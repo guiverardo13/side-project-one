@@ -5,8 +5,8 @@
         <h1><router-link to="/">GV's Travel Guide</router-link></h1>
         <div class="item about"><a href="#">About</a></div>
         <div class="item contact"><a href="#contact">Contact</a></div>
-        <div class="item register"><a href="#">Register</a></div>
-        <div class="item sign-in"><a href="#">Sign in</a></div>
+        <div class="item register" @click="openRegistrationModal">Register</div>
+        <div class="item sign-in" @click="openLoginModal">Sign in</div>
       </nav>
     </header>
       <main>
@@ -79,7 +79,7 @@
             <div class="pittsburgh">
               <img src="../assets/pitt.jpg" alt="Pitt">
               <div class="pittsburgh-text">
-                <a href="next.html">
+                <a href="/city/name/Pittsburgh">
                   <h4>Pittsburgh</h4>
                 </a>
               </div>
@@ -87,7 +87,7 @@
             <div class="miami">
                     <img src="../assets/mia.jpg" alt="MIA">
                 <div class="miami-text">
-                    <a href="#">
+                    <a href="/city/name/Miami">
                       <h4>Miami</h4>
                     </a>
                 </div>
@@ -95,7 +95,7 @@
             <div class="nyc">
                     <img src="../assets/nyc.jpg" alt="NYC">
                 <div class="nyc-text">
-                    <a href="#">
+                    <a href="/city/name/New%20York%20City">
                         <h4>New York City</h4>
                     </a>
                 </div> 
@@ -103,7 +103,7 @@
             <div class="seattle">
                     <img src="../assets/seattle.jpg" alt="Seattle">
                 <div class="seattle-text">
-                    <a href="#">
+                    <a href="/city/name/Seattle">
                         <h4>Seattle</h4>
                     </a>
                 </div>    
@@ -111,7 +111,7 @@
             <div class="los-angeles">
                     <img src="../assets/1.jpg" alt="LA">
                 <div class="la-text">
-                    <a href="#">
+                    <a href="/city/name/Los%20Angeles">
                         <h4>Los Angeles</h4>
                     </a>
                 </div>    
@@ -119,7 +119,7 @@
             <div class="dc">
                     <img src="../assets/dc.jpg" alt="DC">
                 <div class="dc-text">
-                    <a href="#">
+                    <a href="/city/name/Washington%20D.C.">
                         <h4>Washington D.C.</h4> 
                     </a>    
                 </div>    
@@ -129,26 +129,30 @@
           </section>
           <footer class="container-footer" id="contact">
           <div class="footer-content">
-          <h2>Contact Us</h2>
-          <p>If you have any questions or feedback, feel free to get in touch with us.</p>
+          <h2>Contact Me</h2>
+          <p>If you have any questions or feedback, feel free to get in touch with me.</p>
             <div class="contact-info">
-              <p>Email: info@gvstravelguide.com</p>
-              <p>Phone: +1 (123) 456-7890</p>
+              <p>Email: gverardo13@gmail.com</p>
+              <p>Phone: +1 (641) 758-1207</p>
             </div>
             <div class="social-icons">
-              <a href="#" class="social-icon"><i class="fa-brands fa-facebook"></i></a>
-              <a href="#" class="social-icon"><i class="fa-brands fa-twitter"></i></a>
-              <a href="#" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+              <a href="https://www.linkedin.com/in/guilhermeverardo/"  target="_blank" class="social-icon"><i class="fa-brands fa-linkedin"></i></a>
+              <a href="https://github.com/guiverardo13" target="_blank" class="social-icon"><i class="fa-brands fa-github"></i></a>
             </div>
           </div>
           <div class="footer-background"></div>
           </footer>
-          <!-- <CityPage :selectedCity="selectedCity" />  -->
-    </div>
+          <RegisterUserModal v-if="showRegistrationModal" @close="closeRegistrationModal" @registration-successful="handleRegistrationSuccess" />
+          <AccountCreatedModal :showAccountCreatedModal="showAccountCreatedModal" @close-success-modal="closeSuccessModal" />
+          <LoginModal v-if="showLoginModal" @close="closeLoginModal" @login-successful="handleLoginSuccess" />
+      </div>
   </template>
   
   <script>
-import CityService from '../services/CityServices.js'; 
+  import RegisterUserModal from '../components/RegisterUserModal.vue';
+  import AccountCreatedModal from '../components/AccountCreatedModal.vue';
+  import CityService from '../services/CityServices.js'; 
+  import LoginModal from '../components/LoginModal.vue';
 
   export default {
     name: 'WelcomePage',
@@ -156,10 +160,19 @@ import CityService from '../services/CityServices.js';
       return {
         citySearchQuery: '',
         selectedCity: null,
+        showRegistrationModal: false,
+        showAccountCreatedModal: false,
+        showLoginModal: false,
       };
     },
+
+    components:{
+      RegisterUserModal,
+      AccountCreatedModal,
+      LoginModal
+    },
   
-    methods:{
+    methods: {
   
     async searchCity() {
       try {
@@ -173,10 +186,47 @@ import CityService from '../services/CityServices.js';
         console.error('Error searching for city:', error);
       }
     },
-  }
-}
 
-  </script>
+    handleRegistrationSuccess() {
+      // Close the registration modal and open the success modal
+      this.closeRegistrationModal();
+      this.openSuccessModal();
+    },
+
+    openRegistrationModal() {
+    console.log('Opening registration modal');
+    this.showRegistrationModal = true;
+  },
+
+    closeRegistrationModal() {
+      console.log('Closing the modal');
+      this.showRegistrationModal = false; // Close the modal
+    },
+
+    closeSuccessModal() {
+      this.showAccountCreatedModal = false;
+    },
+
+    openSuccessModal() {
+      this.showAccountCreatedModal = true;
+    },
+    
+    openLoginModal() {
+        this.showLoginModal = true;
+      },
+
+    closeLoginModal() {
+      this.showLoginModal = false;
+    },
+
+    handleLoginSuccess() {
+      this.closeLoginModal();
+      // ... handle successful login ...
+    },
+  },
+};
+
+</script>
   
  
   <style>
@@ -374,6 +424,11 @@ import CityService from '../services/CityServices.js';
     .text {
       padding-top: 10px;
       font-size: 16px;
+    }
+
+    .item {
+      color: #fff;
+      cursor: pointer;
     }
   
     section .top-searches {

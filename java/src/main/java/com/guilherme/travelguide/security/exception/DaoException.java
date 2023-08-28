@@ -1,4 +1,4 @@
-package com.guilherme.travelguide.security;
+package com.guilherme.travelguide.security.exception;
 
 public class DaoException extends RuntimeException {
 

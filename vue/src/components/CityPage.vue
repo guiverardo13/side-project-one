@@ -5,8 +5,8 @@
         <h1><router-link to="/">GV's Travel Guide</router-link></h1>
         <div class="item about"><a href="#">About</a></div>
         <div class="item contact"><a href="#contact">Contact</a></div>
-        <div class="item register"><a href="#">Register</a></div>
-        <div class="item sign-in"><a href="#">Sign in</a></div>
+        <div class="item register" @click="openRegistrationModal">Register</div>
+        <div class="item sign-in" @click="openLoginModal">Sign in</div>
     </nav>
     </header>
 <main>
@@ -22,12 +22,12 @@
     <div class="city-description">
         <p>{{ cityDescription }}</p>
     </div>
-    <section class="things-to-do-container">
+    <section class="things-to-do-container" >
         <section class="things-to-do">
             <h2>Things To Do</h2>
             <div class="categories">
           <div class="category hotels">
-            <div class="category-text">Hotels</div>
+            <router-link  class="category-text" :to="{ name: 'HotelPage', params: { cityName: selectedCity } }">Hotels</router-link>
           </div>
           <div class="category bars-restaurants">
             <div class="category-text">Bars <br> & <br> Restaurants</div>
@@ -46,35 +46,53 @@
 
     <footer class="container-footer" id="contact">
             <div class="footer-content">
-        <h2>Contact Us</h2>
-        <p>If you have any questions or feedback, feel free to get in touch with us.</p>
+        <h2>Contact Me</h2>
+        <p>If you have any questions or feedback, feel free to get in touch with me.</p>
     <div class="contact-info">
-        <p>Email: info@gvstravelguide.com</p>
-        <p>Phone: +1 (123) 456-7890</p>
+        <p>Email: gverardo13@gmail.com</p>
+        <p>Phone: +1 (641) 758-1207</p>
     </div>
     <div class="social-icons">
-        <a href="#" class="social-icon"><i class="fa-brands fa-facebook"></i></a>
-        <a href="#" class="social-icon"><i class="fa-brands fa-twitter"></i></a>
-        <a href="#" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+      <a href="https://www.linkedin.com/in/guilhermeverardo/"  target="_blank" class="social-icon"><i class="fa-brands fa-linkedin"></i></a>
+      <a href="https://github.com/guiverardo13" target="_blank" class="social-icon"><i class="fa-brands fa-github"></i></a>
     </div>
 </div>
     </footer>
-</div>
+    <RegisterUserModal v-if="showRegistrationModal" @close="closeRegistrationModal" @registration-successful="handleRegistrationSuccess" />
+          <AccountCreatedModal :showAccountCreatedModal="showAccountCreatedModal" @close-success-modal="closeSuccessModal" />
+          <LoginModal v-if="showLoginModal" @close="closeLoginModal" @login-successful="handleLoginSuccess" />
+          <HotelPage />
+      </div>
 </template>
 
 <script>
 import cityServices from '../services/CityServices.js';
+import RegisterUserModal from './RegisterUserModal.vue';
+import AccountCreatedModal from './AccountCreatedModal.vue';
+import LoginModal from './LoginModal.vue';
+import HotelPage from './HotelPage.vue';
 
 export default {
   name: 'CityPage',
-  props: {
-    cityName: String // This prop will hold the city name from the search
+  components: {
+    RegisterUserModal,
+    AccountCreatedModal,
+    LoginModal,
+    HotelPage
   },
+
+  props: {
+    cityName: String 
+  },
+
   data() {
     return {
       coverPictureUrl: '',
       cityDescription: '',
-      videoLink: ''
+      videoLink: '',
+      showRegistrationModal: false,
+      showAccountCreatedModal: false,
+      showLoginModal: false,
     };
   },
 
@@ -87,7 +105,6 @@ export default {
   methods: {
     async getCoverPicture() {
       try {
-        // Fetch the cover picture URL using the cityServices
         const coverPictureUrl = await cityServices.getCoverPictureByCityName(this.cityName);
         this.coverPictureUrl = coverPictureUrl;
       } catch (error) {
@@ -97,7 +114,6 @@ export default {
 
     async getCityDescription() {
       try {
-        // Fetch the city description using the cityServices
         const cityDescription = await cityServices.getCityDescriptionByCityName(this.cityName);
         this.cityDescription = cityDescription;
       } catch (error) {
@@ -107,14 +123,47 @@ export default {
 
     async getCityVideoLink() {
       try {
-        // Fetch the video link using the cityServices
         const videoLink = await cityServices.getVideoByCityName(this.cityName);
         this.videoLink = videoLink;
       } catch (error) {
         console.error('An error occurred while fetching video link:', error);
       }
     },
-  }
+
+    openRegistrationModal() {
+      this.showRegistrationModal = true;
+    },
+
+    closeRegistrationModal() {
+      this.showRegistrationModal = false;
+    },
+
+    handleRegistrationSuccess() {
+      this.closeRegistrationModal();
+      this.openSuccessModal();
+    },
+
+    closeSuccessModal() {
+      this.showAccountCreatedModal = false;
+    },
+
+    openSuccessModal() {
+      this.showAccountCreatedModal = true;
+    },
+
+    openLoginModal() {
+        this.showLoginModal = true;
+      },
+
+    closeLoginModal() {
+      this.showLoginModal = false;
+    },
+
+    handleLoginSuccess() {
+      this.closeLoginModal();
+      // ... handle successful login ...
+    },
+  },
 };
 </script>
 
@@ -171,6 +220,15 @@ export default {
   text-align: center;
 }
 
+.category-text:hover {
+  color:  #36bfe9;
+}
+
+.category-text {
+
+  text-decoration: none;
+}
+
 .categories .bars-restaurants {
     background-image: url("../assets/restaurant.jpeg");
   background-size: cover;
@@ -205,7 +263,7 @@ export default {
 }
 
 .city-link:hover {
-    color:#00AFEF;
+    color:#36bfe9;
 }
 
 .category-text {
@@ -251,7 +309,6 @@ export default {
   position: relative;
   width: 100%;
   overflow: hidden;
-  
   margin: 20px 0; /* Add spacing around the picture */
 }
 

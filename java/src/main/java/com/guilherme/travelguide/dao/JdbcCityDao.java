@@ -1,6 +1,6 @@
 package com.guilherme.travelguide.dao;
 
-import com.guilherme.travelguide.security.DaoException;
+import com.guilherme.travelguide.security.exception.DaoException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;

@@ -2,7 +2,6 @@ package com.guilherme.travelguide.dao;
 
 import com.guilherme.travelguide.model.City;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 
 @Component

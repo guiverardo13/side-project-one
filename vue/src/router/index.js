@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import CityPage from '../components/CityPage.vue';
-import WelcomePage from '../views/WelcomePage.vue'
+import WelcomePage from '../views/WelcomePage.vue';
+import HotelPage from '../components/HotelPage.vue';
 
 const routes = [
     // ... your other routes  
@@ -14,9 +15,14 @@ const routes = [
       name: 'city-page',
       component: CityPage,
       props: true, // This allows passing route parameters as props
-    }
+    },
+    {
+      path: '/city/name/:cityName/hotels',
+      name: 'HotelPage',
+      component: HotelPage,
+    },
   ];
-  
+
   const router = createRouter({
     history: createWebHistory(),
     routes,
