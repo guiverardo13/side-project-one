@@ -450,7 +450,6 @@
     flex-wrap: wrap;
     justify-content: center;
     gap: 8px;
-    border-bottom: solid black 1px;
     padding-bottom: 100px;
   }
   
@@ -610,15 +609,6 @@
     margin: 0 auto;
     padding: 40px 0;
   }
-
-  .footer-background {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    height: 350px; /* Adjust the height as needed */
-    background-image: linear-gradient(to top, #008793, #004D7A, #051937, white, white);
-  }
-
 
 .footer-content h2 {
   font-size: 28px;

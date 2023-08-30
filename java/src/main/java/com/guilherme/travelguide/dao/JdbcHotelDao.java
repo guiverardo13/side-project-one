@@ -67,17 +67,17 @@ public class JdbcHotelDao implements HotelDao {
 
     @Override
     public String getHotelWebsiteById(int hotelId) {
-        String hotelDescription = null;
+        String hotelWebsite = null;
         String sql = "SELECT hotel_website FROM hotel WHERE hotel_id = ?;";
         try {
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql, hotelId);
             if(results.next()) {
-                hotelDescription = results.getString("hotel_website");
+                hotelWebsite = results.getString("hotel_website");
             }
         } catch (DataAccessException e) {
             throw new DaoException("Error accessing data", e);
         }
-        return hotelDescription;
+        return hotelWebsite;
     }
 
     @Override

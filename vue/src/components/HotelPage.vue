@@ -19,6 +19,7 @@
     <div class="top-hotels" v-if="isHotelPage" >
       <h2>Top Hotels in {{ $route.params.cityName }}</h2>
     </div>
+    <router-link :to="'/city/name/' + $route.params.cityName" class="back-button" v-if="isHotelPage">Back</router-link>
     <div class="hotel-list" v-if="isHotelPage">
           <div v-for="hotel in hotels" :key="hotel.hotel_id" class="hotel-box">
             <img :src="hotel.hotelPicture" alt="Hotel Image">
@@ -142,10 +143,13 @@ export default {
     },
   },
 };
-
 </script>
 
 <style>
+.back-button {
+  font-size: 20px;
+  color: blue;
+}
 
 .top-hotels {
   display: flex;
@@ -212,7 +216,6 @@ position: relative;
 padding: 0;
 color: rgb(0, 0, 0);
 text-align: center;
-border-top: 1px solid black;
 }
 
 .footer-content {
@@ -259,7 +262,7 @@ text-decoration: none;
 .cover-hotel-container {
   position: relative;
 }
-
+/* do this for bar */
 .cover-picture {
   width: 100%;
   max-height: 400px;
@@ -298,7 +301,7 @@ text-decoration: none;
   margin-right: 20px;
   margin-bottom: 20px;
   border: 1px solid #1a1818;
-  background: rgb(199, 219, 223);
+  background: #E9E5E9;
   text-align: left; /* Align content to the left */
   box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.9); /* Add box shadow */;
 }
@@ -314,16 +317,11 @@ text-decoration: none;
   font-size: 18px;
   color: black; /* Set font color to black */
 }
-
+/* do this for bar */
 .hotel-box p {
   margin: 5px 0;
   color: black; /* Set font color to black */
 }
-
-.book-link {
-  color: blue;
-  text-decoration: underline;
-} 
 
 .red-heart {
   position: relative;

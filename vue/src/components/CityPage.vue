@@ -30,7 +30,7 @@
             <router-link  class="category-text" :to="{ name: 'HotelPage', params: { cityName: selectedCity } }">Hotels</router-link>
           </div>
           <div class="category bars-restaurants">
-            <div class="category-text">Bars <br> & <br> Restaurants</div>
+            <router-link  class="category-text" :to="{ name: 'BarPage', params: { cityName: selectedCity } }">Bars <br> & <br> Restaurants</router-link>
           </div>
         </div>
         <div class="categories">
@@ -62,6 +62,7 @@
           <AccountCreatedModal :showAccountCreatedModal="showAccountCreatedModal" @close-success-modal="closeSuccessModal" />
           <LoginModal v-if="showLoginModal" @close="closeLoginModal" @login-successful="handleLoginSuccess" />
           <HotelPage />
+          <BarPage />
       </div>
 </template>
 
@@ -71,6 +72,7 @@ import RegisterUserModal from './RegisterUserModal.vue';
 import AccountCreatedModal from './AccountCreatedModal.vue';
 import LoginModal from './LoginModal.vue';
 import HotelPage from './HotelPage.vue';
+import BarPage from './BarPage.vue';
 
 export default {
   name: 'CityPage',
@@ -78,7 +80,8 @@ export default {
     RegisterUserModal,
     AccountCreatedModal,
     LoginModal,
-    HotelPage
+    HotelPage,
+    BarPage
   },
 
   props: {
@@ -283,7 +286,6 @@ export default {
 }
 
 .things-to-do-container {
-    border-bottom: 1px solid black;
     padding-bottom: 20px;
 }
 
@@ -382,6 +384,7 @@ position: relative;
 padding: 0;
 color: rgb(0, 0, 0);
 text-align: center;
+border-top: 1px solid black;
 }
 
 .footer-content {
