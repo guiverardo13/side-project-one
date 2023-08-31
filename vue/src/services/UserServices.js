@@ -10,7 +10,7 @@ export default {
         },
 
         login(user) {
-          return axios.post('/login', user)
+          return instance.post('/login', user); // Use the instance with specified baseURL
         },
         
       };

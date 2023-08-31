@@ -85,7 +85,8 @@ export default {
   },
 
   props: {
-    cityName: String 
+    cityName: String,
+    selectedCity: String
   },
 
   data() {
@@ -96,6 +97,7 @@ export default {
       showRegistrationModal: false,
       showAccountCreatedModal: false,
       showLoginModal: false,
+
     };
   },
 

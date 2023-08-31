@@ -3,7 +3,7 @@
     <div class="login-modal" >
         <div class="login-content">
           <h2>Sign In</h2>
-          <form @submit.prevent="loginUser" action="/login">
+          <form @submit.prevent="loginUser">
             <div id="close-modal"  @click="closeLoginModal">+</div>
             <div class="form-group">
               <label for="username">Username:</label>

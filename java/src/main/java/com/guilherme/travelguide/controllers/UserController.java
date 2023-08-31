@@ -9,8 +9,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+@CrossOrigin
 
-@PreAuthorize("isAuthenticated()")
 @RestController
 public class UserController {
     private final UserDao userDao;

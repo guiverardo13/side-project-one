@@ -4,6 +4,7 @@ import com.guilherme.travelguide.dao.BarDao;
 import com.guilherme.travelguide.model.Bar;
 import com.guilherme.travelguide.model.City;
 import com.guilherme.travelguide.model.Hotel;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @CrossOrigin
+
 @RestController
 public class BarController {
 
