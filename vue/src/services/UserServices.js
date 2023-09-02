@@ -12,6 +12,13 @@ export default {
         login(user) {
           return instance.post('/login', user); // Use the instance with specified baseURL
         },
+
+        logout() {
+          // Since there is no dedicated logout endpoint on the server,
+          // you can simply clear the token and user data on the client side
+          localStorage.removeItem('token'); // Remove the token from local storage
+          localStorage.removeItem('user');  // Remove the user data from local storage
+        },
         
       };
 

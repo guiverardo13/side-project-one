@@ -16,9 +16,8 @@
 import LoginModal from './LoginModal.vue';
 
 export default {
-    showLoginModal: false,
-    props: {
-    showAccountCreatedModal: Boolean, 
+  props: {
+    showAccountCreatedModal: Boolean,
   },
 
   components: {
@@ -28,7 +27,7 @@ export default {
   data() {
     return {
       showLoginModal: false,
-    }
+    };
   },
 
   methods: {
@@ -38,10 +37,12 @@ export default {
     },
 
     openLoginModalAndCloseSuccessModal() {
-      // Close the account created modal
-      this.closeSuccessModal();
-      // Open the login modal
-      this.showLoginModal = true;
+      // Close the account created modal with a small delay
+      setTimeout(() => {
+        this.closeSuccessModal();
+        // Open the login modal
+        this.showLoginModal = true;
+      }, 100); // Adjust the delay as needed
     },
 
     closeLoginModal() {

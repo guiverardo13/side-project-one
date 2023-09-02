@@ -5,15 +5,19 @@
         <h1><router-link to="/">GV's Travel Guide</router-link></h1>
         <div class="item about"><a href="#">About</a></div>
         <div class="item contact"><a href="#contact">Contact</a></div>
-        <div class="item register" @click="openRegistrationModal">Register</div>
-        <div class="item sign-in" @click="openLoginModal">Sign in</div>
+        <div class="item" @click="openRegistrationModal">
+          {{ isAuthenticated ? 'Likes' : 'Register' }}
+        </div>
+        <div class="item" @click="handleSignOutClick">
+        {{ isAuthenticated ? 'Sign Out' : 'Sign in' }}
+        </div>
       </nav>
     </header>
       <main>
         <div class="container-main">
           <div class="welcome">
             <div>
-              <h2>Welcome to my first project</h2>
+              <h2>Welcome {{ isAuthenticated ? user.firstName : 'to my first project' }}!</h2>
             </div>
             <p>
               All the information you need within a few clicks
@@ -143,93 +147,161 @@
           <div class="footer-background"></div>
           </footer>
           <RegisterUserModal v-if="showRegistrationModal" @close="closeRegistrationModal" @registration-successful="handleRegistrationSuccess" />
-          <AccountCreatedModal :showAccountCreatedModal="showAccountCreatedModal" @close-success-modal="closeSuccessModal" />
+          <AccountCreatedModal :showAccountCreatedModal="showAccountCreatedModal" @close-success-modal="closeSuccessModal()" />
           <LoginModal v-if="showLoginModal" @close="closeLoginModal" @login-successful="handleLoginSuccess" />
       </div>
   </template>
   
   <script>
+  import UserServices from '../services/UserServices.js';
   import RegisterUserModal from '../components/RegisterUserModal.vue';
   import AccountCreatedModal from '../components/AccountCreatedModal.vue';
-  import CityService from '../services/CityServices.js'; 
+  import CityService from '../services/CityServices.js';
   import LoginModal from '../components/LoginModal.vue';
-
+  
   export default {
     name: 'WelcomePage',
+  
+    created() {
+      // Check if the user is authenticated by looking at the Vuex store and local storage
+      this.checkUserAuthentication();
+    },
+    
     data() {
       return {
+        isAuthenticated: false,
         citySearchQuery: '',
-        selectedCity: null,
         showRegistrationModal: false,
         showAccountCreatedModal: false,
         showLoginModal: false,
+        user: this.$store.state.user || {}, // Initialize user object from Vuex
       };
     },
 
-    components:{
+    
+  
+    components: {
       RegisterUserModal,
       AccountCreatedModal,
-      LoginModal
+      LoginModal,
     },
   
     methods: {
-  
-    async searchCity() {
-      try {
-        const data = await CityService.getCityByName(this.citySearchQuery);
-        if (data) {
-          this.$router.push({ name: 'city-page', params: { cityName: this.citySearchQuery } });
-        } else {
-          console.log('City not found');
+      async checkUserAuthentication() {
+        const token = this.$store.state.token || localStorage.getItem('token');
+        if (token) {
+          this.isAuthenticated = true;
+          const user = this.$store.state.user || JSON.parse(localStorage.getItem('user'));
+          if (user) {
+            this.user = user;
+          }
         }
-      } catch (error) {
-        console.error('Error searching for city:', error);
-      }
-    },
+      },
+      
+      async handleRegistrationSuccess() {
+        // Close the registration modal and open the success modal
+        this.closeRegistrationModal();
+        this.openSuccessModal();
+      },
+  
+      async handleSignOutClick() {
+        if (this.isAuthenticated) {
+          this.logoutUser(); // Call the logoutUser method when Sign Out is clicked
+        } else {
+          this.openLoginModal(); // Open the login modal when not authenticated
+        }
+      },
+  
+      async searchCity() {
+        try {
+          const data = await CityService.getCityByName(this.citySearchQuery);
+          if (data) {
+            this.$router.push({ name: 'city-page', params: { cityName: this.citySearchQuery } });
+          } else {
+            console.log('City not found');
+          }
+        } catch (error) {
+          console.error('Error searching for city:', error);
+        }
+      },
+  
+      async handleLoginSuccess(response) {
+          this.closeLoginModal();
+          this.isAuthenticated = true; // Set isAuthenticated to true
+          this.user = response.data.user; // Update the user data
 
-    handleRegistrationSuccess() {
-      // Close the registration modal and open the success modal
-      this.closeRegistrationModal();
-      this.openSuccessModal();
-    },
+          try {
+            // Update the Vuex store with the new user data
+            this.$store.commit("SET_AUTH_TOKEN", response.data.token);
+            this.$store.commit("SET_USER", response.data.user);
 
-    openRegistrationModal() {
-    console.log('Opening registration modal');
-    this.showRegistrationModal = true;
+            // Update local storage
+            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('user', JSON.stringify(response.data.user));
+          } catch (error) {
+            console.error('Error updating Vuex store and local storage:', error);
+          }
+        },
+  
+      // async loginUser() {
+      //   try {
+      //     const response = await UserServices.login(this.user);
+      //     if (response.status === 200) {
+      //       this.handleLoginSuccess(response);
+      //     }
+      //   } catch (error) {
+      //     // Handle login error
+      //   }
+      // },
+  
+      viewLikes() {
+        // Implement this method to display user likes (e.g., open a modal)
+      },
+  
+      logoutUser() {
+  // Clear the token and user data from local storage
+    UserServices.logout();
+
+    // Clear user data and token in your Vuex store
+    this.$store.commit('LOGOUT');
+
+    // Reset the user in Vuex store to an empty object
+    this.$store.commit('SET_USER', {});
+
+    // Update the isAuthenticated status
+    this.isAuthenticated = false;
   },
-
-    closeRegistrationModal() {
-      console.log('Closing the modal');
-      this.showRegistrationModal = false; // Close the modal
-    },
-
-    closeSuccessModal() {
-      this.showAccountCreatedModal = false;
-    },
-
-    openSuccessModal() {
-      this.showAccountCreatedModal = true;
-    },
-    
-    openLoginModal() {
+  
+      openRegistrationModal() {
+        console.log('Opening registration modal');
+        this.showRegistrationModal = true;
+      },
+  
+      closeRegistrationModal() {
+        console.log('Closing the modal');
+        this.showRegistrationModal = false; // Close the modal
+      },
+  
+      closeSuccessModal() {
+        this.showAccountCreatedModal = false;
+      },
+  
+      openSuccessModal() {
+        this.showAccountCreatedModal = true;
+      },
+  
+      openLoginModal() {
         this.showLoginModal = true;
       },
-
-    closeLoginModal() {
-      this.showLoginModal = false;
-    },
-
-    handleLoginSuccess() {
-      this.closeLoginModal();
-      // ... handle successful login ...
-    },
-  },
-};
-
-</script>
   
- 
-  <style>
+      closeLoginModal() {
+        this.showLoginModal = false;
+      },
+    },
+  };
+  </script>
+
+<style>
   html {
     min-height: 100%;
     scroll-behavior: smooth;
@@ -345,26 +417,15 @@
       border-radius: 3px;
   }
   
-  .about :hover {
+    .about :hover {
       color: #00AFEF;
-      text-decoration: underline;
-    }
+      text-decoration: none;
+    } 
   
     .contact :hover {
       color: #00AFEF;
-      text-decoration: underline;
     }
-  
-    .register :hover {
-      color: #00AFEF;
-      text-decoration: underline;
-    }
-  
-    .sign-in :hover {
-      color: #00AFEF;
-      text-decoration: underline;
-    }
-  
+
     .container-middle h3 {
       display: flex;
       justify-content: center;
@@ -634,5 +695,34 @@
   color: white;
   margin: 0 10px;
   text-decoration: none;
+}
+
+.account-box {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  display: none;
+  flex-direction: column;
+  z-index: 1;
+}
+
+.account-box .likes,
+.account-box .sign-out {
+  cursor: pointer;
+  margin-bottom: 5px;
+}
+
+.account-box .likes:hover,
+.account-box .sign-out:hover {
+  background-color: #eee;
+}
+
+.item:hover {
+  color: #00AFEF;
 }
   </style>
