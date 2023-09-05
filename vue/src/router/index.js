@@ -3,9 +3,10 @@ import CityPage from '../components/CityPage.vue';
 import WelcomePage from '../views/WelcomePage.vue';
 import HotelPage from '../components/HotelPage.vue';
 import BarPage from '../components/BarPage.vue';
+import LikeModal from '../components/LikeModal.vue';
+import store from '../store'; // Import your Vuex store
 
 const routes = [
-  // ... your other routes
   {
     path: '/',
     name: 'WelcomePage',
@@ -26,12 +27,31 @@ const routes = [
     path: '/city/name/:cityName/bars',
     name: 'BarPage',
     component: BarPage,
+    // meta: { requiresAuth: true }, // Add meta field to require authentication
+  },
+  {
+    path: '/likes',
+    name: 'LikePage',
+    component: LikeModal,
+    meta: { requiresAuth: true }, // Add meta field to require authentication
   },
 ];
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
+});
+
+// Add a navigation guard to protect routes that require authentication
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = store.state.token; // Assuming 'token' is your authentication state in Vuex
+
+  // Check if the route requires authentication and the user is not authenticated
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    next('/login'); // Redirect to the login page if not authenticated
+  } else {
+    next(); // Proceed with navigation
+  }
 });
 
 export default router;

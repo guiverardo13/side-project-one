@@ -9,6 +9,7 @@ export default createStore({
   state: {
       token: currentToken,
       user: currentUser,
+      isAuthenticated: false,
   },
 
   mutations: {
@@ -29,6 +30,10 @@ export default createStore({
       state.token = '';
       state.user = {};
       axios.defaults.headers.common = {};
+    },
+
+    setAuthenticationStatus(state, status) {
+      state.isAuthenticated = status;
     },
   },
 });

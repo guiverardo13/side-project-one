@@ -3,14 +3,11 @@ package com.guilherme.travelguide.controllers;
 import com.guilherme.travelguide.dao.HotelDao;
 import com.guilherme.travelguide.model.City;
 import com.guilherme.travelguide.model.Hotel;
-import org.checkerframework.checker.units.qual.C;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @CrossOrigin
-
 @RestController
 public class HotelController {
 

@@ -17,7 +17,7 @@
         <div class="container-main">
           <div class="welcome">
             <div>
-              <h2>Welcome {{ isAuthenticated ? user.firstName : 'to my first project' }}!</h2>
+              <h2>Welcome {{ isAuthenticated ? user.username : 'to my first project' }}!</h2>
             </div>
             <p>
               All the information you need within a few clicks
@@ -147,7 +147,7 @@
           <div class="footer-background"></div>
           </footer>
           <RegisterUserModal v-if="showRegistrationModal" @close="closeRegistrationModal" @registration-successful="handleRegistrationSuccess" />
-          <AccountCreatedModal :showAccountCreatedModal="showAccountCreatedModal" @close-success-modal="closeSuccessModal()" />
+          <AccountCreatedModal :showAccountCreatedModal="showAccountCreatedModal" @close-success-modal="closeSuccessModal" @sign-in="handleSignIn" />
           <LoginModal v-if="showLoginModal" @close="closeLoginModal" @login-successful="handleLoginSuccess" />
       </div>
   </template>
@@ -174,7 +174,7 @@
         showRegistrationModal: false,
         showAccountCreatedModal: false,
         showLoginModal: false,
-        user: this.$store.state.user || {}, // Initialize user object from Vuex
+        // user: this.$store.state.user || {}, // Initialize user object from Vuex
       };
     },
 
@@ -188,13 +188,10 @@
   
     methods: {
       async checkUserAuthentication() {
-        const token = this.$store.state.token || localStorage.getItem('token');
+        const token = this.$store.state.token;
         if (token) {
           this.isAuthenticated = true;
-          const user = this.$store.state.user || JSON.parse(localStorage.getItem('user'));
-          if (user) {
-            this.user = user;
-          }
+          this.user = this.$store.state.user;
         }
       },
       
@@ -253,7 +250,13 @@
       //     // Handle login error
       //   }
       // },
-  
+
+      handleSignIn() {
+        console.log('Sign In button clicked'); // Add this line for debugging
+          this.closeSuccessModal();
+          this.openLoginModal();
+        },
+      
       viewLikes() {
         // Implement this method to display user likes (e.g., open a modal)
       },
@@ -267,7 +270,7 @@
 
     // Reset the user in Vuex store to an empty object
     this.$store.commit('SET_USER', {});
-
+    window.alert("Sign out Successful!");
     // Update the isAuthenticated status
     this.isAuthenticated = false;
   },

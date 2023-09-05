@@ -1,12 +1,16 @@
 <template>
     <div class="container-new-page">
-<header>
+    <header>
     <nav class="container-top-new-page">
         <h1><router-link to="/">GV's Travel Guide</router-link></h1>
         <div class="item about"><a href="#">About</a></div>
         <div class="item contact"><a href="#contact">Contact</a></div>
-        <div class="item register" @click="openRegistrationModal">Register</div>
-        <div class="item sign-in" @click="openLoginModal">Sign in</div>
+        <div class="item" @click="openRegistrationModal">
+          {{ isAuthenticated ? 'Likes' : 'Register' }}
+        </div>
+        <div class="item" @click="handleSignOutClick">
+        {{ isAuthenticated ? 'Sign Out' : 'Sign in' }}
+        </div>
     </nav>
     </header>
 <main>
@@ -59,7 +63,7 @@
 </div>
     </footer>
     <RegisterUserModal v-if="showRegistrationModal" @close="closeRegistrationModal" @registration-successful="handleRegistrationSuccess" />
-          <AccountCreatedModal :showAccountCreatedModal="showAccountCreatedModal" @close-success-modal="closeSuccessModal" />
+    <AccountCreatedModal :showAccountCreatedModal="showAccountCreatedModal" @close-success-modal="closeSuccessModal" @sign-in="handleSignIn" />
           <LoginModal v-if="showLoginModal" @close="closeLoginModal" @login-successful="handleLoginSuccess" />
           <HotelPage />
           <BarPage />
@@ -68,6 +72,7 @@
 
 <script>
 import cityServices from '../services/CityServices.js';
+import UserServices from '@/services/UserServices';
 import RegisterUserModal from './RegisterUserModal.vue';
 import AccountCreatedModal from './AccountCreatedModal.vue';
 import LoginModal from './LoginModal.vue';
@@ -76,6 +81,24 @@ import BarPage from './BarPage.vue';
 
 export default {
   name: 'CityPage',
+
+  data() {
+    return {
+      isAuthenticated: false, // Initialize isAuthenticated to false
+      coverPictureUrl: '',
+      cityDescription: '',
+      videoLink: '',
+      showRegistrationModal: false,
+      showAccountCreatedModal: false,
+      showLoginModal: false,
+    };
+  },
+
+  created() {
+    // Check if the user is authenticated by looking at the Vuex store and local storage
+    this.checkUserAuthentication();
+  },
+
   components: {
     RegisterUserModal,
     AccountCreatedModal,
@@ -89,18 +112,6 @@ export default {
     selectedCity: String
   },
 
-  data() {
-    return {
-      coverPictureUrl: '',
-      cityDescription: '',
-      videoLink: '',
-      showRegistrationModal: false,
-      showAccountCreatedModal: false,
-      showLoginModal: false,
-
-    };
-  },
-
   mounted() {
     this.getCoverPicture();
     this.getCityDescription();
@@ -108,6 +119,63 @@ export default {
   },
 
   methods: {
+    handleSignIn() {
+      console.log('Sign In button clicked');
+      this.closeSuccessModal();
+      this.openLoginModal();
+    },
+
+    async handleSignOutClick() {
+      if (this.isAuthenticated) {
+        this.logoutUser();
+      } else {
+        this.openLoginModal();
+      }
+    },
+
+    logoutUser() {
+      // Clear the token and user data from local storage
+      UserServices.logout();
+
+      // Clear user data and token in your Vuex store if needed
+      this.$store.commit('LOGOUT');
+
+      // Reset the user in Vuex store to an empty object if needed
+      this.$store.commit('SET_USER', {});
+
+      // Update the isAuthenticated status directly
+      this.isAuthenticated = false;
+      window.alert("Sign out Successful!");
+      // Ensure that the route is redirected to another page after logout
+      this.$router.push('/'); // Redirect to the home page or another appropriate page
+      },
+
+    async checkUserAuthentication() {
+      const token = this.$store.state.token;
+      if (token) {
+        this.isAuthenticated = true;
+        // You can also update the user data here if needed
+      }
+    },
+
+      async handleLoginSuccess(response) {
+          this.closeLoginModal();
+          this.isAuthenticated = true; // Set isAuthenticated to true
+          this.user = response.data.user; // Update the user data
+
+          try {
+            // Update the Vuex store with the new user data
+            this.$store.commit("SET_AUTH_TOKEN", response.data.token);
+            this.$store.commit("SET_USER", response.data.user);
+
+            // Update local storage
+            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('user', JSON.stringify(response.data.user));
+          } catch (error) {
+            console.error('Error updating Vuex store and local storage:', error);
+          }
+        },
+
     async getCoverPicture() {
       try {
         const coverPictureUrl = await cityServices.getCoverPictureByCityName(this.cityName);
@@ -144,6 +212,7 @@ export default {
     },
 
     handleRegistrationSuccess() {
+      console.log('Registration successful. Opening success modal.');
       this.closeRegistrationModal();
       this.openSuccessModal();
     },
@@ -164,10 +233,7 @@ export default {
       this.showLoginModal = false;
     },
 
-    handleLoginSuccess() {
-      this.closeLoginModal();
-      // ... handle successful login ...
-    },
+    
   },
 };
 </script>

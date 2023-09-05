@@ -38,11 +38,8 @@ export default {
 
     openLoginModalAndCloseSuccessModal() {
       // Close the account created modal with a small delay
-      setTimeout(() => {
-        this.closeSuccessModal();
-        // Open the login modal
-        this.showLoginModal = true;
-      }, 100); // Adjust the delay as needed
+      this.closeSuccessModal();
+      this.$emit('sign-in'); // Add this line to emit the event
     },
 
     closeLoginModal() {

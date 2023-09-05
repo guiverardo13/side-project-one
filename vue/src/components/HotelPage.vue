@@ -5,8 +5,12 @@
         <h1><router-link to="/">GV's Travel Guide</router-link></h1>
         <div class="item about"><a href="#">About</a></div>
         <div class="item contact"><a href="#contact">Contact</a></div>
-        <div class="item register" @click="openRegistrationModal">Register</div>
-        <div class="item sign-in" @click="openLoginModal">Sign in</div>
+        <div class="item" @click="openLikesModal">
+          {{ isAuthenticated ? 'Likes' : 'Register' }}
+        </div>
+        <div class="item" @click="handleSignOutClick">
+        {{ isAuthenticated ? 'Sign Out' : 'Sign in' }}
+        </div>
     </nav>
     </header>
     <main>
@@ -56,16 +60,19 @@
 </div>
     </footer>
     <RegisterUserModal v-if="showRegistrationModal" @close="closeRegistrationModal" @registration-successful="handleRegistrationSuccess" />
-          <AccountCreatedModal :showAccountCreatedModal="showAccountCreatedModal" @close-success-modal="closeSuccessModal" />
-          <LoginModal v-if="showLoginModal" @close="closeLoginModal" @login-successful="handleLoginSuccess" />
+    <AccountCreatedModal :showAccountCreatedModal="showAccountCreatedModal" @close-success-modal="closeSuccessModal" @sign-in="handleSignIn" />
+    <LoginModal v-if="showLoginModal" @close="closeLoginModal" @login-successful="handleLoginSuccess" />
+    <LikeModal v-if="showLikesModal" :isAuthenticated="isAuthenticated" :likedItems="likedItems" />
   </div>
 </template>
 
 <script>
 import HotelServices from '../services/HotelServices.js';
+import UserServices from '../services/UserServices';
 import RegisterUserModal from './RegisterUserModal.vue'
 import AccountCreatedModal from './AccountCreatedModal.vue';
 import LoginModal from './LoginModal.vue';
+import LikeModal from './LikeModal.vue'; // Import the LikeModal component
 
 export default {
     name: 'HotelPage',  
@@ -74,7 +81,10 @@ export default {
         showRegistrationModal: false,
         showAccountCreatedModal: false,
         showLoginModal: false,
-        hotels: [] 
+        isAuthenticated: false,
+        showLikesModal: false,
+        hotels: [],
+        likedItems: [],
       };
   },
 
@@ -82,6 +92,7 @@ export default {
       RegisterUserModal,
       AccountCreatedModal,
       LoginModal,
+      LikeModal
     },  
 
     computed: {
@@ -93,19 +104,102 @@ export default {
   created() {
     // Fetch hotel data from the service
     this.fetchHotels();
+    this.checkUserAuthentication();
   },
 
   methods: {
+
+    toggleLike(hotel) {
+      // Implement the logic to like the item and update likedItems
+      hotel.isLiked = !hotel.isLiked;
+      if (hotel.isLiked) {
+        // Add the liked item to the likedItems array
+        this.likedItems.push({ id: hotel.id, name: hotel.name });
+      } else {
+        // Remove the unliked item from the likedItems array
+        const index = this.likedItems.findIndex((item) => item.id === hotel.id);
+        if (index !== -1) {
+          this.likedItems.splice(index, 1);
+        }
+      }
+    },
+
+    openLikesModal() {
+      // Show the Like modal when the user clicks "Likes" if authenticated
+      if (this.isAuthenticated) {
+        this.showLikesModal = true;
+      } else {
+        this.openRegistrationModal();
+      }
+    },
+       
+    handleSignIn() {
+        console.log('Sign In button clicked'); // Add this line for debugging
+          this.closeSuccessModal();
+          this.openLoginModal();
+        },
+
+    async handleLoginSuccess(response) {
+        this.closeLoginModal();
+        this.isAuthenticated = true; // Set isAuthenticated to true
+        this.user = response.data.user; // Update the user data
+
+        try {
+          // Update the Vuex store with the new user data
+          this.$store.commit("SET_AUTH_TOKEN", response.data.token);
+          this.$store.commit("SET_USER", response.data.user);
+        
+
+          // Update local storage
+          localStorage.setItem('token', response.data.token);
+          localStorage.setItem('user', JSON.stringify(response.data.user));
+        } catch (error) {
+          console.error('Error updating Vuex store and local storage:', error);
+        }
+      },
+
+    async handleSignOutClick() {
+      if (this.isAuthenticated) {
+        this.logoutUser(); // Call the logoutUser method when Sign Out is clicked
+      } else {
+        this.openLoginModal(); // Open the login modal when not authenticated
+      }
+    },
+
+    logoutUser() {
+      // Clear the token and user data from local storage
+      UserServices.logout();
+
+      // Clear user data and token in your Vuex store if needed
+      this.$store.commit('LOGOUT');
+
+      // Reset the user in Vuex store to an empty object if needed
+      this.$store.commit('SET_USER', {});
+
+      // Update the isAuthenticated status directly
+      this.isAuthenticated = false;
+
+      window.alert("Sign out Successful!");
+      // Ensure that the route is redirected to another page after logout
+      this.$router.push('/'); // Redirect to the home page or another appropriate page
+      },
+          
+    async checkUserAuthentication() {
+  const token = this.$store.state.token;
+  
+  // Check if token is not undefined or null to set isAuthenticated
+  if (token !== undefined && token !== null) {
+    this.isAuthenticated = true; // Set isAuthenticated to true
+    this.user = this.$store.state.user;
+  }
+},
+
     async fetchHotels() {
       try {
         this.hotels = await HotelServices.getHotelsByCityName(this.$route.params.cityName);
       } catch (error) {
         console.error('Error fetching hotel data:', error);
       }
-    },
-
-    toggleLike(hotel) {
-      hotel.isLiked = !hotel.isLiked;
     },
 
     openRegistrationModal() {
@@ -135,11 +229,6 @@ export default {
 
     closeLoginModal() {
       this.showLoginModal = false;
-    },
-
-    handleLoginSuccess() {
-      this.closeLoginModal();
-      // ... handle successful login ...
     },
   },
 };

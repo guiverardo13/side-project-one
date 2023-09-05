@@ -1,6 +1,6 @@
 BEGIN TRANSACTION;
 
-DROP TABLE IF EXISTS users, city, city_likes, account, user_account, user_likes, hotel, restaurant, bar, events, tourism;
+DROP TABLE IF EXISTS users, city, user_likes, likes, hotel, restaurant, bar, events, tourism;
 
 CREATE TABLE users (
 	user_id serial NOT NULL,
@@ -25,16 +25,6 @@ CREATE TABLE city (
 	CONSTRAINT pk_city PRIMARY KEY (city_id),
 	CONSTRAINT pk_state UNIQUE (state_name)
 );
-
-
-CREATE TABLE user_likes (
-	user_id int NOT NULL REFERENCES users(user_id),
-	like_id int NOT NULL,
-	CONSTRAINT pk_user_likes PRIMARY KEY (user_id, like_id),
-	CONSTRAINT fk_user_like_user FOREIGN KEY (user_id) REFERENCES users(user_id),
-	CONSTRAINT fk_user_like_like FOREIGN KEY (like_id) REFERENCES like_categories(like_id)
-);
-
 
 CREATE TABLE hotel (
 	hotel_id serial NOT NULL,
@@ -98,6 +88,32 @@ CREATE TABLE tourism (
 	CONSTRAINT pk_tour PRIMARY KEY (tour_id),
 	CONSTRAINT fk_tour_city FOREIGN KEY(tour_city_id) REFERENCES city(city_id)
 );
+
+CREATE TABLE likes (
+    like_id serial NOT NULL,
+    like_city_id int,
+    like_bar_id int,
+    like_hotel_id int,
+    like_restaurant_id int,
+    like_event_id int,
+    like_tour_id int,
+    CONSTRAINT pk_like PRIMARY KEY (like_id),
+    CONSTRAINT fk_like_city_id FOREIGN KEY (like_city_id) REFERENCES city(city_id),
+    CONSTRAINT fk_like_bar_id FOREIGN KEY (like_bar_id) REFERENCES bar(bar_id),
+    CONSTRAINT fk_like_hotel_id FOREIGN KEY (like_hotel_id) REFERENCES hotel(hotel_id),
+    CONSTRAINT fk_like_restaurant_id FOREIGN KEY (like_restaurant_id) REFERENCES restaurant(restaurant_id),
+    CONSTRAINT fk_like_event_id FOREIGN KEY (like_event_id) REFERENCES events(event_id),
+    CONSTRAINT fk_like_tour_id FOREIGN KEY (like_tour_id) REFERENCES tourism(tour_id)
+);
+
+CREATE TABLE user_likes (
+	user_id int NOT NULL REFERENCES users(user_id),
+	like_id int NOT NULL,
+	CONSTRAINT pk_user_likes PRIMARY KEY (user_id, like_id),
+	CONSTRAINT fk_user_like_user FOREIGN KEY (user_id) REFERENCES users(user_id),
+	CONSTRAINT fk_user_like_like FOREIGN KEY (like_id) REFERENCES likes(like_id)
+);
+
 -- CITY
 INSERT INTO city (city_name, state_name, cover_picture, city_video, city_description) VALUES ('Pittsburgh', 'Pennsylvania','https://cdn.wallpapersafari.com/34/60/pwHxg2.jpg', 'https://www.youtube.com/watch?v=IiQxXqcQFKA', 'The City of Pittsburgh offers everything a person might be looking for in a home, with its wonderful shopping areas, great restaurants, and beautiful views. Pittsburgh is known for having more named neighborhoods than any American city. Ninety distinct communities collectively create the culture of Pittsburgh. The Strip District is a wonderful market spot known for its variety of food and an excellent shopping with unique stores. The neighborhoods known as Shadyside, Beechview, or the West End are other fantastic region of Pittsburgh to find trendy shops and restaurants. If you’re looking for authentic homemade Italian food, Bloomfield or “Pittsburgh’s Little Italy” is the place for you. If you’re looking for more of a creative and artistic side of Pittsburgh, pass through the neighborhood of Lawrenceville. East Liberty is known as for business and industries. Looking for a fun night out on the town? South Side has a fun and exciting nightlife full of clubs, sports bars, and laid-back pubs. Wanting to catch a game or spend some quality time with your loved ones? The North Shore or North Side is the place to be. Mount Washington is the high point of Pittsburgh; it gives the residents of Pittsburgh and tourists a beautiful view of this magnificent city. Finally, Downtown, like most downtown districts, has great food, dining, parks, plazas, and art museums.');
 INSERT INTO city (city_name, state_name, cover_picture, city_video, city_description) VALUES ('Miami', 'Florida', 'https://justinkelefas.com/wp-content/uploads/2021/03/Miami-Skyline-Cityscape-Sunset-Sunrise-Downtown-January-by-Justin-Kelefas-2021-ver2.jpg', 'https://www.youtube.com/watch?v=tsyW6zFuaBk', 'Miami is one of the citys and the world’s most popular vacation spots. Though destinations often are said to offer something for everyone, the Miami area does indeed offer multiple enticements for all. The trendy nightlife of South Beach, bejeweled by the eye candy of the Art Deco district. The bustle of Calle Ocho and the highly caffeinated energy of Little Havana. The plush hotels of Miami Beach and the historic hideaways of Coral Gables. Seemingly endless shopping opportunities in modern, sprawling malls and the quiet, personal attention offered by the family-owned shops of Coconut Grove and many other corners of the region. The lures of deep-sea fishing and golf and tennis. Miamis professional football, basketball, baseball and hockey. Boat shows and auto racing. Art festivals and outdoor food and wine extravaganzas. An international airport and the world’s busiest cruise port.');

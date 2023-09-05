@@ -1,6 +1,5 @@
 package com.guilherme.travelguide.dao;
 
-import com.guilherme.travelguide.model.Bar;
 import com.guilherme.travelguide.model.Restaurant;
 import com.guilherme.travelguide.security.exception.DaoException;
 import org.springframework.dao.DataAccessException;
@@ -8,9 +7,9 @@ import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
-
 import java.util.ArrayList;
 import java.util.List;
+
 @Repository
 public class JdbcRestaurantDao implements RestaurantDao {
 
