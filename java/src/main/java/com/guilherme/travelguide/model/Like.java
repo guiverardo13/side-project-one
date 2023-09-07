@@ -1,7 +1,6 @@
 package com.guilherme.travelguide.model;
 
 public class Like {
-
     private int likeId;
     private int likeCityId;
     private int likeBarId;
@@ -9,8 +8,16 @@ public class Like {
     private int likeRestaurantId;
     private int likeEventId;
     private int likeTourId;
+    private String likePicture;
+    private String likeCityName;
+    private String likeName;
+    private String likeAddress;
+    private String likePhone;
+    private String likePrice;
+    private String likeWebsite;
+    private Hotel hotel;
 
-    public Like(int likeId, int likeCityId, int likeBarId, int likeHotelId, int likeRestaurantId, int likeEventId, int likeTourId) {
+    public Like(int likeId, int likeCityId, int likeBarId, int likeHotelId, int likeRestaurantId, int likeEventId, int likeTourId, String likePicture, String likeCityName, String likeName, String likeAddress, String likePhone, String likePrice, String likeWebsite) {
         this.likeId = likeId;
         this.likeCityId = likeCityId;
         this.likeBarId = likeBarId;
@@ -18,9 +25,16 @@ public class Like {
         this.likeRestaurantId = likeRestaurantId;
         this.likeEventId = likeEventId;
         this.likeTourId = likeTourId;
+        this.likePicture = likePicture;
+        this.likeCityName = likeCityName;
+        this.likeName = likeName;
+        this.likeAddress = likeAddress;
+        this.likePhone = likePhone;
+        this.likePrice = likePrice;
+        this.likeWebsite = likeWebsite;
     }
 
-    public Like() {}
+    public Like(){}
 
     public int getLikeId() {
         return likeId;
@@ -77,4 +91,69 @@ public class Like {
     public void setLikeTourId(int likeTourId) {
         this.likeTourId = likeTourId;
     }
+
+    public String getLikePicture() {
+        return likePicture;
+    }
+
+    public void setLikePicture(String likePicture) {
+        this.likePicture = likePicture;
+    }
+
+    public String getLikeCityName() {
+        return likeCityName;
+    }
+
+    public void setLikeCityName(String likeCityName) {
+        this.likeCityName = likeCityName;
+    }
+
+    public String getLikeName() {
+        return likeName;
+    }
+
+    public void setLikeName(String likeName) {
+        this.likeName = likeName;
+    }
+
+    public String getLikeAddress() {
+        return likeAddress;
+    }
+
+    public void setLikeAddress(String likeAddress) {
+        this.likeAddress = likeAddress;
+    }
+
+    public String getLikePhone() {
+        return likePhone;
+    }
+
+    public void setLikePhone(String likePhone) {
+        this.likePhone = likePhone;
+    }
+
+    public String getLikePrice() {
+        return likePrice;
+    }
+
+    public void setLikePrice(String likePrice) {
+        this.likePrice = likePrice;
+    }
+
+    public String getLikeWebsite() {
+        return likeWebsite;
+    }
+
+    public void setLikeWebsite(String likeWebsite) {
+        this.likeWebsite = likeWebsite;
+    }
+
+    public Hotel getHotel() {
+        return hotel;
+    }
+
+    public void setHotel(Hotel hotel) {
+        this.hotel = hotel;
+    }
 }
+

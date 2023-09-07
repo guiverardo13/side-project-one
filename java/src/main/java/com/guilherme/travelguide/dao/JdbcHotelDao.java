@@ -130,6 +130,7 @@ public class JdbcHotelDao implements HotelDao {
         hotel.setHotelId(rs.getInt("hotel_id"));
         hotel.setHotelCityId(rs.getInt("hotel_city_id"));
         hotel.setHotelPicture(rs.getString("hotel_picture"));
+        hotel.setHotelCityName(rs.getString("hotel_city_name"));
         hotel.setHotelName(rs.getString("hotel_name"));
         hotel.setHotelWebsite(rs.getString("hotel_website"));
         hotel.setHotelAddress(rs.getString("hotel_address"));

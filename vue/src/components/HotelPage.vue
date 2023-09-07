@@ -62,7 +62,8 @@
     <RegisterUserModal v-if="showRegistrationModal" @close="closeRegistrationModal" @registration-successful="handleRegistrationSuccess" />
     <AccountCreatedModal :showAccountCreatedModal="showAccountCreatedModal" @close-success-modal="closeSuccessModal" @sign-in="handleSignIn" />
     <LoginModal v-if="showLoginModal" @close="closeLoginModal" @login-successful="handleLoginSuccess" />
-    <LikeModal v-if="showLikesModal" :isAuthenticated="isAuthenticated" :likedItems="likedItems" />
+    <LikeModal v-if="showLikesModal" :isAuthenticated="isAuthenticated" :likedItems="likedItems" @close="closeLikeModal"/>
+
   </div>
 </template>
 
@@ -73,6 +74,7 @@ import RegisterUserModal from './RegisterUserModal.vue'
 import AccountCreatedModal from './AccountCreatedModal.vue';
 import LoginModal from './LoginModal.vue';
 import LikeModal from './LikeModal.vue'; // Import the LikeModal component
+import LikeService from '../services/LikeService.js';
 
 export default {
     name: 'HotelPage',  
@@ -109,20 +111,42 @@ export default {
 
   methods: {
 
-    toggleLike(hotel) {
-      // Implement the logic to like the item and update likedItems
-      hotel.isLiked = !hotel.isLiked;
-      if (hotel.isLiked) {
-        // Add the liked item to the likedItems array
-        this.likedItems.push({ id: hotel.id, name: hotel.name });
-      } else {
+    async toggleLike(hotel) {
+  // Toggle the like status
+  hotel.isLiked = !hotel.isLiked;
+
+  try {
+    if (hotel.isLiked) {
+      // If liked, make an API request to add the hotel to the user's likes
+      const response = await LikeService.addLikeToList(hotel);
+      const likeId = response.data.like_id; // Get the returned like_id
+      
+      // Make an API request to associate the hotel with the user using the like_id
+      await LikeService.addUserLike(this.$store.state.userId, likeId);
+      
+      // Add the liked item to the likedItems array
+      this.likedItems.push({ id: likeId, name: hotel.name });
+    } else {
+      // If unliked, make an API request to remove the hotel from the user's likes
+      // You would need to implement a corresponding removeLikeFromList method in LikeService
+      // Also, you need to find the like_id associated with the hotel in the likedItems array
+      const likeId = this.likedItems.find(item => item.name === hotel.name)?.id;
+      if (likeId) {
+        await LikeService.removeLikeFromList(likeId);
+        await LikeService.removeUserLike(this.$store.state.userId, likeId);
+        
         // Remove the unliked item from the likedItems array
-        const index = this.likedItems.findIndex((item) => item.id === hotel.id);
+        const index = this.likedItems.findIndex(item => item.id === likeId);
         if (index !== -1) {
           this.likedItems.splice(index, 1);
         }
       }
-    },
+    }
+  } catch (error) {
+    console.error('Error toggling like:', error);
+  }
+},
+
 
     openLikesModal() {
       // Show the Like modal when the user clicks "Likes" if authenticated
@@ -230,6 +254,10 @@ export default {
     closeLoginModal() {
       this.showLoginModal = false;
     },
+
+    closeLikeModal() {
+      this.showLikesModal = false;
+    }
   },
 };
 </script>

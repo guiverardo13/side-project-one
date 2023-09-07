@@ -3,7 +3,6 @@ import CityPage from '../components/CityPage.vue';
 import WelcomePage from '../views/WelcomePage.vue';
 import HotelPage from '../components/HotelPage.vue';
 import BarPage from '../components/BarPage.vue';
-import LikeModal from '../components/LikeModal.vue';
 import store from '../store'; // Import your Vuex store
 
 const routes = [
@@ -28,13 +27,7 @@ const routes = [
     name: 'BarPage',
     component: BarPage,
     // meta: { requiresAuth: true }, // Add meta field to require authentication
-  },
-  {
-    path: '/likes',
-    name: 'LikePage',
-    component: LikeModal,
-    meta: { requiresAuth: true }, // Add meta field to require authentication
-  },
+  }
 ];
 
 const router = createRouter({

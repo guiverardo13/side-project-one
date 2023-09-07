@@ -5,16 +5,18 @@ public class Hotel {
     private int hotelId;
     private int hotelCityId;
     private String hotelPicture;
+    private String hotelCityName;
     private String hotelName;
     private String hotelWebsite;
     private String hotelAddress;
     private String hotelPhone;
     private String hotelPrice;
 
-    public Hotel(int hotelId, int hotelCityId, String hotelPicture, String hotelName, String hotelWebsite, String hotelAddress, String hotelPhone, String hotelPrice) {
+    public Hotel(int hotelId, int hotelCityId, String hotelPicture, String hotelCityName, String hotelName, String hotelWebsite, String hotelAddress, String hotelPhone, String hotelPrice) {
         this.hotelId = hotelId;
         this.hotelCityId = hotelCityId;
         this.hotelPicture = hotelPicture;
+        this.hotelCityName = hotelCityName;
         this.hotelName = hotelName;
         this.hotelWebsite = hotelWebsite;
         this.hotelAddress = hotelAddress;
@@ -42,6 +44,14 @@ public class Hotel {
 
     public void setHotelPicture(String hotelPicture) {
         this.hotelPicture = hotelPicture;
+    }
+
+    public String getHotelCityName() {
+        return hotelCityName;
+    }
+
+    public void setHotelCityName(String hotelCityName) {
+        this.hotelCityName = hotelCityName;
     }
 
     public void setHotelCityId(int hotelCityId) {

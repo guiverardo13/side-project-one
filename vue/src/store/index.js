@@ -7,9 +7,10 @@ const currentUser = JSON.parse(localStorage.getItem('user')) || {};
 
 export default createStore({
   state: {
-      token: currentToken,
-      user: currentUser,
-      isAuthenticated: false,
+    token: currentToken,
+    user: currentUser,
+    isAuthenticated: false,
+    userId: undefined, // Initialize userId
   },
 
   mutations: {
@@ -20,15 +21,18 @@ export default createStore({
     },
 
     SET_USER(state, user) {
+      console.log('SET_USER mutation called with user:', user);
       state.user = user;
+      state.userId = user.userId; // Set the userId from user data
       localStorage.setItem('user', JSON.stringify(user));
     },
-    
+
     LOGOUT(state) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       state.token = '';
       state.user = {};
+      state.userId = null;
       axios.defaults.headers.common = {};
     },
 

@@ -5,7 +5,7 @@
         <h1><router-link to="/">GV's Travel Guide</router-link></h1>
         <div class="item about"><a href="#">About</a></div>
         <div class="item contact"><a href="#contact">Contact</a></div>
-        <div class="item" @click="openRegistrationModal">
+        <div class="item" @click="openLikesModal">
           {{ isAuthenticated ? 'Likes' : 'Register' }}
         </div>
         <div class="item" @click="handleSignOutClick">
@@ -64,9 +64,10 @@
     </footer>
     <RegisterUserModal v-if="showRegistrationModal" @close="closeRegistrationModal" @registration-successful="handleRegistrationSuccess" />
     <AccountCreatedModal :showAccountCreatedModal="showAccountCreatedModal" @close-success-modal="closeSuccessModal" @sign-in="handleSignIn" />
-          <LoginModal v-if="showLoginModal" @close="closeLoginModal" @login-successful="handleLoginSuccess" />
-          <HotelPage />
-          <BarPage />
+    <LikeModal v-if="showLikesModal" :isAuthenticated="isAuthenticated" :likedItems="likedItems" @close="closeLikeModal"/>
+    <LoginModal v-if="showLoginModal" @close="closeLoginModal" @login-successful="handleLoginSuccess" />
+    <HotelPage />
+    <BarPage />
       </div>
 </template>
 
@@ -78,6 +79,7 @@ import AccountCreatedModal from './AccountCreatedModal.vue';
 import LoginModal from './LoginModal.vue';
 import HotelPage from './HotelPage.vue';
 import BarPage from './BarPage.vue';
+import LikeModal from './LikeModal.vue';
 
 export default {
   name: 'CityPage',
@@ -91,6 +93,7 @@ export default {
       showRegistrationModal: false,
       showAccountCreatedModal: false,
       showLoginModal: false,
+      showLikesModal: false
     };
   },
 
@@ -104,7 +107,8 @@ export default {
     AccountCreatedModal,
     LoginModal,
     HotelPage,
-    BarPage
+    BarPage,
+    LikeModal
   },
 
   props: {
@@ -155,6 +159,15 @@ export default {
       if (token) {
         this.isAuthenticated = true;
         // You can also update the user data here if needed
+      }
+    },
+
+    openLikesModal() {
+      // Show the Like modal when the user clicks "Likes" if authenticated
+      if (this.isAuthenticated) {
+        this.showLikesModal = true;
+      } else {
+        this.openRegistrationModal();
       }
     },
 
@@ -232,6 +245,10 @@ export default {
     closeLoginModal() {
       this.showLoginModal = false;
     },
+
+    closeLikeModal() {
+      this.showLikesModal = false;
+    }
 
     
   },
