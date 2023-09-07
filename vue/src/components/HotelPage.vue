@@ -62,7 +62,7 @@
     <RegisterUserModal v-if="showRegistrationModal" @close="closeRegistrationModal" @registration-successful="handleRegistrationSuccess" />
     <AccountCreatedModal :showAccountCreatedModal="showAccountCreatedModal" @close-success-modal="closeSuccessModal" @sign-in="handleSignIn" />
     <LoginModal v-if="showLoginModal" @close="closeLoginModal" @login-successful="handleLoginSuccess" />
-    <LikeModal v-if="showLikesModal" :isAuthenticated="isAuthenticated" :likedItems="likedItems" @close="closeLikeModal"/>
+    <LikeModal v-if="showLikesModal" :isAuthenticated="isAuthenticated" :likedItems="likedItems" @close="closeLikeModal" @liked-items-updated="handleLikedItemsUpdated"/>
 
   </div>
 </template>
@@ -77,7 +77,8 @@ import LikeModal from './LikeModal.vue'; // Import the LikeModal component
 import LikeService from '../services/LikeService.js';
 
 export default {
-    name: 'HotelPage',  
+    name: 'HotelPage',
+
     data() {
       return {
         showRegistrationModal: false,
@@ -106,10 +107,22 @@ export default {
   created() {
     // Fetch hotel data from the service
     this.fetchHotels();
+    this.handleLikedItemsUpdated(this.fetchedLikedItems);
     this.checkUserAuthentication();
   },
 
   methods: {
+
+    handleLikedItemsUpdated(fetchedLikedItems) {
+      // Assign the fetchedLikedItems to the likedItems array
+      this.likedItems = fetchedLikedItems;
+
+      // Iterate through the hotel items and update isLiked property
+      this.hotels.forEach((hotel) => {
+        // Check if the likeHotelId matches the hotelId
+        hotel.isLiked = !!this.likedItems.find((item) => item.likeHotelId === hotel.hotelId);
+      });
+    },
 
     async toggleLike(hotel) {
   // Toggle the like status
@@ -118,12 +131,17 @@ export default {
   try {
     if (hotel.isLiked) {
       // If liked, make an API request to add the hotel to the user's likes
-      const response = await LikeService.addLikeToList(hotel);
+      const userId = this.$store.state.user.userId;
+      const like = {
+        // Include other like properties as needed
+        likeHotelId: hotel.hotelId // Set the likeHotelId here
+      };
+      const response = await LikeService.addLikeToList(userId, like, hotel);
       const likeId = response.data.like_id; // Get the returned like_id
-      
+
       // Make an API request to associate the hotel with the user using the like_id
-      await LikeService.addUserLike(this.$store.state.userId, likeId);
-      
+      await LikeService.addUserLike(this.$store.state.user.userId, likeId);
+
       // Add the liked item to the likedItems array
       this.likedItems.push({ id: likeId, name: hotel.name });
     } else {
@@ -134,7 +152,7 @@ export default {
       if (likeId) {
         await LikeService.removeLikeFromList(likeId);
         await LikeService.removeUserLike(this.$store.state.userId, likeId);
-        
+
         // Remove the unliked item from the likedItems array
         const index = this.likedItems.findIndex(item => item.id === likeId);
         if (index !== -1) {
@@ -218,13 +236,27 @@ export default {
   }
 },
 
-    async fetchHotels() {
-      try {
-        this.hotels = await HotelServices.getHotelsByCityName(this.$route.params.cityName);
-      } catch (error) {
-        console.error('Error fetching hotel data:', error);
+async fetchHotels() {
+  try {
+    // Fetch hotel data for the current city
+    const cityName = this.$route.params.cityName;
+    this.hotels = await HotelServices.getHotelsByCityName(cityName);
+
+    // Loop through the fetched hotels and set the isLiked property
+    
+    this.hotels.forEach((hotel) => {
+      // Check if there's a value for the hotel in local storage
+      const isLiked = localStorage.getItem(`likedHotel_${hotel.hotelId}`);
+      if (isLiked !== null) {
+        // If found, parse it as a boolean and set isLiked accordingly
+        hotel.isLiked = JSON.parse(isLiked);
       }
-    },
+    });
+    
+  } catch (error) {
+    console.error('Error fetching hotel data:', error);
+  }
+},
 
     openRegistrationModal() {
       this.showRegistrationModal = true;

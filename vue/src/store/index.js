@@ -11,6 +11,7 @@ export default createStore({
     user: currentUser,
     isAuthenticated: false,
     userId: undefined, // Initialize userId
+    likedHotels: []
   },
 
   mutations: {
@@ -38,6 +39,19 @@ export default createStore({
 
     setAuthenticationStatus(state, status) {
       state.isAuthenticated = status;
+    },
+
+    addToLikedHotels(state, hotelId) {
+      if (!state.likedHotels.includes(hotelId)) {
+        state.likedHotels.push(hotelId);
+      }
+    },
+
+    removeFromLikedHotels(state, hotelId) {
+      const index = state.likedHotels.indexOf(hotelId);
+      if (index !== -1) {
+        state.likedHotels.splice(index, 1);
+      }
     },
   },
 });

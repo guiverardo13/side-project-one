@@ -15,9 +15,11 @@ export default {
     }
   },
 
-  async addLikeToList(like) {
+  async addLikeToList(userId, like, hotel) {
     try {
-      const response = await instance.post('/likes/add', like);
+      like.likeHotelId = hotel.hotelId;
+      const response = await instance.post(`/likes/add/user/${userId}`, like);
+      console.log('Response from backend:', response.data); // Log the response data
       return response.data;
     } catch (error) {
       console.error('Error adding like:', error);
@@ -35,22 +37,12 @@ export default {
     }
   },
 
-  async removeLikeFromList(likeId) {
+  async deleteLike(likeId, userId) {
     try {
-      const response = await instance.delete(`/likes/remove/${likeId}`);
+      const response = await instance.delete(`/like/delete/${likeId}/user/${userId}`);
       return response.data;
     } catch (error) {
-      console.error('Error removing like from list:', error);
-      throw error;
-    }
-  },
-
-  async removeUserLike(userId, likeId) {
-    try {
-      const response = await instance.delete(`/likes/remove/user/like?userId=${userId}&likeId=${likeId}`);
-      return response.data;
-    } catch (error) {
-      console.error('Error removing user like:', error);
+      console.error('Error deleting like:', error);
       throw error;
     }
   },

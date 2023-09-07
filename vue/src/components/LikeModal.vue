@@ -12,8 +12,10 @@
               <!-- Use flexbox for positioning -->
               <div class="like-info">
                 <div class="top-right">
-                  <i v-if="like.isLiked" @click="toggleLike(like)" class="fa-solid fa-heart red-heart"></i>
-                  <i v-else @click="toggleLike(like)" class="fa-regular fa-heart red-heart"></i>
+                  <i
+            @click="toggleLike(like)"
+            :class="{'fa-regular fa-heart red-heart': like.isLiked, 'fa-solid fa-heart red-heart': !like.isLiked }"
+          ></i>
                 </div>
                 <h3>Name: {{ like.likeName }}</h3>
                 <p>City: {{ like.likeCityName }}</p>
@@ -55,15 +57,53 @@ export default {
   methods: {
     async fetchLikedItems(userId) {
       try {
-        console.log('User ID from store:', this.$store.state.userId);
         // Fetch liked items for the user
         const fetchedItems = await LikeService.getLikesByUserId(userId);
-        console.log('Fetched items:', fetchedItems); // Add this line
+        console.log('Fetched items:', fetchedItems); // Log the fetched data
         this.fetchedLikedItems = fetchedItems; // Update the local data property
+
+        // Emit the fetchedLikedItems data to the parent component (HotelPage)
+        this.$emit('liked-items-updated', this.fetchedLikedItems);
       } catch (error) {
         console.error('Error fetching liked items data:', error);
       }
     },
+
+
+async toggleLike(like) {
+    // Toggle the like status
+    like.isLiked = !like.isLiked;
+
+    try {
+      if (like.isLiked) {
+        // If liked, call the deleteLike method
+        await this.deleteLike(like.likeId);
+      }
+    } catch (error) {
+      console.error('Error toggling like:', error);
+    }
+  },
+
+async deleteLike(likeId) {
+  try {
+    const userId = this.$store.state.user.userId;
+    
+    // Introduce a 0.5-second (500 milliseconds) delay
+    await new Promise(resolve => setTimeout(resolve, 80));
+    
+    const isDeleted = await LikeService.deleteLike(likeId, userId); // Pass the likeId
+    console.log('Like object before deletion:', likeId);
+
+    if (isDeleted) {
+      // Remove the deleted like from the local list
+      this.fetchedLikedItems = this.fetchedLikedItems.filter(item => item.likeId !== likeId);
+    } else {
+      console.error('Failed to delete like');
+    }
+  } catch (error) {
+    console.error('Error deleting like:', error);
+  }
+},
 
     closeLoginModal() {
       // Implement the logic to close the modal here

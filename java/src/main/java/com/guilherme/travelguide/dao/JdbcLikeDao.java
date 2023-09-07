@@ -16,6 +16,7 @@ import java.util.List;
 public class JdbcLikeDao implements LikeDao {
 
     private final JdbcTemplate jdbcTemplate;
+    Hotel hotel = new Hotel();
 
     public JdbcLikeDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -53,28 +54,13 @@ public class JdbcLikeDao implements LikeDao {
         return like;
     }
 
-    @Override
-    public Hotel getHotelById(int hotelId) {
-        Hotel hotel = null;
-        String sql = "SELECT * FROM hotel WHERE hotel_id = ?;";
-        try {
-            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, hotelId);
-            if (results.next()) {
-                hotel = mapRowToHotel(results);
-            }
-        } catch (CannotGetJdbcConnectionException e) {
-            throw new DaoException("Unable to connect to server or database", e);
-        }
-        return hotel;
-    }
-
     // user ID is not present
     @Override
-    public Like addHotelToLikeList(User user, Like like) {
-        Hotel hotel = getHotelById(like.getLikeHotelId());
+    public Like addHotelToLikeList(User user, Like like, Hotel hotel) {
+        int hotelId = hotel.getHotelId();
 
-        if (hotel == null) {
-            throw new DaoException("Hotel information not found for hotelId: " + like.getLikeHotelId());
+        if (hotelId == 0) {
+            throw new DaoException("Hotel information not found for hotelId: " + hotel.getHotelId());
         }
 
         // Create a new Like object and set its properties
@@ -94,7 +80,7 @@ public class JdbcLikeDao implements LikeDao {
         try {
             String insertLikeSql = "INSERT INTO likes (like_city_id, like_hotel_id, like_picture, like_city_name, like_name, like_address, like_phone, like_price, like_website) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING like_id;";
             int newLikeId = jdbcTemplate.queryForObject(insertLikeSql, int.class,
-                    newLike.getLikeCityId(), newLike.getLikeHotelId(), newLike.getLikePicture(),
+                    newLike.getLikeCityId(), hotelId, newLike.getLikePicture(),
                     newLike.getLikeCityName(), newLike.getLikeName(), newLike.getLikeAddress(),
                     newLike.getLikePhone(), newLike.getLikePrice(), newLike.getLikeWebsite());
 
@@ -114,25 +100,42 @@ public class JdbcLikeDao implements LikeDao {
 
         return newLike;
     }
-//
-//    @Override
-//    public boolean addUserLike(int userId, int likeId) {
-//        try {
-//            String sql = "INSERT INTO user_likes (user_id, like_id) VALUES (?, ?)";
-//            int rowsAffected = jdbcTemplate.update(sql, userId, likeId);
-//
-//            return rowsAffected > 0;
-//        } catch (CannotGetJdbcConnectionException e) {
-//            throw new DaoException("Unable to connect to the server or database", e);
-//        }
-//    }
 
-        // DELETE LIKES FROM DATABASE
+    @Override
+    public boolean deleteLike(int likeId, int userId) {
+        try {
+            // Check if the like belongs to the user
+            String checkOwnershipSql = "SELECT COUNT(*) FROM user_likes WHERE like_id = ? AND user_id = ?";
+            int count = jdbcTemplate.queryForObject(checkOwnershipSql, Integer.class, likeId, userId);
 
+            if (count == 0) {
+                // The like doesn't belong to the user, so it cannot be deleted
+                return false;
+            }
+
+            // Delete from user_likes table
+            String deleteUserLikesSql = "DELETE FROM user_likes WHERE like_id = ?";
+            int deletedUserLikesCount = jdbcTemplate.update(deleteUserLikesSql, likeId);
+
+            // Delete from likes table
+            String deleteLikesSql = "DELETE FROM likes WHERE like_id = ?";
+            int deletedLikesCount = jdbcTemplate.update(deleteLikesSql, likeId);
+
+            // Check if at least one row was deleted from each table
+            return deletedUserLikesCount > 0 && deletedLikesCount > 0;
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        } catch (Exception e) {
+            throw new DaoException("An error occurred while deleting the like", e);
+        }
+    }
 
 
     private Like mapRowToLike(SqlRowSet rs) {
         Like like = new Like();
+        like.setLikeId(rs.getInt("like_id"));
         like.setLikeCityId(rs.getInt("like_city_id"));
         like.setLikeBarId(rs.getInt("like_bar_id"));
         like.setLikeHotelId(rs.getInt("like_hotel_id"));

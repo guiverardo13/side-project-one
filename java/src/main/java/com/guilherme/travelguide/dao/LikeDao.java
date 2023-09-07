@@ -17,10 +17,10 @@ public interface LikeDao {
 
     Like getLikeById(int likeId);
 
-    Like addHotelToLikeList(User user, Like like);
+    Like addHotelToLikeList(User user, Like like, Hotel hotel);
 
-//    boolean addUserLike(int userId, int likeId);
-    Hotel getHotelById(int hotelId);
+    boolean deleteLike(int likeId, int userId);
+
 
 
 

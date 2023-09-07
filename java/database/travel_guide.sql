@@ -227,15 +227,5 @@ INSERT INTO hotel (hotel_city_id, hotel_picture, hotel_city_name, hotel_name, ho
 INSERT INTO hotel (hotel_city_id, hotel_picture, hotel_city_name, hotel_name, hotel_website, hotel_address, hotel_phone, hotel_price) VALUES (6, 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/27/e6/c1/d0/exterior.jpg?w=1100&h=-1&s=1', 'Washington D.C.', 'The Royal Sonesta Washington DC Dupont Circle', 'https://www.sonesta.com/royal-sonesta/dc/washington/royal-sonesta-washington-dc-dupont-circle?utm_campaign=business_advantage&utm_medium=listing&utm_source=tripadvisor&src=tripadvisor_business_advantage', '2121 P Street NW, Washington DC, DC 20037', '(202) 410-9320', '$$$');
 INSERT INTO hotel (hotel_city_id, hotel_picture, hotel_city_name, hotel_name, hotel_website, hotel_address, hotel_phone, hotel_price) VALUES (6, 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/29/39/a3/0b/exterior.jpg?w=1100&h=-1&s=1', 'Washington D.C.', 'Hilton Washington DC National Mall The Wharf', 'https://www.hilton.com/en/hotels/dcaephh-hilton-washington-dc-national-mall-the-wharf/?SEO_id=GMB-AMER-HH-DCAEPHH&y_source=1_MTIzOTE2NTMtNzE1LWxvY2F0aW9uLndlYnNpdGU%3D', '480 L''Enfant Plaza SW, Washington DC, DC 20024', '(855) 605-0316', '$$');
 
-INSERT INTO likes (like_city_id, like_hotel_id, like_picture, like_city_name, like_name, like_address, like_phone, like_price, like_website)
-VALUES (1, 1, 'https://cdn.wallpapersafari.com/34/60/pwHxg2.jpg', 'Pittsburgh', 'Hotel Name 1', 'Hotel Address 1', '123-456-7890', '200', 'http://hotel1.com');
-
-INSERT INTO likes (like_city_id, like_bar_id, like_picture, like_city_name, like_name, like_address, like_phone, like_price, like_website)
-VALUES (1, 2, 'https://cms.druryhotels.com/media/467707/172-exterior.png?anchor=center&mode=crop&width=659&height=422&rnd=133307098360000000', 'Miami', 'Bar Name 2', 'Bar Address 2', '987-654-3210', '50', 'http://bar2.com');
-
-
-INSERT INTO user_likes (user_id, like_id) VALUES (1, 1);
-INSERT INTO user_likes (user_id, like_id) VALUES (1, 2);
-
 
 COMMIT;
