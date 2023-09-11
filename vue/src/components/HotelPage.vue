@@ -62,7 +62,7 @@
     <RegisterUserModal v-if="showRegistrationModal" @close="closeRegistrationModal" @registration-successful="handleRegistrationSuccess" />
     <AccountCreatedModal :showAccountCreatedModal="showAccountCreatedModal" @close-success-modal="closeSuccessModal" @sign-in="handleSignIn" />
     <LoginModal v-if="showLoginModal" @close="closeLoginModal" @login-successful="handleLoginSuccess" />
-    <LikeModal v-if="showLikesModal" :isAuthenticated="isAuthenticated" :likedItems="likedItems" @close="closeLikeModal" @liked-items-updated="handleLikedItemsUpdated"/>
+    <LikeModal v-if="showLikesModal" :isAuthenticated="isAuthenticated" :likedItems="likedItems" @close="closeLikeModal" @liked-items-updated="handleLikedItemsUpdated" @like-removed="handleLikeRemoved"/>
 
   </div>
 </template>
@@ -107,27 +107,29 @@ export default {
   created() {
     // Fetch hotel data from the service
     this.fetchHotels();
-    this.handleLikedItemsUpdated(this.fetchedLikedItems);
+    this.handleLikedItemsUpdated(this.likedItems);
     this.checkUserAuthentication();
   },
 
   methods: {
 
-    handleLikedItemsUpdated(fetchedLikedItems) {
-      // Assign the fetchedLikedItems to the likedItems array
-      this.likedItems = fetchedLikedItems;
+    handleLikedItemsUpdated(updatedLikedItems) {
+    // Update the likedItems array with the updated data
+    this.likedItems = updatedLikedItems;
 
-      // Iterate through the hotel items and update isLiked property
-      this.hotels.forEach((hotel) => {
-        // Check if the likeHotelId matches the hotelId
-        hotel.isLiked = !!this.likedItems.find((item) => item.likeHotelId === hotel.hotelId);
-      });
-    },
+    // Iterate through the hotel items and update the isLiked property
+    this.hotels.forEach((hotel) => {
+      // Check if the likeHotelId matches the hotelId
+      hotel.isLiked = !!this.likedItems.find((item) => item.likeHotelId === hotel.hotelId);
+    });
+  },
 
     async toggleLike(hotel) {
-  // Toggle the like status
+      if (!this.isAuthenticated) {
+        window.alert('Please sign in');
+      } else {
+        
   hotel.isLiked = !hotel.isLiked;
-
   try {
     if (hotel.isLiked) {
       // If liked, make an API request to add the hotel to the user's likes
@@ -137,32 +139,48 @@ export default {
         likeHotelId: hotel.hotelId // Set the likeHotelId here
       };
       const response = await LikeService.addLikeToList(userId, like, hotel);
-      const likeId = response.data.like_id; // Get the returned like_id
 
-      // Make an API request to associate the hotel with the user using the like_id
-      await LikeService.addUserLike(this.$store.state.user.userId, likeId);
+      // Check if the response status is successful (e.g., 200 OK)
+      if (response.status === 200 || response.status === 201) {
+        // Check if the response data has the expected structure
+        if (response.data && response.data.likeId) {
+          const likeId = response.data.likeId; // Get the returned like_id
 
-      // Add the liked item to the likedItems array
-      this.likedItems.push({ id: likeId, name: hotel.name });
+          // Make an API request to associate the hotel with the user using the like_id
+          await LikeService.addUserLike(this.$store.state.user.userId, likeId);
+
+          // Add the liked item to the likedItems array
+          this.likedItems.push({ id: likeId, likeHotelId: hotel.hotelId });
+        } else {
+          console.error('Invalid response structure:', response.data);
+        }
+      } else {
+        console.error('Failed to add like:', response.status, response.statusText);
+        console.log('API Response:', response);
+      }
     } else {
-      // If unliked, make an API request to remove the hotel from the user's likes
-      // You would need to implement a corresponding removeLikeFromList method in LikeService
-      // Also, you need to find the like_id associated with the hotel in the likedItems array
-      const likeId = this.likedItems.find(item => item.name === hotel.name)?.id;
+      // If unliked, retrieve the likeId from the likedItems array
+      const likeId = this.likedItems.find((likedItem) => likedItem.likeHotelId === hotel.hotelId)?.id;
       if (likeId) {
-        await LikeService.removeLikeFromList(likeId);
-        await LikeService.removeUserLike(this.$store.state.userId, likeId);
+        try {
+          // Make an API request to delete the like using likeId
+          await LikeService.deleteLike(likeId);
 
-        // Remove the unliked item from the likedItems array
-        const index = this.likedItems.findIndex(item => item.id === likeId);
-        if (index !== -1) {
-          this.likedItems.splice(index, 1);
+          // Remove the unliked item from the likedItems array
+          const index = this.likedItems.findIndex((item) => item.id === likeId);
+          if (index !== -1) {
+            this.likedItems.splice(index, 1);
+          }
+        } catch (deleteError) {
+          console.error('Failed to delete like:', deleteError);
+          // Handle delete error appropriately
         }
       }
     }
   } catch (error) {
     console.error('Error toggling like:', error);
   }
+}
 },
 
 
@@ -208,6 +226,14 @@ export default {
       }
     },
 
+        handleLikeRemoved(item) {
+      // Find the hotel in the `hotels` array based on the likeHotelId and update its `isLiked` property to `false`
+      const hotelToUpdate = this.hotels.find((hotel) => hotel.hotelId === item.likeHotelId);
+      if (hotelToUpdate) {
+        hotelToUpdate.isLiked = false;
+      }
+    },
+
     logoutUser() {
       // Clear the token and user data from local storage
       UserServices.logout();
@@ -242,22 +268,20 @@ async fetchHotels() {
     const cityName = this.$route.params.cityName;
     this.hotels = await HotelServices.getHotelsByCityName(cityName);
 
+    // Fetch the user's liked items
+    const userId = this.$store.state.user.userId; // Assuming you have access to the user's ID
+    const userLikedItems = await LikeService.getLikesByUserId(userId);
+
     // Loop through the fetched hotels and set the isLiked property
-    
     this.hotels.forEach((hotel) => {
-      // Check if there's a value for the hotel in local storage
-      const isLiked = localStorage.getItem(`likedHotel_${hotel.hotelId}`);
-      if (isLiked !== null) {
-        // If found, parse it as a boolean and set isLiked accordingly
-        hotel.isLiked = JSON.parse(isLiked);
-      }
+      // Check if the hotel is in the user's liked items
+      hotel.isLiked = userLikedItems.some((item) => item.likeHotelId === hotel.hotelId);
     });
-    
   } catch (error) {
     console.error('Error fetching hotel data:', error);
   }
 },
-
+    
     openRegistrationModal() {
       this.showRegistrationModal = true;
     },
@@ -289,6 +313,7 @@ async fetchHotels() {
 
     closeLikeModal() {
       this.showLikesModal = false;
+      this.fetchHotels();
     }
   },
 };

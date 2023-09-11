@@ -176,8 +176,8 @@
         showRegistrationModal: false,
         showAccountCreatedModal: false,
         showLoginModal: false,
-        showLikesModal: false
-        // user: this.$store.state.user || {}, // Initialize user object from Vuex
+        showLikesModal: false,
+        likedItems: [], // Initialize likedItems as an empty array
       };
     },
 
