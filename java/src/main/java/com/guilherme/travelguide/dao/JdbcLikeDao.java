@@ -1,8 +1,6 @@
 package com.guilherme.travelguide.dao;
 
-import com.guilherme.travelguide.model.Hotel;
-import com.guilherme.travelguide.model.Like;
-import com.guilherme.travelguide.model.User;
+import com.guilherme.travelguide.model.*;
 import com.guilherme.travelguide.security.exception.DaoException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
@@ -101,6 +99,96 @@ public class JdbcLikeDao implements LikeDao {
         return newLike;
     }
 
+    public Like addBarToLikeList(User user, Like like, Bar bar) {
+        int barId = bar.getBarId();
+
+        if (barId == 0) {
+            throw new DaoException("Bar information not found for barId: " + bar.getBarId());
+        }
+
+        // Create a new Like object and set its properties
+        Like newLike = new Like();
+        newLike.setLikeCityId(bar.getBarCityId());
+        newLike.setLikePicture(bar.getBarPicture());
+        newLike.setLikeCityName(bar.getBarCityName());
+        newLike.setLikeName(bar.getBarName());
+        newLike.setLikeWebsite(bar.getBarWebsite());
+        newLike.setLikeAddress(bar.getBarAddress());
+        newLike.setLikePhone(bar.getBarPhone());
+        newLike.setLikePrice(bar.getBarPrice());
+
+        // Set the hotel object in the newLike object
+        newLike.setBar(bar);
+
+        try {
+            String insertLikeSql = "INSERT INTO likes (like_city_id, like_bar_id, like_picture, like_city_name, like_name, like_address, like_phone, like_price, like_website) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING like_id;";
+            int newLikeId = jdbcTemplate.queryForObject(insertLikeSql, int.class,
+                    newLike.getLikeCityId(), barId, newLike.getLikePicture(),
+                    newLike.getLikeCityName(), newLike.getLikeName(), newLike.getLikeAddress(),
+                    newLike.getLikePhone(), newLike.getLikePrice(), newLike.getLikeWebsite());
+
+            // Now, insert the association into the user_likes table
+            String insertUserLikesSql = "INSERT INTO user_likes (user_id, like_id) VALUES (?, ?)";
+            jdbcTemplate.update(insertUserLikesSql, user.getUserId(), newLikeId);
+
+            newLike.setLikeId(newLikeId); // Set the generated like_id in the newLike object
+
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        } catch (Exception e) {
+            throw new DaoException("An error occurred while adding the like", e);
+        }
+
+        return newLike;
+    }
+
+    public Like addRestaurantToLikeList(User user, Like like, Restaurant restaurant) {
+        int restaurantId = restaurant.getRestaurantId();
+
+        if (restaurantId == 0) {
+            throw new DaoException("Restaurant information not found for restaurantId: " + restaurant.getRestaurantId());
+        }
+
+        // Create a new Like object and set its properties
+        Like newLike = new Like();
+        newLike.setLikeCityId(restaurant.getRestaurantCityId());
+        newLike.setLikePicture(restaurant.getRestaurantPicture());
+        newLike.setLikeCityName(restaurant.getRestaurantCityName());
+        newLike.setLikeName(restaurant.getRestaurantName());
+        newLike.setLikeWebsite(restaurant.getRestaurantWebsite());
+        newLike.setLikeAddress(restaurant.getRestaurantAddress());
+        newLike.setLikePhone(restaurant.getRestaurantPhone());
+        newLike.setLikePrice(restaurant.getRestaurantPrice());
+
+        // Set the hotel object in the newLike object
+        newLike.setRestaurant(restaurant);
+
+        try {
+            String insertLikeSql = "INSERT INTO likes (like_city_id, like_restaurant_id, like_picture, like_city_name, like_name, like_address, like_phone, like_price, like_website) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING like_id;";
+            int newLikeId = jdbcTemplate.queryForObject(insertLikeSql, int.class,
+                    newLike.getLikeCityId(), restaurantId, newLike.getLikePicture(),
+                    newLike.getLikeCityName(), newLike.getLikeName(), newLike.getLikeAddress(),
+                    newLike.getLikePhone(), newLike.getLikePrice(), newLike.getLikeWebsite());
+
+            // Now, insert the association into the user_likes table
+            String insertUserLikesSql = "INSERT INTO user_likes (user_id, like_id) VALUES (?, ?)";
+            jdbcTemplate.update(insertUserLikesSql, user.getUserId(), newLikeId);
+
+            newLike.setLikeId(newLikeId); // Set the generated like_id in the newLike object
+
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        } catch (Exception e) {
+            throw new DaoException("An error occurred while adding the like", e);
+        }
+
+        return newLike;
+    }
+
     @Override
     public boolean deleteLike(int likeId, int userId) {
         try {
@@ -166,5 +254,33 @@ public class JdbcLikeDao implements LikeDao {
         hotel.setHotelPrice(rs.getString("hotel_price"));
 
         return hotel;
+    }
+
+    private Bar mapRowToBar(SqlRowSet rs) {
+        Bar bar = new Bar();
+        bar.setBarId(rs.getInt("bar_id"));
+        bar.setBarCityId(rs.getInt("bar_city_id"));
+        bar.setBarPicture(rs.getString("bar_picture"));
+        bar.setBarName(rs.getString("bar_name"));
+        bar.setBarWebsite(rs.getString("bar_website"));
+        bar.setBarAddress(rs.getString("bar_address"));
+        bar.setBarPhone(rs.getString("bar_phone"));
+        bar.setBarPrice(rs.getString("bar_price"));
+        return bar;
+    }
+
+    private Restaurant mapRowToRestaurant(SqlRowSet rs) {
+        Restaurant restaurant = new Restaurant();
+        restaurant.setRestaurantId(rs.getInt("restaurant_id"));
+        restaurant.setRestaurantCityId(rs.getInt("restaurant_city_id"));
+        restaurant.setRestaurantPicture(rs.getString("restaurant_picture"));
+        restaurant.setRestaurantCityName(rs.getString("restaurant_city_name"));
+        restaurant.setRestaurantName(rs.getString("restaurant_name"));
+        restaurant.setRestaurantWebsite(rs.getString("restaurant_website"));
+        restaurant.setRestaurantAddress(rs.getString("restaurant_address"));
+        restaurant.setRestaurantPhone(rs.getString("restaurant_phone"));
+        restaurant.setRestaurantPrice(rs.getString("restaurant_price"));
+
+        return restaurant;
     }
 }

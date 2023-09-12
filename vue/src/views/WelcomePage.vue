@@ -252,27 +252,12 @@
             console.error('Error updating Vuex store and local storage:', error);
           }
         },
-  
-      // async loginUser() {
-      //   try {
-      //     const response = await UserServices.login(this.user);
-      //     if (response.status === 200) {
-      //       this.handleLoginSuccess(response);
-      //     }
-      //   } catch (error) {
-      //     // Handle login error
-      //   }
-      // },
 
       handleSignIn() {
         console.log('Sign In button clicked'); // Add this line for debugging
           this.closeSuccessModal();
           this.openLoginModal();
         },
-      
-      viewLikes() {
-        // Implement this method to display user likes (e.g., open a modal)
-      },
   
       logoutUser() {
   // Clear the token and user data from local storage

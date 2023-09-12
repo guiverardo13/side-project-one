@@ -4,16 +4,18 @@ public class Bar {
     private int barId;
     private int barCityId;
     private String barPicture;
+    private String barCityName;
     private String barName;
     private String barWebsite;
     private String barAddress;
     private String barPhone;
     private String barPrice;
 
-    public Bar(int barId, int barCityId, String barPicture, String barName, String barWebsite, String barAddress, String barPhone, String barPrice) {
+    public Bar(int barId, int barCityId, String barPicture, String barCityName, String barName, String barWebsite, String barAddress, String barPhone, String barPrice) {
         this.barId = barId;
         this.barCityId = barCityId;
         this.barPicture = barPicture;
+        this.barCityName = barCityName;
         this.barName = barName;
         this.barWebsite = barWebsite;
         this.barAddress = barAddress;
@@ -41,6 +43,14 @@ public class Bar {
 
     public String getBarPicture() {
         return barPicture;
+    }
+
+    public String getBarCityName() {
+        return barCityName;
+    }
+
+    public void setBarCityName(String barCityName) {
+        this.barCityName = barCityName;
     }
 
     public void setBarPicture(String barPicture) {

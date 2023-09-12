@@ -132,6 +132,7 @@ public class JdbcBarDao implements BarDao{
         bar.setBarId(rs.getInt("bar_id"));
         bar.setBarCityId(rs.getInt("bar_city_id"));
         bar.setBarPicture(rs.getString("bar_picture"));
+        bar.setBarCityName(rs.getString("bar_city_name"));
         bar.setBarName(rs.getString("bar_name"));
         bar.setBarWebsite(rs.getString("bar_website"));
         bar.setBarAddress(rs.getString("bar_address"));

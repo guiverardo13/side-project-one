@@ -163,11 +163,12 @@ export default {
     },
 
     openLikesModal() {
-      // Show the Like modal when the user clicks "Likes" if authenticated
+      // Check if the user is authenticated before showing the Like modal
       if (this.isAuthenticated) {
         this.showLikesModal = true;
       } else {
-        this.openRegistrationModal();
+        // If not authenticated, you can handle it in some way, such as showing a login/register modal
+        this.openRegistrationModal(); // You may want to modify this part to fit your application's logic
       }
     },
 

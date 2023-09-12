@@ -148,7 +148,7 @@ export default {
 
     async toggleLike(hotel) {
   if (!this.isAuthenticated) {
-    window.alert('Please sign in');
+    window.alert('Please sign in to like hotels');
   } else {
     hotel.isLiked = !hotel.isLiked;
     try {
@@ -206,15 +206,16 @@ export default {
   }
 },
 
+openLikesModal() {
+  // Check if the user is authenticated before showing the Like modal
+  if (this.isAuthenticated) {
+    this.showLikesModal = true;
+  } else {
+    // If not authenticated, you can handle it in some way, such as showing a login/register modal
+    this.openRegistrationModal(); // You may want to modify this part to fit your application's logic
+  }
+},
 
-    openLikesModal() {
-      // Show the Like modal when the user clicks "Likes" if authenticated
-      if (this.isAuthenticated) {
-        this.showLikesModal = true;
-      } else {
-        this.openRegistrationModal();
-      }
-    },
        
     handleSignIn() {
         console.log('Sign In button clicked'); // Add this line for debugging

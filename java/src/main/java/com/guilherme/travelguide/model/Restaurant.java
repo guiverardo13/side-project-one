@@ -5,16 +5,18 @@ public class Restaurant {
     private int restaurantId;
     private int restaurantCityId;
     private String restaurantPicture;
+    private String restaurantCityName;
     private String restaurantName;
     private String restaurantWebsite;
     private String restaurantAddress;
     private String restaurantPhone;
     private String restaurantPrice;
 
-    public Restaurant(int restaurantId, int restaurantCityId, String restaurantPicture, String restaurantName, String restaurantWebsite, String restaurantAddress, String restaurantPhone, String restaurantPrice) {
+    public Restaurant(int restaurantId, int restaurantCityId, String restaurantPicture, String restaurantCityName, String restaurantName, String restaurantWebsite, String restaurantAddress, String restaurantPhone, String restaurantPrice) {
         this.restaurantId = restaurantId;
         this.restaurantCityId = restaurantCityId;
         this.restaurantPicture = restaurantPicture;
+        this.restaurantCityName = restaurantCityName;
         this.restaurantName = restaurantName;
         this.restaurantWebsite = restaurantWebsite;
         this.restaurantAddress = restaurantAddress;
@@ -42,6 +44,14 @@ public class Restaurant {
 
     public String getRestaurantPicture() {
         return restaurantPicture;
+    }
+
+    public String getRestaurantCityName() {
+        return restaurantCityName;
+    }
+
+    public void setRestaurantCityName(String restaurantCityName) {
+        this.restaurantCityName = restaurantCityName;
     }
 
     public void setRestaurantPicture(String restaurantPicture) {

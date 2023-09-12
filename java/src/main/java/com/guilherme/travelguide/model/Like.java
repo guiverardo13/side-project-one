@@ -16,6 +16,8 @@ public class Like {
     private String likePrice;
     private String likeWebsite;
     private Hotel hotel;
+    private Bar bar;
+    private Restaurant restaurant;
 
     public Like(int likeId, int likeCityId, int likeBarId, int likeHotelId, int likeRestaurantId, int likeEventId, int likeTourId, String likePicture, String likeCityName, String likeName, String likeAddress, String likePhone, String likePrice, String likeWebsite) {
         this.likeId = likeId;
@@ -154,6 +156,22 @@ public class Like {
 
     public void setHotel(Hotel hotel) {
         this.hotel = hotel;
+    }
+
+    public Bar getBar() {
+        return bar;
+    }
+
+    public void setBar(Bar bar) {
+        this.bar = bar;
+    }
+
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
     }
 }
 

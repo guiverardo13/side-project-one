@@ -1,9 +1,6 @@
 package com.guilherme.travelguide.dao;
 
-import com.guilherme.travelguide.model.City;
-import com.guilherme.travelguide.model.Hotel;
-import com.guilherme.travelguide.model.Like;
-import com.guilherme.travelguide.model.User;
+import com.guilherme.travelguide.model.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +15,9 @@ public interface LikeDao {
     Like getLikeById(int likeId);
 
     Like addHotelToLikeList(User user, Like like, Hotel hotel);
+
+    Like addBarToLikeList(User user, Like like, Bar bar);
+    Like addRestaurantToLikeList(User user, Like like, Restaurant restaurant);
 
     boolean deleteLike(int likeId, int userId);
 

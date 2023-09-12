@@ -1,11 +1,7 @@
 package com.guilherme.travelguide.controllers;
 
-import com.guilherme.travelguide.dao.HotelDao;
-import com.guilherme.travelguide.dao.LikeDao;
-import com.guilherme.travelguide.dao.UserDao;
-import com.guilherme.travelguide.model.Hotel;
-import com.guilherme.travelguide.model.Like;
-import com.guilherme.travelguide.model.User;
+import com.guilherme.travelguide.dao.*;
+import com.guilherme.travelguide.model.*;
 import com.guilherme.travelguide.security.exception.DaoException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +16,15 @@ public class LikeController {
     private final LikeDao likeDao;
     private final UserDao userDao;
     private final HotelDao hotelDao;
+    private final BarDao barDao;
+    private final RestaurantDao restaurantDao;
 
-    public LikeController(LikeDao likeDao, UserDao userDao, HotelDao hotelDao) {
+    public LikeController(LikeDao likeDao, UserDao userDao, HotelDao hotelDao, BarDao barDao, RestaurantDao restaurantDao) {
         this.likeDao = likeDao;
         this.userDao = userDao;
         this.hotelDao = hotelDao;
+        this.barDao = barDao;
+        this.restaurantDao = restaurantDao;
     }
 
     @GetMapping("/likes/{userId}")
@@ -42,25 +42,40 @@ public class LikeController {
     public ResponseEntity<Like> addLike(@RequestBody Like like, @PathVariable Integer userId) {
         if (like == null || userId == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Like or User ID");
-        } else {
-            User user = userDao.getUserById(userId); // Replace userDao with your actual user data access object
-            if (user == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found");
-            }
+        }
 
-            // Fetch the hotel information by its ID or any other identifier.
-            // You may need to adjust this based on how you fetch hotel details in your application.
+        User user = userDao.getUserById(userId);
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found");
+        }
+
+        // Determine the type of liked item based on the presence of specific properties
+        if (like.getLikeHotelId() != 0) {
             Hotel hotel = hotelDao.getHotelById(like.getLikeHotelId());
-
-            // Check if the hotel exists
             if (hotel == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Hotel Not Found");
             }
-
-            // Pass the hotel object to the DAO method
-            Like createdLike = likeDao.addHotelToLikeList(user, like, hotel);
-
-            return new ResponseEntity<>(createdLike, HttpStatus.CREATED);
+            // Add the hotel to the user's liked list
+            Like createdHotelLike = likeDao.addHotelToLikeList(user, like, hotel);
+            return new ResponseEntity<>(createdHotelLike, HttpStatus.CREATED);
+        } else if (like.getLikeBarId() != 0) {
+            Bar bar = barDao.getBarById(like.getLikeBarId());
+            if (bar == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Bar Not Found");
+            }
+            // Add the bar to the user's liked list
+            Like createdBarLike = likeDao.addBarToLikeList(user, like, bar);
+            return new ResponseEntity<>(createdBarLike, HttpStatus.CREATED);
+        } else if (like.getLikeRestaurantId() != 0) {
+            Restaurant restaurant = restaurantDao.getRestaurantById(like.getLikeRestaurantId());
+            if (restaurant == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Restaurant Not Found");
+            }
+            // Add the restaurant to the user's liked list
+            Like createdRestaurantLike = likeDao.addRestaurantToLikeList(user, like, restaurant);
+            return new ResponseEntity<>(createdRestaurantLike, HttpStatus.CREATED);
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Like Type");
         }
     }
 

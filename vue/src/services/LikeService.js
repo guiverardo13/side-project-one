@@ -27,6 +27,30 @@ export default {
     }
   },
 
+  async addLikeBarToList(userId, like, bar) {
+    try {
+      like.likeBarId = bar.barId;
+      const response = await instance.post(`/likes/add/user/${userId}`, like);
+      console.log('Response from backend:', response.data); // Log the response data
+      return response.data;
+    } catch (error) {
+      console.error('Error adding like:', error);
+      throw error;
+    }
+  },
+
+  async addLikeRestaurantToList(userId, like, restaurant) {
+    try {
+      like.likeRestaurantId = restaurant.restaurantId;
+      const response = await instance.post(`/likes/add/user/${userId}`, like);
+      console.log('Response from backend:', response.data); // Log the response data
+      return response.data;
+    } catch (error) {
+      console.error('Error adding like:', error);
+      throw error;
+    }
+  },
+
   async addUserLike(userId, likeId) {
     try {
       const response = await instance.post(`/likes/add/like/${likeId}/user/${userId}`);

@@ -1,12 +1,16 @@
 <template>
   <div class="container-bar-restaurant">
     <header>
-    <nav class="container-top-bar-restaurant" v-if="isBarPage">
+    <nav class="container-top-hotel" v-if="isBarPage">
         <h1><router-link to="/">GV's Travel Guide</router-link></h1>
         <div class="item about"><a href="#">About</a></div>
         <div class="item contact"><a href="#contact">Contact</a></div>
-        <div class="item register" @click="openRegistrationModal">Register</div>
-        <div class="item sign-in" @click="openLoginModal">Sign in</div>
+        <div class="item" @click="openLikesModal">
+          {{ isAuthenticated ? 'Likes' : 'Register' }}
+        </div>
+        <div class="item" @click="handleSignOutClick">
+        {{ isAuthenticated ? 'Sign Out' : 'Sign in' }}
+        </div>
     </nav>
     </header>
     <main>
@@ -46,8 +50,8 @@
             <p> {{ bar.barAddress }}</p>
             <p> {{ bar.barPhone }}</p>
             <a :href="bar.barWebsite" target="_blank" class="menu-link">Reserve</a>
-            <i v-if="bar.isLiked" @click="toggleLike(bar)" class="fa-solid fa-heart red-heart-bar"></i>
-            <i v-else @click="toggleLike(bar)" class="fa-regular fa-heart red-heart-bar"></i>
+            <i v-if="bar.isLiked" @click="likeBar(bar)" class="fa-solid fa-heart red-heart-bar"></i>
+            <i v-else @click="likeBar(bar)" class="fa-regular fa-heart red-heart-bar"></i>
           </div>
         </div>
         <div class="restaurant-list" v-if="isBarPage && selectedSection === 'Restaurants' && !toggleState">
@@ -58,8 +62,8 @@
             <p> {{ restaurant.restaurantAddress }}</p>
             <p> {{ restaurant.restaurantPhone }}</p>
             <a :href="restaurant.restaurantWebsite" target="_blank" class="menu-link">Reserve</a>
-            <i v-if="restaurant.isLiked" @click="toggleLike(restaurant)" class="fa-solid fa-heart red-heart-bar"></i>
-            <i v-else @click="toggleLike(restaurant)" class="fa-regular fa-heart red-heart-bar"></i>
+            <i v-if="restaurant.isLiked" @click="likeRestaurant(restaurant)" class="fa-solid fa-heart red-heart-bar"></i>
+            <i v-else @click="likeRestaurant(restaurant)" class="fa-regular fa-heart red-heart-bar"></i>
           </div>
         </div>
     </main>
@@ -78,17 +82,21 @@
 </div>
     </footer>
     <RegisterUserModal v-if="showRegistrationModal" @close="closeRegistrationModal" @registration-successful="handleRegistrationSuccess" />
-          <AccountCreatedModal :showAccountCreatedModal="showAccountCreatedModal" @close-success-modal="closeSuccessModal" />
+          <AccountCreatedModal :showAccountCreatedModal="showAccountCreatedModal" @close-success-modal="closeSuccessModal"  @sign-in="handleSignIn" />
           <LoginModal v-if="showLoginModal" @close="closeLoginModal" @login-successful="handleLoginSuccess" />
+          <LikeModal v-if="showLikesModal" :isAuthenticated="isAuthenticated" :likedItems="likedItems" @close="closeLikeModal" @liked-items-updated="handleLikedItemsUpdated" @like-removed="handleLikeRemoved"/>
   </div>
 </template>
 
 <script>
 import BarServices from '../services/BarServices.js';
 import RestaurantServices from '../services/RestaurantServices.js'
+import UserServices from '../services/UserServices';
 import RegisterUserModal from './RegisterUserModal.vue';
 import AccountCreatedModal from './AccountCreatedModal.vue';
 import LoginModal from './LoginModal.vue';
+import LikeModal from './LikeModal.vue'; 
+import LikeService from '../services/LikeService.js';
 
 export default {
     name: 'BarPage',
@@ -97,79 +105,363 @@ export default {
             showRegistrationModal: false,
             showAccountCreatedModal: false,
             showLoginModal: false,
+            isAuthenticated: false,
             toggleState: true, // Initial toggle state
             selectedSection: 'Bars', // Initial selected section
+            showLikesModal: false,
             bars: [],
-            restaurants: [] 
+            restaurants: [],
+            likedItems: [], 
         };
     },
+
     components: {
         RegisterUserModal,
         AccountCreatedModal,
         LoginModal,
+        LikeModal
     },
+
     computed: {
         isBarPage() {
             return this.$route.name === 'BarPage'; // Adjust the route name if needed
         },
     },
+
     created() {
-        // Fetch bar data from the service
-        this.fetchBars();
-        this.fetchRestaurants();
-    },
+    this.fetchBars();
+    this.fetchRestaurants();
+    this.checkUserAuthentication();
+
+    if (this.isAuthenticated) {
+      const userId = this.$store.state.user.userId;
+      // Fetch liked items for bars
+      this.fetchLikedItems(userId, this.bars, 'bar_id');
+      // Fetch liked items for restaurants
+      this.fetchLikedItems(userId, this.restaurants, 'restaurant_id');
+    }
+  },
+
     methods: {
+
+      handleLikedItemsUpdated(updatedLikedItems, items, type) {
+  // Update the likedItems array with the updated data
+  this.likedItems = updatedLikedItems;
+
+  // Check if items is defined before iterating
+  if (items && items.length > 0) {
+    items.forEach((item) => {
+      this.toggleLike(item, type);
+    });
+  }
+},
+
+      handleLikeRemoved(item, itemType) {
+  // Determine the array of items based on the itemType
+  const itemsArray = itemType === 'bar' ? this.bars : this.restaurants;
+
+  // Find the item in the itemsArray based on its ID and update its `isLiked` property to `false`
+  const itemToUpdate = itemsArray.find((itemData) => itemData.id === item.itemId);
+
+  if (itemToUpdate) {
+    itemToUpdate.isLiked = false;
+  }
+},
+
+async fetchLikedItems(userId, items, type) {
+  try {
+    // Fetch liked items for the user
+    const fetchedItems = await LikeService.getLikesByUserId(userId);
+    console.log('Fetched items:', fetchedItems); // Log the fetched data
+    this.likedItems = fetchedItems; // Update the likedItems array
+
+    // Determine the itemIdKey based on the type
+    const itemIdKey = type === 'bar' ? 'barId' : 'restaurantId';
+
+    // Iterate through the items (bars or restaurants) and update their isLiked property
+    items.forEach((item) => {
+      // Check if the itemIdKey matches the item's ID
+      item.isLiked = !!this.likedItems.find((likedItem) => likedItem[itemIdKey] === item[itemIdKey]);
+    });
+  } catch (error) {
+    console.error('Error fetching liked items data:', error);
+  }
+},
+
+
+      async checkUserAuthentication() {
+        const token = this.$store.state.token;
+        
+        // Check if token is not undefined or null to set isAuthenticated
+        if (token !== undefined && token !== null) {
+          this.isAuthenticated = true; // Set isAuthenticated to true
+          this.user = this.$store.state.user;
+        }
+      },
+
       async fetchBars() {
         try {
-            this.bars = await BarServices.getBarsByCityName(this.$route.params.cityName);
-        } catch (error) {
-            console.error('Error fetching bar data:', error);
-        }
-    },
+          // Fetch hotel data for the current city
+          const cityName = this.$route.params.cityName;
+          this.bars = await BarServices.getBarsByCityName(cityName);
 
-    async fetchRestaurants() {
-        try {
-            this.restaurants = await RestaurantServices.getRestaurantsByCityName(this.$route.params.cityName);
+          // Fetch the user's liked items
+          const userId = this.$store.state.user.userId; // Assuming you have access to the user's ID
+          const userLikedItems = await LikeService.getLikesByUserId(userId);
+
+          // Loop through the fetched hotels and set the isLiked property
+          this.bars.forEach((bar) => {
+            // Check if the hotel is in the user's liked items
+            bar.isLiked = userLikedItems.some((item) => item.likeBarId === bar.barId);
+          });
         } catch (error) {
-            console.error('Error fetching restaurant data:', error);
+          console.error('Error fetching hotel data:', error);
         }
-    },
-        toggleLike(bar) {
-            bar.isLiked = !bar.isLiked;
+      },
+
+      async fetchRestaurants() {
+          try {
+            // Fetch hotel data for the current city
+            const cityName = this.$route.params.cityName;
+            this.restaurants = await RestaurantServices.getRestaurantsByCityName(cityName);
+
+            // Fetch the user's liked items
+            const userId = this.$store.state.user.userId; // Assuming you have access to the user's ID
+            const userLikedItems = await LikeService.getLikesByUserId(userId);
+
+            // Loop through the fetched hotels and set the isLiked property
+            this.restaurants.forEach((restaurant) => {
+              // Check if the hotel is in the user's liked items
+              restaurant.isLiked = userLikedItems.some((item) => item.likeRestaurantId === restaurant.restaurantId);
+            });
+          } catch (error) {
+            console.error('Error fetching hotel data:', error);
+          }
         },
+
+      async handleSignOutClick() {
+          if (this.isAuthenticated) {
+          this.logoutUser(); // Call the logoutUser method when Sign Out is clicked
+        } else {
+          this.openLoginModal(); // Open the login modal when not authenticated
+        }
+      },
+
+      async likeBar(bar) {
+  if (!this.isAuthenticated) {
+    window.alert('Please sign in to like bars');
+    return;
+  }
+
+  try {
+    const userId = this.$store.state.user.userId;
+
+    if (bar.isLiked) {
+      // If the bar is already liked, unliking it
+      const likeItem = this.likedItems.find(
+        (likedItem) => likedItem.likeBarId === bar.barId && likedItem.itemType === 'bar'
+      );
+
+      if (likeItem) {
+        const likeId = likeItem.likeId;
+
+        // Make an API request to remove the like based on the likeId
+        await LikeService.deleteLike(likeId, userId);
+
+        // Remove the unliked bar from the likedItems array
+        const index = this.likedItems.indexOf(likeItem);
+        if (index !== -1) {
+          this.likedItems.splice(index, 1);
+        }
+      }
+    } else {
+      // If the bar is not liked, liking it
+      const like = {
+        likeBarId: bar.barId,
+      };
+
+      // Make an API request to add the bar to the user's liked items
+      const response = await LikeService.addLikeBarToList(userId, like, bar);
+
+      if (response.status === 200 || response.status === 201) {
+        if (response.data && response.data.likeId) {
+          const likeId = response.data.likeId;
+
+          // Make an API request to associate the bar with the user using the like_id
+          await LikeService.addUserLike(userId, likeId);
+
+          // Add the liked bar to the likedItems array
+          this.likedItems.push({ likeId, likeBarId: bar.barId, itemType: 'bar' });
+        } else {
+          console.error('Invalid response structure:', response.data);
+        }
+      } else {
+        console.error('Failed to add like:', response.status, response.statusText);
+        console.log('API Response:', response);
+      }
+    }
+
+    // Toggle the isLiked state after handling the API call
+    bar.isLiked = !bar.isLiked;
+  } catch (error) {
+    console.error('Error toggling like:', error);
+  }
+},
+
+async likeRestaurant(restaurant) {
+  if (!this.isAuthenticated) {
+    window.alert('Please sign in to like hotels');
+  } else {
+    restaurant.isLiked = !restaurant.isLiked;
+    try {
+      if (restaurant.isLiked) {
+        // If liked, make an API request to add the hotel to the user's likes
+        const userId = this.$store.state.user.userId;
+        const like = {
+          // Include other like properties as needed
+          likeRestaurantId: restaurant.restaurantId // Set the likeHotelId here
+        };
+        const response = await LikeService.addLikeRestaurantToList(userId, like, restaurant);
+
+        // Check if the response status is successful (e.g., 200 OK)
+        if (response.status === 200 || response.status === 201) {
+          // Check if the response data has the expected structure
+          if (response.data && response.data.likeId) {
+            const likeId = response.data.likeId; // Get the returned like_id
+
+            // Make an API request to associate the hotel with the user using the like_id
+            await LikeService.addUserLike(userId, likeId); // Pass the userId here
+
+            // Add the liked item to the likedItems array
+            this.likedItems.push({ id: likeId, likeRestaurantId: restaurant.restaurantId });
+          } else {
+            console.error('Invalid response structure:', response.data);
+          }
+        } else {
+          console.error('Failed to add like:', response.status, response.statusText);
+          console.log('API Response:', response);
+        }
+      } else {
+        // If unliked, retrieve the likeId from the likedItems array
+        const likeItem = this.likedItems.find((likedItem) => likedItem.likeRestaurantId === restaurant.restaurantId);
+        if (likeItem) {
+          const likeId = likeItem.likeId;
+          const userId = this.$store.state.user.userId;
+          try {
+            // Make an API request to delete the like using likeId and userId
+            await LikeService.deleteLike(likeId, userId); // Pass the userId here
+
+            // Remove the unliked item from the likedItems array
+            const index = this.likedItems.indexOf(likeItem);
+            if (index !== -1) {
+              this.likedItems.splice(index, 1);
+            }
+          } catch (deleteError) {
+            console.error('Failed to delete like:', deleteError);
+            // Handle delete error appropriately
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error toggling like:', error);
+    }
+  }
+},
+
+        toggleSection(section) {
+          this.toggleState = !this.toggleState;
+          this.selectedSection = section;
+        },
+
         openRegistrationModal() {
             this.showRegistrationModal = true;
         },
         closeRegistrationModal() {
             this.showRegistrationModal = false;
         },
+
         handleRegistrationSuccess() {
             this.closeRegistrationModal();
             this.openSuccessModal();
         },
+
         closeSuccessModal() {
             this.showAccountCreatedModal = false;
         },
+
         openSuccessModal() {
             this.showAccountCreatedModal = true;
         },
+
+        handleSignIn() {
+      console.log('Sign In button clicked');
+      this.closeSuccessModal();
+      this.openLoginModal();
+        },
+
         openLoginModal() {
             this.showLoginModal = true;
         },
+
         closeLoginModal() {
             this.showLoginModal = false;
         },
-        handleLoginSuccess() {
-            this.closeLoginModal();
-            // ... handle successful login ...
+        
+        closeLikeModal() {
+            this.showLikesModal = false;
+            this.fetchBars();
+            this.fetchRestaurants();
         },
 
-        toggleSection(section) {
-          this.toggleState = !this.toggleState;
-          this.selectedSection = section;
+        openLikesModal() {
+  // Check if the user is authenticated before showing the Like modal
+  if (this.isAuthenticated) {
+    this.showLikesModal = true;
+  } else {
+    // If not authenticated, you can handle it in some way, such as showing a login/register modal
+    this.openRegistrationModal(); // You may want to modify this part to fit your application's logic
+  }
         },
-    },
-};
+
+        async handleLoginSuccess(response) {
+        this.closeLoginModal();
+        this.isAuthenticated = true; // Set isAuthenticated to true
+        this.user = response.data.user; // Update the user data
+
+        try {
+          // Update the Vuex store with the new user data
+          this.$store.commit("SET_AUTH_TOKEN", response.data.token);
+          this.$store.commit("SET_USER", response.data.user);
+        
+
+          // Update local storage
+          localStorage.setItem('token', response.data.token);
+          localStorage.setItem('user', JSON.stringify(response.data.user));
+        } catch (error) {
+          console.error('Error updating Vuex store and local storage:', error);
+        }
+        },
+      
+        logoutUser() {
+          // Clear the token and user data from local storage
+          UserServices.logout();
+          
+          // Clear user data and token in your Vuex store if needed
+          this.$store.commit('LOGOUT');
+          
+          // Reset the user in Vuex store to an empty object if needed
+          this.$store.commit('SET_USER', {});
+          
+          // Update the isAuthenticated status directly
+          this.isAuthenticated = false;
+          
+          window.alert("Sign out Successful!");
+          // Ensure that the route is redirected to another page after logout
+          this.$router.push('/'); // Redirect to the home page or another appropriate page
+        },
+      }
+    };
+
 </script>
 
 <style>
@@ -425,8 +717,15 @@ color: blue;
   color: red; /* Change the color as needed */
 }
 
-.red-heart:hover {
+.red-heart-bar:hover {
   cursor: pointer;
 }
 
+.red-heart-restaurant:hover {
+  cursor: pointer;
+}
+
+.toggle-button {
+  cursor: pointer;
+}
 </style>
