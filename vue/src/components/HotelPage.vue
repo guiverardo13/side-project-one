@@ -100,15 +100,20 @@ export default {
 
     computed: {
     isHotelPage() {
-      return this.$route.name === 'HotelPage'; // Adjust the route name if needed
+      return this.$route.name === 'HotelPage';
     },
   },
 
   created() {
     // Fetch hotel data from the service
     this.fetchHotels();
-    this.handleLikedItemsUpdated(this.likedItems);
     this.checkUserAuthentication();
+    
+    // Fetch liked items and populate likedItems array
+    if (this.isAuthenticated) {
+      const userId = this.$store.state.user.userId;
+      this.fetchLikedItems(userId);
+    }
   },
 
   methods: {
@@ -124,63 +129,81 @@ export default {
     });
   },
 
-    async toggleLike(hotel) {
-      if (!this.isAuthenticated) {
-        window.alert('Please sign in');
-      } else {
+  async fetchLikedItems(userId) {
+      try {
+        // Fetch liked items for the user
+        const fetchedItems = await LikeService.getLikesByUserId(userId);
+        console.log('Fetched items:', fetchedItems); // Log the fetched data
+        this.likedItems = fetchedItems; // Update the likedItems array
         
-  hotel.isLiked = !hotel.isLiked;
-  try {
-    if (hotel.isLiked) {
-      // If liked, make an API request to add the hotel to the user's likes
-      const userId = this.$store.state.user.userId;
-      const like = {
-        // Include other like properties as needed
-        likeHotelId: hotel.hotelId // Set the likeHotelId here
-      };
-      const response = await LikeService.addLikeToList(userId, like, hotel);
+        // Iterate through the hotel items and update the isLiked property
+        this.hotels.forEach((hotel) => {
+          // Check if the likeHotelId matches the hotelId
+          hotel.isLiked = !!this.likedItems.find((item) => item.likeHotelId === hotel.hotelId);
+        });
+      } catch (error) {
+        console.error('Error fetching liked items data:', error);
+      }
+    },
 
-      // Check if the response status is successful (e.g., 200 OK)
-      if (response.status === 200 || response.status === 201) {
-        // Check if the response data has the expected structure
-        if (response.data && response.data.likeId) {
-          const likeId = response.data.likeId; // Get the returned like_id
+    async toggleLike(hotel) {
+  if (!this.isAuthenticated) {
+    window.alert('Please sign in');
+  } else {
+    hotel.isLiked = !hotel.isLiked;
+    try {
+      if (hotel.isLiked) {
+        // If liked, make an API request to add the hotel to the user's likes
+        const userId = this.$store.state.user.userId;
+        const like = {
+          // Include other like properties as needed
+          likeHotelId: hotel.hotelId // Set the likeHotelId here
+        };
+        const response = await LikeService.addLikeToList(userId, like, hotel);
 
-          // Make an API request to associate the hotel with the user using the like_id
-          await LikeService.addUserLike(this.$store.state.user.userId, likeId);
+        // Check if the response status is successful (e.g., 200 OK)
+        if (response.status === 200 || response.status === 201) {
+          // Check if the response data has the expected structure
+          if (response.data && response.data.likeId) {
+            const likeId = response.data.likeId; // Get the returned like_id
 
-          // Add the liked item to the likedItems array
-          this.likedItems.push({ id: likeId, likeHotelId: hotel.hotelId });
+            // Make an API request to associate the hotel with the user using the like_id
+            await LikeService.addUserLike(userId, likeId); // Pass the userId here
+
+            // Add the liked item to the likedItems array
+            this.likedItems.push({ id: likeId, likeHotelId: hotel.hotelId });
+          } else {
+            console.error('Invalid response structure:', response.data);
+          }
         } else {
-          console.error('Invalid response structure:', response.data);
+          console.error('Failed to add like:', response.status, response.statusText);
+          console.log('API Response:', response);
         }
       } else {
-        console.error('Failed to add like:', response.status, response.statusText);
-        console.log('API Response:', response);
-      }
-    } else {
-      // If unliked, retrieve the likeId from the likedItems array
-      const likeId = this.likedItems.find((likedItem) => likedItem.likeHotelId === hotel.hotelId)?.id;
-      if (likeId) {
-        try {
-          // Make an API request to delete the like using likeId
-          await LikeService.deleteLike(likeId);
+        // If unliked, retrieve the likeId from the likedItems array
+        const likeItem = this.likedItems.find((likedItem) => likedItem.likeHotelId === hotel.hotelId);
+        if (likeItem) {
+          const likeId = likeItem.likeId;
+          const userId = this.$store.state.user.userId;
+          try {
+            // Make an API request to delete the like using likeId and userId
+            await LikeService.deleteLike(likeId, userId); // Pass the userId here
 
-          // Remove the unliked item from the likedItems array
-          const index = this.likedItems.findIndex((item) => item.id === likeId);
-          if (index !== -1) {
-            this.likedItems.splice(index, 1);
+            // Remove the unliked item from the likedItems array
+            const index = this.likedItems.indexOf(likeItem);
+            if (index !== -1) {
+              this.likedItems.splice(index, 1);
+            }
+          } catch (deleteError) {
+            console.error('Failed to delete like:', deleteError);
+            // Handle delete error appropriately
           }
-        } catch (deleteError) {
-          console.error('Failed to delete like:', deleteError);
-          // Handle delete error appropriately
         }
       }
+    } catch (error) {
+      console.error('Error toggling like:', error);
     }
-  } catch (error) {
-    console.error('Error toggling like:', error);
   }
-}
 },
 
 
