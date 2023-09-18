@@ -249,68 +249,67 @@ async fetchLikedItems(userId, items, type) {
 
       async likeBar(bar) {
   if (!this.isAuthenticated) {
-    window.alert('Please sign in to like bars');
-    return;
-  }
+    window.alert('Please sign in to like restaurants');
+  } else {
+    bar.isLiked = !bar.isLiked;
+    try {
+      if (bar.isLiked) {
+        // If liked, make an API request to add the hotel to the user's likes
+        const userId = this.$store.state.user.userId;
+        const like = {
+          // Include other like properties as needed
+          likeBarId: bar.barId // Set the likeHotelId here
+        };
+        const response = await LikeService.addLikeBarToList(userId, like, bar);
 
-  try {
-    const userId = this.$store.state.user.userId;
+        // Check if the response status is successful (e.g., 200 OK)
+        if (response.status === 200 || response.status === 201) {
+          // Check if the response data has the expected structure
+          if (response.data && response.data.likeId) {
+            const likeId = response.data.likeId; // Get the returned like_id
 
-    if (bar.isLiked) {
-      // If the bar is already liked, unliking it
-      const likeItem = this.likedItems.find(
-        (likedItem) => likedItem.likeBarId === bar.barId && likedItem.itemType === 'bar'
-      );
+            // Make an API request to associate the hotel with the user using the like_id
+            await LikeService.addUserLike(userId, likeId); // Pass the userId here
 
-      if (likeItem) {
-        const likeId = likeItem.likeId;
-
-        // Make an API request to remove the like based on the likeId
-        await LikeService.deleteLike(likeId, userId);
-
-        // Remove the unliked bar from the likedItems array
-        const index = this.likedItems.indexOf(likeItem);
-        if (index !== -1) {
-          this.likedItems.splice(index, 1);
-        }
-      }
-    } else {
-      // If the bar is not liked, liking it
-      const like = {
-        likeBarId: bar.barId,
-      };
-
-      // Make an API request to add the bar to the user's liked items
-      const response = await LikeService.addLikeBarToList(userId, like, bar);
-
-      if (response.status === 200 || response.status === 201) {
-        if (response.data && response.data.likeId) {
-          const likeId = response.data.likeId;
-
-          // Make an API request to associate the bar with the user using the like_id
-          await LikeService.addUserLike(userId, likeId);
-
-          // Add the liked bar to the likedItems array
-          this.likedItems.push({ likeId, likeBarId: bar.barId, itemType: 'bar' });
+            // Add the liked item to the likedItems array
+            this.likedItems.push({ id: likeId, likeBarId: bar.barId });
+          } else {
+            console.error('Invalid response structure:', response.data);
+          }
         } else {
-          console.error('Invalid response structure:', response.data);
+          console.error('Failed to add like:', response.status, response.statusText);
+          console.log('API Response:', response);
         }
       } else {
-        console.error('Failed to add like:', response.status, response.statusText);
-        console.log('API Response:', response);
-      }
-    }
+        // If unliked, retrieve the likeId from the likedItems array
+        const likeItem = this.likedItems.find((likedItem) => likedItem.likeBarId === bar.barId);
+        if (likeItem) {
+          const likeId = likeItem.likeId;
+          const userId = this.$store.state.user.userId;
+          try {
+            // Make an API request to delete the like using likeId and userId
+            await LikeService.deleteLike(likeId, userId); // Pass the userId here
 
-    // Toggle the isLiked state after handling the API call
-    bar.isLiked = !bar.isLiked;
-  } catch (error) {
-    console.error('Error toggling like:', error);
+            // Remove the unliked item from the likedItems array
+            const index = this.likedItems.indexOf(likeItem);
+            if (index !== -1) {
+              this.likedItems.splice(index, 1);
+            }
+          } catch (deleteError) {
+            console.error('Failed to delete like:', deleteError);
+            // Handle delete error appropriately
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error toggling like:', error);
+    }
   }
 },
 
 async likeRestaurant(restaurant) {
   if (!this.isAuthenticated) {
-    window.alert('Please sign in to like hotels');
+    window.alert('Please sign in to like restaurants');
   } else {
     restaurant.isLiked = !restaurant.isLiked;
     try {

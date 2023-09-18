@@ -2,7 +2,7 @@
   <div class="container">
     <header>
       <nav class="container-top">
-        <h1><router-link to="/">GV's Travel Guide</router-link></h1>
+        <h1 class="logo"><router-link to="/">GV's Travel Guide</router-link></h1>
         <div class="item about"><a href="#">About</a></div>
         <div class="item contact"><a href="#contact">Contact</a></div>
         <div class="item" @click="openLikesModal">
