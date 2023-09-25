@@ -249,7 +249,7 @@ async fetchLikedItems(userId, items, type) {
 
       async likeBar(bar) {
   if (!this.isAuthenticated) {
-    window.alert('Please sign in to like restaurants');
+    window.alert('Please sign in to like bars');
   } else {
     bar.isLiked = !bar.isLiked;
     try {

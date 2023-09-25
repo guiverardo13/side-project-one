@@ -28,7 +28,8 @@
     </div>
     <section class="things-to-do-container" >
         <section class="things-to-do">
-            <h2>Things To Do</h2>
+          <h2>Things To Do</h2>
+          <router-link :to="'/'" class="back-button" v-if="isCityPage">Back</router-link>
             <div class="categories">
           <div class="category hotels">
             <router-link  class="category-text" :to="{ name: 'HotelPage', params: { cityName: selectedCity } }">Hotels</router-link>
@@ -114,6 +115,12 @@ export default {
   props: {
     cityName: String,
     selectedCity: String
+  },
+
+  computed: {
+    isCityPage() {
+            return this.$route.name === 'city-page'; // Adjust the route name if needed
+        },
   },
 
   mounted() {
@@ -344,6 +351,10 @@ export default {
   color: white;
   font-size: 30px;
   text-align: center;
+}
+
+.back-button {
+  display: flex;
 }
 
 .city-link {

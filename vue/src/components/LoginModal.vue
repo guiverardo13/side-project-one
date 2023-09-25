@@ -64,6 +64,8 @@ export default {
 
           if (response && response.status === 401) {
             this.invalidCredentials = true;
+            window.alert('Please create a traveler account.');
+            this.closeLoginModal();
           } else {
             this.credentialsNotFound = true;
           }

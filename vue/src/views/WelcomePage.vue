@@ -179,9 +179,7 @@
         showLikesModal: false,
         likedItems: [], // Initialize likedItems as an empty array
       };
-    },
-
-    
+    }, 
   
     components: {
       RegisterUserModal,
@@ -248,6 +246,7 @@
             // Update local storage
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('user', JSON.stringify(response.data.user));
+        
           } catch (error) {
             console.error('Error updating Vuex store and local storage:', error);
           }

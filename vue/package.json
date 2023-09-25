@@ -13,6 +13,7 @@
     "vue": "^3.3.4",
     "vue-loader": "^14.2.2",
     "vue-router": "^4.2.4",
+    "vue2-google-maps": "^0.10.7",
     "vuex": "^4.1.0"
   },
   "devDependencies": {
