@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="login-modal">
-      <div class="login-content">
+    <div class="login-modal" @click="closeModalOutside">
+      <div class="login-content" :class="{ 'slide-in': showModal }">
         <h2>Sign In</h2>
         <form @submit.prevent="loginUser">
           <div id="close-modal" @click="closeLoginModal">+</div>
@@ -34,10 +34,23 @@ export default {
         "username": "",
         "password": "",
       },
+      showModal: false, // Initially hide the modal
     }
   },
 
+  mounted() {
+    // Show the modal after a brief delay to allow for the transition effect
+    setTimeout(() => {
+      this.showModal = true;
+    }, 100);
+  },
+
   methods: {
+    closeModalOutside(event) {
+      if (event.target.classList.contains('login-modal')) {
+        this.closeLoginModal();
+      }
+    },
     clearForm() {
       this.user.username = "";
       this.user.password = "";
@@ -64,7 +77,7 @@ export default {
 
           if (response && response.status === 401) {
             this.invalidCredentials = true;
-            window.alert('Please create a traveler account.');
+            window.alert('Please create a traveler account to sign in.');
             this.closeLoginModal();
           } else {
             this.credentialsNotFound = true;
@@ -104,6 +117,12 @@ export default {
   text-align: center;
   align-items: center;
   position: absolute;
+  transform: translateY(260%); /* Start off-screen */
+  transition: transform 0.4s ease; /* Transition on transform property */
+}
+
+.login-content.slide-in {
+  transform: translateY(0); /* Slide in from the bottom */
 }
 
 .login-content button {

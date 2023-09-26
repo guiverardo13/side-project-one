@@ -45,7 +45,7 @@
         </div>
         <div id="items">
           <div class="discover">
-            <i class="fa-solid fa-earth-americas" style="color: #008793;"></i>
+            <i class="fa-solid fa-earth-americas" :class="{ 'rotate-icon': isIconClicked }" style="color: #008793" @click="toggleRotation"></i>
             <div>Discover</div>
             <div class="text text-discover">
               Discover new locations and open up <br>
@@ -54,7 +54,7 @@
               destinations</div>
           </div>
           <div class="plan">
-            <i class="fa-regular fa-pen-to-square" style="color: #008793;"></i>
+            <i class="fa-regular fa-pen-to-square"  :class="{ 'rotate-icon': isIconClicked }" style="color: #008793"  @click="toggleRotation"></i>
             <div>Plan</div>
             <div class="text text-plan">
               Effortlessly plan your dream trips,  <br>
@@ -64,7 +64,7 @@
               a memorable adventure.</div>
           </div>
           <div class="enjoy">
-            <i class="fa-solid fa-champagne-glasses" style="color: #008793;"></i>
+            <i class="fa-solid fa-champagne-glasses"  @click="toggleRotation" :class="{ 'rotate-icon': isIconClicked }" style="color: #008793"></i>
             <div>Enjoy</div>
             <div class="text text-enjoy">
               Joyful moments, laughter, <br> 
@@ -80,16 +80,20 @@
         </div>
         <div class="box">
           <div class="city-pictures">
-            <div class="pittsburgh">
+            <div class="pittsburgh"><a href="/city/name/Pittsburgh">
               <img src="../assets/pitt.jpg" alt="Pitt">
+              </a>
               <div class="pittsburgh-text">
                 <a href="/city/name/Pittsburgh">
                   <h4>Pittsburgh</h4>
                 </a>
+              
               </div>
             </div>
             <div class="miami">
+              <a href="/city/name/Miami">
                     <img src="../assets/mia.jpg" alt="MIA">
+              </a>
                 <div class="miami-text">
                     <a href="/city/name/Miami">
                       <h4>Miami</h4>
@@ -97,7 +101,9 @@
                 </div>
               </div>
             <div class="nyc">
+              <a href="/city/name/New%20York%20City">
                     <img src="../assets/nyc.jpg" alt="NYC">
+                  </a>
                 <div class="nyc-text">
                     <a href="/city/name/New%20York%20City">
                         <h4>New York City</h4>
@@ -105,7 +111,9 @@
                 </div> 
             </div> 
             <div class="seattle">
+              <a href="/city/name/Seattle">
                     <img src="../assets/seattle.jpg" alt="Seattle">
+                  </a>
                 <div class="seattle-text">
                     <a href="/city/name/Seattle">
                         <h4>Seattle</h4>
@@ -113,7 +121,9 @@
                 </div>    
             </div> 
             <div class="los-angeles">
+              <a href="/city/name/Los%20Angeles">
                     <img src="../assets/1.jpg" alt="LA">
+              </a>
                 <div class="la-text">
                     <a href="/city/name/Los%20Angeles">
                         <h4>Los Angeles</h4>
@@ -121,10 +131,12 @@
                 </div>    
             </div>    
             <div class="dc">
+              <a href="/city/name/Washington%20D.C.">
                     <img src="../assets/dc.jpg" alt="DC">
+                  </a>
                 <div class="dc-text">
                     <a href="/city/name/Washington%20D.C.">
-                        <h4>Washington D.C.</h4> 
+                        <h4>Washington <br>D.C.</h4> 
                     </a>    
                 </div>    
             </div>    
@@ -142,6 +154,7 @@
             <div class="social-icons">
               <a href="https://www.linkedin.com/in/guilhermeverardo/"  target="_blank" class="social-icon"><i class="fa-brands fa-linkedin"></i></a>
               <a href="https://github.com/guiverardo13" target="_blank" class="social-icon"><i class="fa-brands fa-github"></i></a>
+              <a href="https://drive.google.com/file/d/1UID0Fpt7Rl_OvHpJsiDGTLcyHefAYuw-/view" target="_blank" class="resume"><i class="fa-regular fa-file-pdf" style="color: #ffffff;"></i></a>
             </div>
           </div>
           <div class="footer-background"></div>
@@ -178,6 +191,7 @@
         showLoginModal: false,
         showLikesModal: false,
         likedItems: [], // Initialize likedItems as an empty array
+        isIconClicked: false,
       };
     }, 
   
@@ -253,24 +267,24 @@
         },
 
       handleSignIn() {
-        console.log('Sign In button clicked'); // Add this line for debugging
-          this.closeSuccessModal();
-          this.openLoginModal();
-        },
+      console.log('Sign In button clicked'); // Add this line for debugging
+        this.closeSuccessModal();
+        this.openLoginModal();
+      },
   
       logoutUser() {
-  // Clear the token and user data from local storage
-    UserServices.logout();
+      // Clear the token and user data from local storage
+        UserServices.logout();
 
-    // Clear user data and token in your Vuex store
-    this.$store.commit('LOGOUT');
+        // Clear user data and token in your Vuex store
+        this.$store.commit('LOGOUT');
 
-    // Reset the user in Vuex store to an empty object
-    this.$store.commit('SET_USER', {});
-    window.alert("Sign out Successful!");
-    // Update the isAuthenticated status
-    this.isAuthenticated = false;
-  },
+        // Reset the user in Vuex store to an empty object
+        this.$store.commit('SET_USER', {});
+        window.alert("Sign out Successful!");
+        // Update the isAuthenticated status
+        this.isAuthenticated = false;
+      },
   
       openRegistrationModal() {
         console.log('Opening registration modal');
@@ -300,9 +314,13 @@
 
       closeLikeModal() {
       this.showLikesModal = false;
-    }
     },
-  };
+
+    toggleRotation() {
+      this.isIconClicked = !this.isIconClicked;
+    },
+  },
+};
   </script>
 
 <style>
@@ -510,7 +528,7 @@
     border-bottom: black solid 1px;
   }
   
-  .box .city-pictures{
+  .city-pictures{
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -520,22 +538,27 @@
   
   .city-pictures img {
     width: 350px;
+    height: 235.55px;
     border-radius: 25px;
   }
-  
+
   .pittsburgh {
-    display: flex;
-    position: relative;
-  }
-  
-  .pittsburgh-text {
-  position: absolute;
-  top: 13%;
-  margin-left: 40px;
+  display: flex;
+  position: relative;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+}
+
+/* Style for the h4 text */
+.pittsburgh-text h4 {
   font-size: 40px;
+  top: 21%;
+  left: 20%;
+  position: absolute;
   color: white;
-  padding: 20px;
-  }
+  text-align: center;
+}
+
   
   .pittsburgh a {
     color: white;
@@ -545,20 +568,22 @@
   .pittsburgh a :hover{
     color: #cfc8c8;
   }
-  
+
   .miami {
-    display: flex;
-    position: relative;
-  }
-  
-  .miami-text {
-  position: absolute;
-  top: 13%;
-  margin-left: 90px;
+  display: flex;
+  position: relative;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+}
+
+.miami-text h4 {
   font-size: 40px;
+  top: 21%;
+  left: 32%;
+  position: absolute;
   color: white;
-  padding: 20px;
-  }
+  text-align: center;
+}
   
   .miami a {
     color: white;
@@ -568,20 +593,23 @@
   .miami a :hover{
     color: #cfc8c8;
   }
-  
+
   .nyc {
-    display: flex;
-    position: relative;
-  }
+  display: flex;
+  position: relative;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+}
   
-  .nyc-text {
-    position: absolute;
-    top: 12%;
-    margin-left: 20px;
-    font-size: 40px;
-    color: white;
-    padding: 20px;
-  }
+  
+.nyc-text h4 {
+  font-size: 40px;
+  top: 20%;
+  left: 12%;
+  position: absolute;
+  color: white;
+  text-align: center;
+}
   
   .nyc a {
     color: white;
@@ -591,20 +619,22 @@
   .nyc a :hover{
     color: #cfc8c8;
   }
-    
+
   .seattle {
-    display: flex;
-    position: relative;
-  }
+  display: flex;
+  position: relative;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+}
   
-  .seattle-text {
-    position: absolute;
-    top: 13%;
-    margin-left: 80px;
-    font-size: 40px;
-    color: white;
-    padding: 20px;
-  } 
+.seattle-text h4 {
+  font-size: 40px;
+  top: 25%;
+  left: 27%;
+  position: absolute;
+  color: white;
+  text-align: center;
+}
   
   .seattle a {
     color: white;
@@ -614,20 +644,23 @@
   .seattle a :hover{
     color: #cfc8c8;
   }
-      
-    .los-angeles {
-      display: flex;
-      position: relative;
-  }
-    
-  .la-text {
-    position: absolute;
-    top: 13%;
-    margin-left: 30px;
-    font-size: 40px;
-    color: white;
-    padding: 20px;
-  }
+
+  .los-angeles {
+  display: flex;
+  position: relative;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+}
+
+.la-text h4 {
+  font-size: 40px;
+  top: 25%;
+  left: 15%;
+  position: absolute;
+  color: white;
+  text-align: center;
+}
+  
   
   .los-angeles a {
     color: white;
@@ -637,20 +670,23 @@
   .los-angeles a :hover{
     color: #cfc8c8;
   }
-      
+
+
   .dc {
-    display: flex;
-    position: relative;
-  }     
+  display: flex;
+  position: relative;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+}
+      
   
-  .dc-text {
-    position: absolute;
-    text-align: center;
-    top: 6%;
-    margin-left: 7px;
+  .dc-text h4 {
     font-size: 40px;
-    color: white;
-    padding: 20px;
+  top: 15%;
+  left: 18%;
+  position: absolute;
+  color: white;
+  text-align: center;
   }
   
   .dc a {
@@ -660,8 +696,8 @@
   
   .dc a :hover{
     color: #cfc8c8;
-  }
-  
+  } */
+   */
   .container-footer {
     position: relative;
     padding: 0;
@@ -690,6 +726,15 @@
   margin: 5px 0;
 }
 
+.fa-file-pdf {
+  font-size: 25px;
+  padding-left: 10px;
+  
+}
+
+.fa-file-pdf:hover {
+  cursor: pointer;
+}
 .social-icons {
   margin-top: 20px;
 }
@@ -729,4 +774,44 @@
 .item:hover {
   color: #00AFEF;
 }
+
+.city-pictures img {
+    width: 350px;
+    border-radius: 25px;
+    transition: transform 0.3s ease; /* Add a smooth transition */
+  }
+
+  /* Apply zoom effect on hover */
+  .city-pictures img:hover {
+    transform: scale(1.1); /* Enlarge the image on hover */
+  }
+
+  .fa-earth-americas, 
+  .fa-pen-to-square, 
+  .fa-champagne-glasses {  
+    transition: transform 0.3s ease; /* Add a smooth transition */
+  }
+
+  /* Apply zoom effect on hover */
+  .fa-earth-americas:hover, 
+  .fa-pen-to-square:hover, 
+  .fa-champagne-glasses:hover {
+    transform: scale(1.3); /* Enlarge the image on hover */
+    cursor: pointer;
+  }
+
+
+  .rotate-icon {
+  animation: rotate 2s linear infinite;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
   </style>

@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="bg-modal" >
-        <div class="modal-content">
+    <div class="bg-modal" @click="closeModalOutside">
+        <div class="modal-content" :class="{ 'slide-in': showModal }">
           <h2>Create a Traveler Account</h2>
           <form @submit.prevent="registerUser"  action="/register">
             <div id="close-modal"  @click="closeRegistrationModal">+</div>
@@ -55,8 +55,16 @@ export default {
                 "confirmPassword": '',
                 "role": 'user'
             },
+            showModal: false, // Initially hide the modal
         };
     },
+
+    mounted() {
+    // Show the modal after a brief delay to allow for the transition effect
+    setTimeout(() => {
+      this.showModal = true;
+    }, 100);
+  },
 
     methods: {
         async registerUser() {
@@ -81,18 +89,20 @@ export default {
             console.error('Error occurred:', error);
           }
         },
+
+        closeModalOutside(event) {
+      // Check if the click event occurred outside of the modal content
+      if (!event.target.closest('.modal-content')) {
+        this.closeRegistrationModal();
+      }
+    },
+    
         closeRegistrationModal() {
           console.log('Closing registration modal in parent');
             this.$emit('close');
         },
       
-        // closeSuccessModal() {
-        //   this.showAccountCreatedModal = false;
-        // },
-
-        // openSuccessModal() {
-        //   this.showAccountCreatedModal = true;
-        // }
+       
     },
 }
 
@@ -145,6 +155,12 @@ export default {
   text-align: center;
   align-items: center;
   position: relative;
+  transform: translateY(260%); /* Start off-screen */
+  transition: transform 0.5s ease; /* Transition on transform property */
+}
+
+.modal-content.slide-in {
+  transform: translateY(0); /* Slide in from the bottom */
 }
 
 .modal-content h2 {

@@ -46,9 +46,6 @@ export default {
       this.showLoginModal = false;
     },
 
-    handleLoginSuccess() {
-      // ... handle successful login ...
-    },
   },
 };
 </script>
@@ -92,5 +89,6 @@ export default {
   transform: rotate(45deg);
   cursor: pointer;
 }
+
 
 </style>

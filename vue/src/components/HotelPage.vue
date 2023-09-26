@@ -56,6 +56,7 @@
     <div class="social-icons">
       <a href="https://www.linkedin.com/in/guilhermeverardo/"  target="_blank" class="social-icon"><i class="fa-brands fa-linkedin"></i></a>
       <a href="https://github.com/guiverardo13" target="_blank" class="social-icon"><i class="fa-brands fa-github"></i></a>
+      <a href="https://drive.google.com/uc?id=1UID0Fpt7Rl_OvHpJsiDGTLcyHefAYuw-&export=download" target="_blank" class="resume"><i class="fa-regular fa-file-pdf" style="color: #ffffff;"></i></a>
     </div>
 </div>
     </footer>
