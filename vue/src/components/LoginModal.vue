@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="login-modal" @click="closeModalOutside">
-      <div class="login-content" :class="{ 'slide-in': showModal }">
+      <div class="login-content" :class="{ 'slide-in': showModal }" ref="modalContent">
         <h2>Sign In</h2>
         <form @submit.prevent="loginUser">
           <div id="close-modal" @click="closeLoginModal">+</div>
@@ -46,11 +46,6 @@ export default {
   },
 
   methods: {
-    closeModalOutside(event) {
-      if (event.target.classList.contains('login-modal')) {
-        this.closeLoginModal();
-      }
-    },
     clearForm() {
       this.user.username = "";
       this.user.password = "";
@@ -84,6 +79,16 @@ export default {
           }
         });
     },
+
+    closeModalOutside(event) {
+  // Get a reference to the modal content element
+  const modalContent = this.$refs.modalContent;
+
+  // Check if the click event occurred outside of the modal content
+  if (modalContent && !modalContent.contains(event.target)) {
+    this.closeLoginModal();
+    }
+  },
 
     closeLoginModal() {
       this.clearForm();

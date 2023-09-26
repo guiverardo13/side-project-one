@@ -26,19 +26,29 @@
         </div>
       </main>
       <div class="container-input">
-      <div class="main-input">
-        <div id="where-to-flex">
-          <!-- Input field for city search -->
-          <i class="fa-solid fa-location-dot"></i>
-          <input v-model="citySearchQuery" name="where-to" id="where-to" type="text" placeholder="What city are you traveling to?">
+    <div class="main-input">
+      <div id="where-to-flex">
+        <button class="drop-down" aria-haspopup="true" aria-controls="dropdown-menu" @click="toggleDropdown">
+          <i class="fa-solid fa-location-dot"></i>{{ citySearchQuery ? citySearchQuery : 'Please select a city' }}<i :class="showDropdown ? 'fa-solid fa-chevron-up' : 'fa-solid fa-chevron-up fa-rotate-180'"></i>
+        </button>
+        <div class="drop-down-list" @click="closeDropDownList" v-if="showDropdown" >
+          <ul>
+            <li class="none"  @click="setCitySearchQuery('Please select a city')"></li>
+            <li @click="setCitySearchQuery('Pittsburgh')">Pittsburgh</li>
+            <li @click="setCitySearchQuery('Miami')">Miami</li>
+            <li @click="setCitySearchQuery('New York City')">New York City</li>
+            <li @click="setCitySearchQuery('Seattle')">Seattle</li>
+            <li @click="setCitySearchQuery('Los Angeles')">Los Angeles</li>
+            <li @click="setCitySearchQuery('Washington D.C.')">Washington D.C.</li>
+          </ul>
         </div>
-        <!-- Search button -->
+      </div>
         <div id="search-button-flex">
           <button class="search-button" @click="searchCity">Search</button>
         </div>
         </div>
       </div>
-      <section class="container-middle">
+        <section class="container-middle">
         <div id="how-it-works">
           <h3>How it works</h3>
           <span>Here to help you create memories</span>
@@ -185,13 +195,14 @@
     data() {
       return {
         isAuthenticated: false,
-        citySearchQuery: '',
+        citySearchQuery: 'Please select a city',
         showRegistrationModal: false,
         showAccountCreatedModal: false,
         showLoginModal: false,
         showLikesModal: false,
         likedItems: [], // Initialize likedItems as an empty array
         isIconClicked: false,
+        showDropdown: false,
       };
     }, 
   
@@ -203,6 +214,12 @@
     },
   
     methods: {
+      closeModalOutside(event) {
+        if (event.target.classList.contains('drop-down-list')) {
+          this.showDropdown = false;
+        }
+      },
+      
       async checkUserAuthentication() {
         const token = this.$store.state.token;
         if (token) {
@@ -235,17 +252,23 @@
       },
   
       async searchCity() {
-        try {
-          const data = await CityService.getCityByName(this.citySearchQuery);
-          if (data) {
-            this.$router.push({ name: 'city-page', params: { cityName: this.citySearchQuery } });
-          } else {
-            console.log('City not found');
-          }
-        } catch (error) {
-          console.error('Error searching for city:', error);
-        }
-      },
+  // Check if citySearchQuery is "Please select a city"
+  if (this.citySearchQuery === 'Please select a city') {
+    window.alert('Please select a valid city.');
+    return; // Exit the function to prevent further execution
+  }
+
+  try {
+    const data = await CityService.getCityByName(this.citySearchQuery);
+    if (data) {
+      this.$router.push({ name: 'city-page', params: { cityName: this.citySearchQuery } });
+    } else {
+      console.log('City not found');
+    }
+  } catch (error) {
+    console.error('Error searching for city:', error);
+  }
+},
   
       async handleLoginSuccess(response) {
           this.closeLoginModal();
@@ -285,7 +308,11 @@
         // Update the isAuthenticated status
         this.isAuthenticated = false;
       },
-  
+      setCitySearchQuery(city) {
+        this.citySearchQuery = city;
+        this.showDropdown = false; // Hide the dropdown after selecting a city
+      },
+    
       openRegistrationModal() {
         console.log('Opening registration modal');
         this.showRegistrationModal = true;
@@ -319,6 +346,11 @@
     toggleRotation() {
       this.isIconClicked = !this.isIconClicked;
     },
+
+    toggleDropdown() {
+      // Toggle the showDropdown property to show/hide the dropdown
+      this.showDropdown = !this.showDropdown;
+    },
   },
 };
   </script>
@@ -342,6 +374,55 @@
   background-position: top, bottom;
   background-size: 100% 50%;
 }
+
+.drop-down-list {
+  right: 35.4%;
+  background: white;
+  border: 1px solid black;
+  width: 646px;
+  z-index: 2;
+  position: absolute;
+}
+
+
+.drop-down-list ul {
+  list-style: none; /* Remove bullet points */
+  padding: 0;
+  margin: 0;
+}
+
+.drop-down-list li:hover {
+  background: #e4e4e4;
+}
+
+.drop-down-list ul li {
+  padding: 10px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.drop-down:hover {
+  background: #e4e4e4;
+}
+
+.fa-chevron-up.fa-rotate-180 {
+  position: absolute; /* Set position to absolute */
+  right: 685px; /* Adjust the right distance as needed */
+  top: 47.3%; /* Position it vertically in the middle */
+  /* transform: translateY(-50%); Adjust vertical alignment */
+}
+
+.fa-chevron-up {
+  position: absolute; /* Set position to absolute */
+  right: 685px; /* Adjust the right distance as needed */
+  top: 47.3%; /* Position it vertically in the middle */
+  /* transform: translateY(-50%); Adjust vertical alignment */
+}
+
+.none {
+  height: 20px;
+}
+
   .container {
     margin: 0 auto;
     max-width: 1200px;
@@ -396,38 +477,63 @@
       margin: 0;
       padding: 0;
   }
-  
-  .container-input .main-input {
-      display:flex;
-      margin-top: 150px;
+
+  .drop-down {
+      border: 1px solid transparent;
+      font-size: 18px;   
+      font-family:'Russo One', sans-serif;
+      padding-left: 10px;
+      width: 650px;  
+      text-align: start;
+      left: 0;
+      background: white;
+      border: 1px solid black;
+      width: 650px;
+      z-index: 2;     
+    }
+
+    .container-input .main-input {
+      display: flex;
       justify-content: center;
+      margin-top: 150px;
       background-color: #004D7A;
-      padding:7px 7px 7px 7px;
+      padding: 7px;
       border-radius: 6px;
       gap: 4px;
-      
-  }
+      height: 45px; /* Add a fixed height */
+    }
+  
   
   .container-middle {
       display: flex;
       flex-direction: column;
       justify-content: center;
+      margin-top: 70px;
+      z-index: 1;
   }
-  
+
+  .fa-location-dot {
+    padding-right: 15px;
+  }
+
+  .fa-chevron-up.fa-rotate-180 {
+    margin-left: 400px;
+  }
+/*   
   #where-to-flex input {
       border: 1px solid transparent;
       font-size: 18px;   
       font-family:'Russo One', sans-serif;
       padding-left: 10px;
       width: 650px;  
-  }
+  } */
   
-  #where-to-flex {
+  /* #where-to-flex {
       background-color: white;
       padding: 10px 8px;
       border-radius: 3px;
       text-align: center;
-  }
+  } */
   
   button {
       font-size: 17px;
@@ -450,10 +556,12 @@
 
     .container-middle h3 {
       display: flex;
+      position: relative;
       justify-content: center;
       margin-top: 100px;
       margin-bottom: 0;
       font-size: 40px;
+      z-index: 1;
     }
   
     .container-middle span {
@@ -557,6 +665,7 @@
   position: absolute;
   color: white;
   text-align: center;
+  z-index: 2;
 }
 
   
@@ -583,6 +692,7 @@
   position: absolute;
   color: white;
   text-align: center;
+  z-index: 2;
 }
   
   .miami a {
@@ -609,6 +719,7 @@
   position: absolute;
   color: white;
   text-align: center;
+  z-index: 2;
 }
   
   .nyc a {
@@ -629,11 +740,12 @@
   
 .seattle-text h4 {
   font-size: 40px;
-  top: 25%;
+  top: 20%;
   left: 27%;
   position: absolute;
   color: white;
   text-align: center;
+  z-index: 2;
 }
   
   .seattle a {
@@ -654,11 +766,12 @@
 
 .la-text h4 {
   font-size: 40px;
-  top: 25%;
+  top: 20%;
   left: 15%;
   position: absolute;
   color: white;
   text-align: center;
+  z-index: 2;
 }
   
   
@@ -687,6 +800,7 @@
   position: absolute;
   color: white;
   text-align: center;
+  z-index: 2;
   }
   
   .dc a {
@@ -779,11 +893,14 @@
     width: 350px;
     border-radius: 25px;
     transition: transform 0.3s ease; /* Add a smooth transition */
+    position: relative;
+    z-index: 1; /* Set a higher z-index for the images */
   }
 
   /* Apply zoom effect on hover */
   .city-pictures img:hover {
-    transform: scale(1.1); /* Enlarge the image on hover */
+    transform: scale(1.1);
+    z-index: 2; /* Set a higher z-index for the zoomed-in image */
   }
 
   .fa-earth-americas, 
