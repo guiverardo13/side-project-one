@@ -8,7 +8,7 @@
         <div class="item" @click="openLikesModal">
           {{ isAuthenticated ? 'Likes' : 'Register' }}
         </div>
-        <div class="item" @click="handleSignOutClick">
+        <div class="item sign" @click="handleSignOutClick">
         {{ isAuthenticated ? 'Sign Out' : 'Sign in' }}
         </div>
       </nav>
@@ -26,7 +26,7 @@
         </div>
       </main>
       <div class="container-input">
-    <div class="main-input">
+    <div class="main-input" id="blue">
       <div id="where-to-flex">
         <button class="drop-down" aria-haspopup="true" aria-controls="dropdown-menu" @click="toggleDropdown">
           <i class="fa-solid fa-location-dot"></i>{{ citySearchQuery ? citySearchQuery : 'Please select a city' }}<i :class="showDropdown ? 'fa-solid fa-chevron-up' : 'fa-solid fa-chevron-up fa-rotate-180'"></i>
@@ -85,7 +85,7 @@
         </div>
       </section>
       <section class="container-bottom">
-        <div class="top-searches">
+        <div class="top-searches" id="hard">
           <h3>Top Searches</h3>
         </div>
         <div class="box">
@@ -931,4 +931,180 @@
   }
 }
 
+@media (max-width: 380px) {
+
+ .container {
+  width: 80%;
+  margin: 0px;
+  padding-right: 0px;
+ }
+
+ body {
+  height: 100px;
+  display: flex;
+  background-image: linear-gradient(to bottom, #051937, #004D7A, #008793, white 70%);
+                    /* linear-gradient(to top, #051937,white,white, , white 50%); */
+  background-repeat: no-repeat;
+  /* margin: 0;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Russo One', sans-serif;
+ 
+  background-attachment: scroll;
+  background-position: top, bottom;
+  background-size: 100% 50%; */
+}
+
+.container-top {
+    display: flex;
+    justify-content: space-between;
+    font-size: 15px;
+    width: 110%;
+
+    font-family: 'Russo One', sans-serif;
+    
+  }
+
+  .container-top h1 {
+    font-size: 18px;
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    width: 10px;
+    margin-right: 50px;
+  }
+
+  .container-main h2 {
+    margin-top: 25px;
+    font-size: 20px;
+  }
+
+  .container-main p {
+    margin: 4px;
+    font-size: 11px;
+  }
+
+  .container-input {
+    width: 100%;
+  }
+
+  #blue {
+    margin-top: 40px;
+    width: 300px;
+    margin-left: 80px;
+    margin-right: 40px;
+    height: 35px;
+  }
+
+  #where-to-flex {
+    margin-top: 10px;
+
+  }
+
+  .drop-down {
+    width: 200px;
+    position: relative;
+    height: 35px;
+    font-size: 12px;
+    top: -42%;
+  }
+
+  .drop-down-list {
+    width: 198px;
+    position: relative;
+    right: 0%;
+    top: -40%
+  }
+
+  .drop-down-list li {
+    font-size: 13px;
+  }
+
+
+  .search-button {
+    width: 60px;
+    height: 35px;
+    font-size: 10px;
+  }
+
+  #how-it-works > h3 {
+    font-size: 20px;
+    margin-top: 0px;
+  }
+
+  #how-it-works {
+    align-items: center;
+    text-align: center;
+  }
+
+  .container-middle {
+    margin-top: 30px;
+    margin-left: 35px;
+    margin-bottom: 0px;
+  }
+
+  #items {
+    width: 20px;
+    align-content: center;
+    height: 135px;
+    font-size: 15px;
+    margin-top: 20px;
+    margin-left: 120px;
+  }
+
+  #items i {
+    font-size: 20px;
+  }
+
+
+.text {
+    font-size: 10px;
+  }
+
+  .plan {
+    border-right: 3px solid #224458;
+    padding: 0px;
+  }
+
+  .discover {
+    padding-right: 5px;
+    border-right: 3px solid #224458;
+  }
+
+  .text.text-discover {
+    font-size: 8px;
+    width: 100px;
+    padding: 0px;
+    padding-top: 10px;
+  }
+
+
+  .text.text-enjoy {
+    font-size: 8px;
+    width: 100px;
+  }
+
+  .text.text-plan {
+    font-size: 8px;
+    width: 130px;
+  }
+  
+  .container-bottom h3 {
+    margin-left: 20px;
+    margin-top: 0px;
+  }
+
+  .top-searches h3 {
+    font-size: 20px;
+  }
+
+  #hard h3{
+    font-size: 20px;
+    margin-top: 0px;
+    position: absolute;
+    top: 10%;
+    }
+
+ 
+}
   </style>
