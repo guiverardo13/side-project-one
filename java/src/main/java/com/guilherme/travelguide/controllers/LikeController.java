@@ -18,13 +18,15 @@ public class LikeController {
     private final HotelDao hotelDao;
     private final BarDao barDao;
     private final RestaurantDao restaurantDao;
+    private final EventDao eventDao;
 
-    public LikeController(LikeDao likeDao, UserDao userDao, HotelDao hotelDao, BarDao barDao, RestaurantDao restaurantDao) {
+    public LikeController(LikeDao likeDao, UserDao userDao, HotelDao hotelDao, BarDao barDao, RestaurantDao restaurantDao, EventDao eventDao) {
         this.likeDao = likeDao;
         this.userDao = userDao;
         this.hotelDao = hotelDao;
         this.barDao = barDao;
         this.restaurantDao = restaurantDao;
+        this.eventDao = eventDao;
     }
 
     @GetMapping("/likes/{userId}")
@@ -74,6 +76,13 @@ public class LikeController {
             // Add the restaurant to the user's liked list
             Like createdRestaurantLike = likeDao.addRestaurantToLikeList(user, like, restaurant);
             return new ResponseEntity<>(createdRestaurantLike, HttpStatus.CREATED);
+        } else if (like.getLikeEventId() != 0) {
+            Event event = eventDao.getEventById(like.getLikeEventId());
+            if (event == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Event Not Found");
+            }
+            Like createdEventLike = likeDao.addEventToLikeList(user, like, event);
+            return new ResponseEntity<>(createdEventLike, HttpStatus.CREATED);
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Like Type");
         }

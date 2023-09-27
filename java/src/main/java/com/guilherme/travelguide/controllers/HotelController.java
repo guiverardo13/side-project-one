@@ -22,6 +22,7 @@ public class HotelController {
     public Hotel getHotelById(@PathVariable int hotelId) {
         return hotelDao.getHotelById(hotelId);
     }
+
     @GetMapping("/city/name/{cityName}/hotels")
     public List<Hotel> getHotelsByCityName(@PathVariable String cityName) {
         List<Hotel> hotels = hotelDao.getHotelsByCityName(cityName);

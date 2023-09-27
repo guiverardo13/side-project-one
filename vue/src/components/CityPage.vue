@@ -40,7 +40,7 @@
         </div>
         <div class="categories">
           <div class="category events">
-            <div class="category-text">Events</div>
+            <router-link  class="category-text" :to="{ name: 'EventPage', params: { cityName: selectedCity } }">Events</router-link>
           </div>
           <div class="category pois">
             <div class="category-text">Points <br> Of <br> Interest</div>

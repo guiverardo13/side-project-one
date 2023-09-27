@@ -19,6 +19,8 @@ public interface LikeDao {
     Like addBarToLikeList(User user, Like like, Bar bar);
     Like addRestaurantToLikeList(User user, Like like, Restaurant restaurant);
 
+    Like addEventToLikeList(User user, Like like, Event event);
+
     boolean deleteLike(int likeId, int userId);
 
 

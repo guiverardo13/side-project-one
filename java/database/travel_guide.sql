@@ -72,10 +72,12 @@ CREATE TABLE bar (
 CREATE TABLE events (
 	event_id serial NOT NULL,
 	event_city_id INT NOT NULL,
-	event_name varchar(50) NOT NULL,
-	description varchar(50) NOT NULL,
-	event_address varchar(50) NOT NULL,
-	event_phone varchar(12) NOT NULL,
+	event_picture varchar(250) NOT NULL,
+	event_city_name varchar(50) NOT NULL,
+	event_name varchar(500) NOT NULL,
+	event_website varchar(1000) NOT NULL,
+	event_address varchar(1000) NOT NULL,
+	event_phone varchar(20) NOT NULL,
 	event_price varchar(5) NOT NULL,
 	CONSTRAINT pk_event PRIMARY KEY (event_id),
 	CONSTRAINT fk_event_city FOREIGN KEY(event_city_id) REFERENCES city(city_id)
@@ -124,6 +126,7 @@ CREATE TABLE user_likes (
 );
 
 -- CITY
+
 INSERT INTO city (city_name, state_name, cover_picture, city_video, city_description) VALUES ('Pittsburgh', 'Pennsylvania','https://cdn.wallpapersafari.com/34/60/pwHxg2.jpg', 'https://www.youtube.com/watch?v=IiQxXqcQFKA', 'The City of Pittsburgh offers everything a person might be looking for in a home, with its wonderful shopping areas, great restaurants, and beautiful views. Pittsburgh is known for having more named neighborhoods than any American city. Ninety distinct communities collectively create the culture of Pittsburgh. The Strip District is a wonderful market spot known for its variety of food and an excellent shopping with unique stores. The neighborhoods known as Shadyside, Beechview, or the West End are other fantastic region of Pittsburgh to find trendy shops and restaurants. If you’re looking for authentic homemade Italian food, Bloomfield or “Pittsburgh’s Little Italy” is the place for you. If you’re looking for more of a creative and artistic side of Pittsburgh, pass through the neighborhood of Lawrenceville. East Liberty is known as for business and industries. Looking for a fun night out on the town? South Side has a fun and exciting nightlife full of clubs, sports bars, and laid-back pubs. Wanting to catch a game or spend some quality time with your loved ones? The North Shore or North Side is the place to be. Mount Washington is the high point of Pittsburgh; it gives the residents of Pittsburgh and tourists a beautiful view of this magnificent city. Finally, Downtown, like most downtown districts, has great food, dining, parks, plazas, and art museums.');
 INSERT INTO city (city_name, state_name, cover_picture, city_video, city_description) VALUES ('Miami', 'Florida', 'https://justinkelefas.com/wp-content/uploads/2021/03/Miami-Skyline-Cityscape-Sunset-Sunrise-Downtown-January-by-Justin-Kelefas-2021-ver2.jpg', 'https://www.youtube.com/watch?v=tsyW6zFuaBk', 'Miami is one of the citys and the world’s most popular vacation spots. Though destinations often are said to offer something for everyone, the Miami area does indeed offer multiple enticements for all. The trendy nightlife of South Beach, bejeweled by the eye candy of the Art Deco district. The bustle of Calle Ocho and the highly caffeinated energy of Little Havana. The plush hotels of Miami Beach and the historic hideaways of Coral Gables. Seemingly endless shopping opportunities in modern, sprawling malls and the quiet, personal attention offered by the family-owned shops of Coconut Grove and many other corners of the region. The lures of deep-sea fishing and golf and tennis. Miamis professional football, basketball, baseball and hockey. Boat shows and auto racing. Art festivals and outdoor food and wine extravaganzas. An international airport and the world’s busiest cruise port.');
 INSERT INTO city (city_name, state_name, cover_picture, city_video, city_description) VALUES ('New York City', 'New York', 'https://wallpaperset.com/w/full/7/9/6/306973.jpg', 'https://www.youtube.com/watch?v=lkkyTUpyIyk', 'New York City is one of the global hubs of international finance, politics, communications, film, music, fashion, and culture. Alongside London its one of only two universally acknowledged to be "World Cities" the most important and influential cities on Earth. Its home to many world-class museums, art galleries, and theaters. Many of the worlds largest corporations have their headquarters here. The headquarters of the United Nations is in New York and most countries have a consulate here. This citys influence on the globe, and all its inhabitants, is hard to overstate, as decisions made within its boundaries often have impacts and ramifications across the world. New York City has a humid subtropical climate, experiencing all four seasons and with about 50 inches (1,200mm) of rainfall evenly distributed throughout the year. Depending on the time of the year you visit it would be optimal to know what kind of weather you should expect. The diverse population runs the gamut from some of Americas wealthiest celebrities and socialites to homeless people. There are millions of immigrants living in the city. New Yorks population has been diverse since the citys founding by the Dutch. Successive waves of immigration from virtually every nation in the world make New York a giant social experiment in cross-cultural harmony.');
@@ -262,6 +265,51 @@ INSERT INTO hotel (hotel_city_id, hotel_picture, hotel_city_name, hotel_name, ho
 INSERT INTO hotel (hotel_city_id, hotel_picture, hotel_city_name, hotel_name, hotel_website, hotel_address, hotel_phone, hotel_price) VALUES (6, 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/23/e3/97/67/hotel-exterior.jpg?w=1100&h=-1&s=1', 'Washington D.C.', 'Washington Plaza Hotel', 'https://www.washingtonplazahotel.com/?utm_source=google%20my%20business&utm_medium=listing&utm_campaign=visit%20website', '10 Thomas Circle NW, Washington DC, DC 20005', '(202) 842-1300', '$$$');
 INSERT INTO hotel (hotel_city_id, hotel_picture, hotel_city_name, hotel_name, hotel_website, hotel_address, hotel_phone, hotel_price) VALUES (6, 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/27/e6/c1/d0/exterior.jpg?w=1100&h=-1&s=1', 'Washington D.C.', 'The Royal Sonesta Washington DC Dupont Circle', 'https://www.sonesta.com/royal-sonesta/dc/washington/royal-sonesta-washington-dc-dupont-circle?utm_campaign=business_advantage&utm_medium=listing&utm_source=tripadvisor&src=tripadvisor_business_advantage', '2121 P Street NW, Washington DC, DC 20037', '(202) 410-9320', '$$$');
 INSERT INTO hotel (hotel_city_id, hotel_picture, hotel_city_name, hotel_name, hotel_website, hotel_address, hotel_phone, hotel_price) VALUES (6, 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/29/39/a3/0b/exterior.jpg?w=1100&h=-1&s=1', 'Washington D.C.', 'Hilton Washington DC National Mall The Wharf', 'https://www.hilton.com/en/hotels/dcaephh-hilton-washington-dc-national-mall-the-wharf/?SEO_id=GMB-AMER-HH-DCAEPHH&y_source=1_MTIzOTE2NTMtNzE1LWxvY2F0aW9uLndlYnNpdGU%3D', '480 L''Enfant Plaza SW, Washington DC, DC 20024', '(855) 605-0316', '$$');
+
+-- EVENTS
+
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (1, 'https://www.visitpittsburgh.com/imager/s3_amazonaws_com/visit-pittsburgh/CMS/1920X1080/VisitPITTSBURGH/VisitPITTSBURGH-Pittsburgh-Marathon-with-City_49338b2ce992ef730f3e2445db4f50c0.jpg', 'Pittsburgh', 'The Pittsburgh Marathon', 'https://www.thepittsburghmarathon.com/', 'Liberty Avenue & 10th Street, Pittsburgh PA', 'N/A', 'FREE');
+-- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (1, '', '', '', '', '', '', '');
+-- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (1, '', '', '', '', '', '', '');
+-- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (1, '', '', '', '', '', '', '');
+-- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (1, '', '', '', '', '', '', '');
+-- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (1, '', '', '', '', '', '', '');
+
+-- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (2, '', '', '', '', '', '', '');
+-- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (2, '', '', '', '', '', '', '');
+-- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (2, '', '', '', '', '', '', '');
+-- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (2, '', '', '', '', '', '', '');
+-- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (2, '', '', '', '', '', '', '');
+-- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (2, '', '', '', '', '', '', '');
+
+-- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (3, '', '', '', '', '', '', '');
+-- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (3, '', '', '', '', '', '', '');
+-- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (3, '', '', '', '', '', '', '');
+-- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (3, '', '', '', '', '', '', '');
+-- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (3, '', '', '', '', '', '', '');
+-- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (3, '', '', '', '', '', '', '');
+
+-- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (4, '', '', '', '', '', '', '');
+-- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (4, '', '', '', '', '', '', '');
+-- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (4, '', '', '', '', '', '', '');
+-- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (4, '', '', '', '', '', '', '');
+-- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (4, '', '', '', '', '', '', '');
+-- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (4, '', '', '', '', '', '', '');
+
+-- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (5, '', '', '', '', '', '', '');
+-- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (5, '', '', '', '', '', '', '');
+-- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (5, '', '', '', '', '', '', '');
+-- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (5, '', '', '', '', '', '', '');
+-- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (5, '', '', '', '', '', '', '');
+-- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (5, '', '', '', '', '', '', '');
+
+-- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (6, '', '', '', '', '', '', '');
+-- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (6, '', '', '', '', '', '', '');
+-- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (6, '', '', '', '', '', '', '');
+-- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (6, '', '', '', '', '', '', '');
+-- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (6, '', '', '', '', '', '', '');
+-- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (6, '', '', '', '', '', '', '');
+
 
 
 COMMIT;

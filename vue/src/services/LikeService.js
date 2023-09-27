@@ -51,6 +51,18 @@ export default {
     }
   },
 
+  async addLikeEventToList(userId, like, event) {
+    try {
+      like.likeEventId = event.eventId;
+      const response = await instance.post(`/likes/add/user/${userId}`, like);
+      console.log('Response from backend:', response.data); // Log the response data
+      return response.data;
+    } catch (error) {
+      console.error('Error adding like:', error);
+      throw error;
+    }
+  },
+
   async addUserLike(userId, likeId) {
     try {
       const response = await instance.post(`/likes/add/like/${likeId}/user/${userId}`);
