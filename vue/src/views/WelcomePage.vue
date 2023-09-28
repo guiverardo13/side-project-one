@@ -164,7 +164,7 @@
             <div class="social-icons">
               <a href="https://www.linkedin.com/in/guilhermeverardo/"  target="_blank" class="social-icon"><i class="fa-brands fa-linkedin"></i></a>
               <a href="https://github.com/guiverardo13" target="_blank" class="social-icon"><i class="fa-brands fa-github"></i></a>
-              <a href="https://drive.google.com/file/d/1UID0Fpt7Rl_OvHpJsiDGTLcyHefAYuw-/view" target="_blank" class="resume"><i class="fa-regular fa-file-pdf" style="color: #ffffff;"></i></a>
+              <a href="https://drive.google.com/file/d/1UID0Fpt7Rl_OvHpJsiDGTLcyHefAYuw-/view" target="_blank" class="resume"><i class="fa-regular fa-file-pdf"></i></a>
             </div>
           </div>
           <div class="footer-background"></div>
@@ -464,7 +464,6 @@
   
   main h2 {
       display: flex;
-      align-items: start;
       color: white;
       font-size: 50px;
       margin-top: 120px;
@@ -860,6 +859,11 @@
   text-decoration: none;
 }
 
+.fa-regular.fa-file-pdf {
+  font-size: 24px;
+  color: rgb(255, 255, 255);
+}
+
 .account-box {
   position: absolute;
   top: 100%;
@@ -1010,7 +1014,7 @@
   }
 
   .drop-down-list {
-    width: 198px;
+    width: 197px;
     position: relative;
     right: 0%;
     top: -40%
@@ -1048,7 +1052,7 @@
     align-content: center;
     height: 135px;
     font-size: 15px;
-    margin-top: 20px;
+    margin-top: 30px;
     margin-left: 120px;
   }
 
@@ -1098,13 +1102,418 @@
     font-size: 20px;
   }
 
+  #hard {
+    margin-top: 30px;
+  }
+
   #hard h3{
     font-size: 20px;
+    width: 350px;
     margin-top: 0px;
-    position: absolute;
-    top: 10%;
+    margin-left: -5px;
+    position: relative;
+    top: 65%;
     }
 
+    .city-pictures{
+      display: flex;
+      
+      margin-left: 32px;      
+      padding-bottom: 0px;
+      margin-bottom: 30px;
+    }
+
+    .city-pictures img {
+    
+      width: 130px;
+      height: 100px;
+      border-radius: 12px;
+    }
+
+    .pittsburgh-text h4 {
+      font-size: 15px;
+      top: 21%;
+      left: 20%;
+      position: absolute;
+      color: white;
+      text-align: center;
+      z-index: 2;
+    }
+
+    .miami-text h4 {
+      font-size: 15px;
+      top: 21%;
+      left: 32%;
+      position: absolute;
+      color: white;
+      text-align: center;
+      z-index: 2;
+    }
+
+    .nyc-text h4 {
+      font-size: 15px;
+      top: 21%;
+      left: 12%;
+      position: absolute;
+      color: white;
+      text-align: center;
+      z-index: 2;
+    }
+
+    .seattle-text h4 {
+      font-size: 15px;
+      top: 21%;
+      left: 27%;
+      position: absolute;
+      color: white;
+      text-align: center;
+      z-index: 2;
+    }
+
+    .la-text h4 {
+      font-size: 15px;
+      top: 21%;
+      left: 15%;
+      position: absolute;
+      color: white;
+      text-align: center;
+      z-index: 2;
+    }
+
+    .dc-text h4 {
+      font-size: 15px;
+      top: 21%;
+      left: 18%;
+      position: absolute;
+      color: white;
+      text-align: center;
+      z-index: 2;
+    }
+
+    .footer-content {
+      margin: 10px 10px 0px 0px;
+      padding: 0px;
+    }
+
+    .footer-content h2 {
+      font-size: 20px;
+      margin-bottom: 20px;
+      padding-top: 5px;
+    }
+
+    .footer-content p {
+      font-size: 12px;
+      margin-bottom: 5px;
+      
+    }
+    
+    .social-icon {
+      font-size: 24px;
+      color: black;
+      margin: 0 10px;
+      
+    }
+   
+    .fa-regular.fa-file-pdf {
+      font-size: 24px;
+      color: black;
+    }
+
+    .container-footer {
+      border-top: 1px solid black;
+      width: 340px;
+    }
+}
+
+
+
+@media (max-width: 450px) {
+
+.container {
+ width: 80%;
+ margin: 0px;
+ padding-right: 0px;
+}
+
+body {
+ height: 100px;
+ display: flex;
+ background-image: linear-gradient(to bottom, #051937, #004D7A, #008793, white 70%);
+                   /* linear-gradient(to top, #051937,white,white, , white 50%); */
+ background-repeat: no-repeat;
+ background-size: 110% 50%;
+ /* margin: 0;
+ display: flex;
+ flex-direction: column;
+ font-family: 'Russo One', sans-serif;
+
+ background-attachment: scroll;
+ background-position: top, bottom;
+ background-size: 100% 50%; */
+}
+
+.container-top {
+   display: flex;
+   justify-content: space-between;
+   font-size: 15px;
+   width: 110%;
+
+   font-family: 'Russo One', sans-serif;
+   
+ }
+
+ .container-top h1 {
+   font-size: 18px;
+   text-align: center;
+   display: flex;
+   flex-wrap: wrap;
+   width: 10px;
+   margin-right: 50px;
+ }
+
+ .container-main h2 {
+   margin-top: 25px;
+   font-size: 30px;
+ }
+
+ .container-main p {
+   margin: 4px;
+   font-size: 15px;
+ }
+
+ .container-input {
+   width: 100%;
+ }
+
+ #blue {
+   margin-top: 45px;
+   width: 300px;
+   margin-left: 80px;
+   margin-right: 40px;
+   height: 35px;
+ }
+
+ #where-to-flex {
+   margin-top: 10px;
+
+ }
+
+ .drop-down {
+   width: 200px;
+   position: relative;
+   height: 35px;
+   font-size: 12px;
+   top: -42%;
+ }
+
+ .drop-down-list {
+   width: 197px;
+   position: relative;
+   right: 0%;
+   top: -40%
+ }
+
+ .drop-down-list li {
+   font-size: 13px;
+ }
+
+
+ .search-button {
+   width: 60px;
+   height: 35px;
+   font-size: 10px;
+ }
+
+ #how-it-works > h3 {
+   font-size: 20px;
+   margin-top: 10px;
+ }
+
+ #how-it-works {
+   align-items: center;
+   text-align: center;
+   margin-left: 20px;
+ }
+
+ .container-middle {
+   margin-top: 30px;
+   margin-left: 35px;
+   margin-bottom: 0px;
+ }
+
+ #items {
+   width: 30px;
+   align-content: center;
+   height: 175px;
+   font-size: 17px;
+   margin-top: 30px;
+   margin-left: 130px;
+ }
+
+ #items i {
+   font-size: 30px;
+ }
+
+ .plan {
+   border-right: 3px solid #224458;
+   padding: 0px;
+ }
+
+ .discover {
+   padding-right: 5px;
+   border-right: 3px solid #224458;
+   padding-left: 10px;
+ }
+
+ .enjoy {
+  padding-right: 7px;
+ }
+
+ .text.text-discover {
+   font-size: 10px;
+   width: 115px;
+   padding: 0px;
+   padding-top: 10px;
+ }
+
+
+ .text.text-enjoy {
+   font-size: 10px;
+   width: 115px;
+ }
+
+ .text.text-plan {
+   font-size: 10px;
+   width: 135px;
+   padding-right: 10px;
+   padding-left: 10px;
+ }
  
+ .container-bottom h3 {
+   margin-left: 20px;
+   margin-top: 0px;
+ }
+
+ .top-searches h3 {
+   font-size: 20px;
+ }
+
+ #hard h3{
+   font-size: 20px;
+   width: 350px;
+   margin-top: 0px;
+   margin-left: 8px;
+   position: relative;
+   }
+
+   #hard {
+    margin-top: 30px;
+   }
+
+   .city-pictures{
+     margin-left: 44px;
+     padding-bottom: 0px;
+     margin-bottom: 30px;
+   }
+
+   .city-pictures img {
+     width: 130px;
+     height: 100px;
+     border-radius: 12px;
+   }
+
+   .pittsburgh-text h4 {
+     font-size: 15px;
+     top: 21%;
+     left: 20%;
+     position: absolute;
+     color: white;
+     text-align: center;
+     z-index: 2;
+   }
+
+   .miami-text h4 {
+     font-size: 15px;
+     top: 21%;
+     left: 32%;
+     position: absolute;
+     color: white;
+     text-align: center;
+     z-index: 2;
+   }
+
+   .nyc-text h4 {
+     font-size: 15px;
+     top: 21%;
+     left: 12%;
+     position: absolute;
+     color: white;
+     text-align: center;
+     z-index: 2;
+   }
+
+   .seattle-text h4 {
+     font-size: 15px;
+     top: 21%;
+     left: 27%;
+     position: absolute;
+     color: white;
+     text-align: center;
+     z-index: 2;
+   }
+
+   .la-text h4 {
+     font-size: 15px;
+     top: 21%;
+     left: 15%;
+     position: absolute;
+     color: white;
+     text-align: center;
+     z-index: 2;
+   }
+
+   .dc-text h4 {
+     font-size: 15px;
+     top: 21%;
+     left: 18%;
+     position: absolute;
+     color: white;
+     text-align: center;
+     z-index: 2;
+   }
+
+   .footer-content {
+     margin: 10px 10px 0px 0px;
+     padding: 0px;
+   }
+
+   .footer-content h2 {
+     font-size: 20px;
+     margin-bottom: 20px;
+     padding-top: 5px;
+   }
+
+   .footer-content p {
+     font-size: 12px;
+     margin-bottom: 5px;
+     
+   }
+   
+   .social-icon {
+     font-size: 24px;
+     color: black;
+     margin: 0 10px;
+     
+   }
+  
+   .fa-regular.fa-file-pdf {
+     font-size: 24px;
+     color: black;
+   }
+
+   .container-footer {
+     border-top: 1px solid black;
+     width: 340px;
+   }
 }
   </style>
