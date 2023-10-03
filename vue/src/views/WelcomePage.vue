@@ -583,6 +583,7 @@
     .discover {
       border-right: #224458 solid 7px;
       padding-right: 15px;
+      margin-left: 30px;
     }
   
     .text.text-discover {

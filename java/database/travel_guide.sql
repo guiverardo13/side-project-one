@@ -78,7 +78,7 @@ CREATE TABLE events (
 	event_website varchar(1000) NOT NULL,
 	event_address varchar(1000) NOT NULL,
 	event_phone varchar(20) NOT NULL,
-	event_price varchar(5) NOT NULL,
+	event_price varchar(10) NOT NULL,
 	CONSTRAINT pk_event PRIMARY KEY (event_id),
 	CONSTRAINT fk_event_city FOREIGN KEY(event_city_id) REFERENCES city(city_id)
 );
@@ -268,12 +268,12 @@ INSERT INTO hotel (hotel_city_id, hotel_picture, hotel_city_name, hotel_name, ho
 
 -- EVENTS
 
-INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (1, 'https://www.visitpittsburgh.com/imager/s3_amazonaws_com/visit-pittsburgh/CMS/1920X1080/VisitPITTSBURGH/VisitPITTSBURGH-Pittsburgh-Marathon-with-City_49338b2ce992ef730f3e2445db4f50c0.jpg', 'Pittsburgh', 'The Pittsburgh Marathon', 'https://www.thepittsburghmarathon.com/', 'Liberty Avenue & 10th Street, Pittsburgh PA', 'N/A', 'FREE');
--- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (1, '', '', '', '', '', '', '');
--- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (1, '', '', '', '', '', '', '');
--- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (1, '', '', '', '', '', '', '');
--- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (1, '', '', '', '', '', '', '');
--- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (1, '', '', '', '', '', '', '');
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (1, 'https://assets-varnish.triblive.com/2023/05/6175498_web1_ptr-Marathon15-050823.jpg', 'Pittsburgh', 'The Pittsburgh Marathon', 'https://www.thepittsburghmarathon.com/', 'Liberty Avenue & 10th Street, Pittsburgh PA', 'May 3-5 2024', 'FREE');
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (1, 'https://www.visitpittsburgh.com/imager/s3_amazonaws_com/visit-pittsburgh/CMS/2022_Asian-Lantern-Festival_-Paul-SelvaggioPittsburgh-Zoo-PPG-Aquarium_5_2200f99a241e55606b0e5da9ea141a39.jpg', 'Pittsburgh', 'Asian Lantern Festival Drive-Thru', 'https://www.pittsburghzoo.org/event-asian-lantern-festival-walk-thru/', '7370 Baker Street Pittsburgh, PA 15206', 'Oct 2023', '$16-$22');
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (1, 'https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/pittsburghpanthers.com/images/2022/10/10/20220829_FB_WVU_ASM_2792.jpg', 'Pittsburgh', 'Pittsburgh Steelers Games', 'https://www.steelers.com/', '100 Art Rooney Ave, Pittsburgh, PA 15212', 'Through Dec 2023', '$100-$400');
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (1, 'https://www.pittsburghmagazine.com/content/uploads/data-import/1d64829b/insidearena.jpg', 'Pittsburgh', 'Pittsburgh Penguins Games', 'https://www.nhl.com/penguins/', '1001 Fifth Ave, Pittsburgh, PA 15219', 'Through April 2024', '$206');
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (1, 'https://parade.com/.image/ar_4:3%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MTkwNTgxMjIzMjQzMzkyODky/new-york-st-patricks-day-parade.jpg', 'Pittsburgh', 'Saint Patrick''s Day Parade', 'https://pittsburghstpatricksdayparade.com/', 'Boulevard of the Allies, Pittsburgh, PA 15222', 'March 16 2024', 'FREE');
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (1, 'https://www.pennlive.com/resizer/y5yvuRK8VgMP1cqoi-Hy4ev-57A=/1280x0/smart/cloudfront-us-east-1.images.arcpublishing.com/advancelocal/543HFDTJARGH7L32II7WORAAZM.jpg', 'Pittsburgh', 'Picklesburgh', 'https://www.picklesburgh.com/', 'Boulevard of the Allies, Pittsburgh, PA 15222', '2024', 'FREE');
 
 -- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (2, '', '', '', '', '', '', '');
 -- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (2, '', '', '', '', '', '', '');

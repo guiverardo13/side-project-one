@@ -18,7 +18,7 @@
         <div class="cover-picture-container">
             <img v-if="coverPictureUrl" :src="coverPictureUrl" alt="City Cover" class="cover-picture">
             <h1 class="city-name">
-            <a :href="videoLink" target="_blank" class="city-link">{{ cityName }}</a>
+            {{ cityName }}<a :href="videoLink" target="_blank" class="city-link"><i class="fa-brands fa-youtube"></i></a>
           </h1>
         </div>
     </div>
@@ -31,17 +31,24 @@
           <h2>Things To Do</h2>
           <router-link :to="'/'" class="back-button" v-if="isCityPage">Back</router-link>
             <div class="categories">
-          <div class="category hotels">
+          <router-link  class="category hotels" :to="{ name: 'HotelPage', params: { cityName: selectedCity } }">
+          <div>
             <router-link  class="category-text" :to="{ name: 'HotelPage', params: { cityName: selectedCity } }">Hotels</router-link>
           </div>
-          <div class="category bars-restaurants">
-            <router-link  class="category-text" :to="{ name: 'BarPage', params: { cityName: selectedCity } }">Bars <br> & <br> Restaurants</router-link>
+        </router-link>
+        <router-link class="category bars-restaurants" :to="{ name: 'BarPage', params: { cityName: selectedCity } }">
+          <div>
+            <router-link  class="category-text" :to="{ name: 'BarPage', params: { cityName: selectedCity } }">Bars & Restaurants</router-link>
           </div>
+        </router-link>
         </div>
         <div class="categories">
-          <div class="category events">
+          <router-link class="category events" :to="{ name: 'EventPage', params: { cityName: selectedCity } }">
+          <div>
             <router-link  class="category-text" :to="{ name: 'EventPage', params: { cityName: selectedCity } }">Events</router-link>
           </div>
+        </router-link>
+        <!-- need to add router link around category pois. name routerlink category pois and delete class from div so picture is involved. -->
           <div class="category pois">
             <div class="category-text">Points <br> Of <br> Interest</div>
           </div>
@@ -275,6 +282,7 @@ export default {
   margin: 0 auto; /* Center the container horizontally */
 }
 
+
 .category {
   display: flex;
   flex-direction: column;
@@ -304,7 +312,7 @@ export default {
 }
 
 .categories .hotels {
-    background-image: url("../assets/hotel.jpeg");
+  background-image: url("../assets/hotel.jpeg");
   background-size: cover;
   background-position: center;
   height: 180px; /* Set the height as needed */
@@ -317,31 +325,57 @@ export default {
   text-align: center;
 }
 
-.category-text:hover {
-  color:  #36bfe9;
+
+.categories .hotels:hover {
+  transform: scale(1.1); /* Increase the scale value for a stronger zoom effect */
+  transition: transform 0.3s ease; /* Add a smooth transition effect */
+  cursor: pointer;
 }
 
-.category-text {
+.categories .events:hover {
+  transform: scale(1.1); /* Increase the scale value for a stronger zoom effect */
+  transition: transform 0.3s ease; /* Add a smooth transition effect */
+  cursor: pointer;
 
+}
+
+.categories .bars-restaurants:hover {
+  transform: scale(1.1); /* Increase the scale value for a stronger zoom effect */
+  transition: transform 0.3s ease; /* Add a smooth transition effect */
+  cursor: pointer;
+}
+
+.categories .pois:hover {
+  transform: scale(1.1); /* Increase the scale value for a stronger zoom effect */
+  transition: transform 0.3s ease; /* Add a smooth transition effect */
+  cursor: pointer;
+
+}
+
+a {
   text-decoration: none;
 }
 
+
+.category-text:hover {
+  color:  #cfc8c8;
+}
+
+
 .categories .bars-restaurants {
-    background-image: url("../assets/restaurant.jpeg");
+  background-image: url("../assets/restaurant.jpeg");
   background-size: cover;
   background-position: center;
   height: 180px; /* Set the height as needed */
   border-radius: 25px;
   display: flex;
-  align-items: center;
   justify-content: center;
   color: white;
   font-size: 30px;
-  text-align: center;
 }
 
 .categories .pois {
-    background-image: url("../assets/bean.jpeg");
+  background-image: url("../assets/bean.jpeg");
   background-size: cover;
   background-position: center;
   height: 180px; /* Set the height as needed */
@@ -356,11 +390,16 @@ export default {
 
 .back-button {
   display: flex;
+  text-decoration: underline;
 }
 
 .city-link {
-  color: white; /* Set the color to white */
+  color: red; /* Set the color to white */
   text-decoration: none; /* Remove underlining */
+  font-size: 50px;
+  margin-left: 20px;
+ 
+  
 }
 
 .city-link:hover {

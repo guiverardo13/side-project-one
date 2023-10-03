@@ -17,7 +17,7 @@
             :class="{'fa-regular fa-heart red-heart': like.isLiked, 'fa-solid fa-heart red-heart': !like.isLiked }"
           ></i>
                 </div>
-                <h3>Name: {{ like.likeName }}</h3>
+                <h3>{{ like.likeName }}</h3>
                 <p>City: {{ like.likeCityName }}</p>
                 <p>Address: {{ like.likeAddress }}</p>
                 <p>Phone: {{ like.likePhone }}</p>
