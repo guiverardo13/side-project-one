@@ -77,7 +77,7 @@ CREATE TABLE events (
 	event_name varchar(500) NOT NULL,
 	event_website varchar(1000) NOT NULL,
 	event_address varchar(1000) NOT NULL,
-	event_phone varchar(20) NOT NULL,
+	event_phone varchar(100) NOT NULL,
 	event_price varchar(10) NOT NULL,
 	CONSTRAINT pk_event PRIMARY KEY (event_id),
 	CONSTRAINT fk_event_city FOREIGN KEY(event_city_id) REFERENCES city(city_id)
@@ -106,8 +106,8 @@ CREATE TABLE likes (
 	like_city_name varchar(50) NOT NULL,
     like_name varchar(500) NOT NULL,  -- Common name attribute
     like_address varchar(1000) NOT NULL,  -- Common address attribute
-    like_phone varchar(20) NOT NULL,  -- Common phone attribute
-    like_price varchar(15) NOT NULL,  -- Common price attribute
+    like_phone varchar(100) NOT NULL,  -- Common phone attribute
+    like_price varchar(10) NOT NULL,  -- Common price attribute
     like_website varchar(1000) NOT NULL,  -- Common website attribute
     CONSTRAINT pk_like PRIMARY KEY (like_id),
     CONSTRAINT fk_like_city_id FOREIGN KEY (like_city_id) REFERENCES city(city_id),
@@ -168,7 +168,7 @@ INSERT INTO bar (bar_city_id, bar_picture, bar_city_name, bar_name, bar_website,
 INSERT INTO bar (bar_city_id, bar_picture, bar_city_name, bar_name, bar_website, menu_link, bar_address, bar_phone, bar_price) VALUES (5, 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/16/87/17/23/getlstd-property-photo.jpg?w=1200&h=-1&s=1', 'Los Angeles', 'Rain Studio City', 'https://www.rainstudiocity.com/', 'https://www.rainstudiocity.com/', '12215 Ventura Blvd UNIT 211, Studio City, CA 91604', '(747) 305-8583', '$$$');
 INSERT INTO bar (bar_city_id, bar_picture, bar_city_name, bar_name, bar_website, menu_link, bar_address, bar_phone, bar_price) VALUES (5, 'https://angelcitybrewery.com/wp-content/uploads/2023/03/Image-40-600x350.jpeg', 'Los Angeles', 'Angel City Brewery', 'https://angelcitybrewery.com/', 'https://angelcitybrewery.com/', '216 S Alameda St, Los Angeles, CA 90012', '(213) 537-5550', '$$$');
 INSERT INTO bar (bar_city_id, bar_picture, bar_city_name, bar_name, bar_website, menu_link, bar_address, bar_phone, bar_price) VALUES (5, 'https://a.storyblok.com/f/116532/896x524/b5345086a0/station-1640-los-angeles.jpg', 'Los Angeles', 'Station1640', 'https://www.station1640.com/', 'https://www.station1640.com/', '1640 N Cahuenga Blvd, Los Angeles, CA 90028', '(323) 464-2065', '$$$$');
-INSERT INTO bar (bar_city_id, bar_picture, bar_city_name, bar_name, bar_website, menu_link, bar_address, bar_phone, bar_price) VALUES (5, 'https://lh3.googleusercontent.com/p/AF1QipMTuoAu9JZWLb-ICpSCY7JV4eOsWNroZ-lvESAa=s680-w680-h510', 'Los Angeles', 'Black Rabbit Rose Magic', 'https://www.blackrabbitrose.com/', 'https://www.blackrabbitrose.com/', '1719 N Hudson Ave, Los Angeles, CA 90028', '(323) 461-1464', '$$$');
+INSERT INTO bar (bar_city_id, bar_picture, bar_city_name, bar_name, bar_website, menu_link, bar_address, bar_phone, bar_price) VALUES (5, 'https://cdn.vox-cdn.com/thumbor/mKJi2E9dbbCcyBdaIA4AuIFYrtQ=/0x0:2000x1335/1200x675/filters:focal(840x508:1160x828)/cdn.vox-cdn.com/uploads/chorus_image/image/53171319/2017_02_08_BlackRabbitRose_001.0.jpg', 'Los Angeles', 'Black Rabbit Rose Magic', 'https://www.blackrabbitrose.com/', 'https://www.blackrabbitrose.com/', '1719 N Hudson Ave, Los Angeles, CA 90028', '(323) 461-1464', '$$$');
 INSERT INTO bar (bar_city_id, bar_picture, bar_city_name, bar_name, bar_website, menu_link, bar_address, bar_phone, bar_price) VALUES (5, 'https://media-cdn.tripadvisor.com/media/photo-s/29/66/36/cc/overview-twilight-cloud.jpg', 'Los Angeles', 'Skybar', 'https://book.ennismore.com/nightlife/skybar/los-angeles?utm_source=google-gmb&utm_medium=organic&utm_campaign=gmb', 'https://book.ennismore.com/nightlife/skybar/los-angeles?utm_source=google-gmb&utm_medium=organic&utm_campaign=gmb', '8440 Sunset Blvd, West Hollywood, CA 90069', '(323) 848-6030', '$$$$');
 
 INSERT INTO bar (bar_city_id, bar_picture, bar_city_name, bar_name, bar_website, menu_link, bar_address, bar_phone, bar_price) VALUES (6, 'https://static.wixstatic.com/media/0069aa_2b3e74ec53014effaacd86122a934788~mv2.jpg/v1/fill/w_640,h_400,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/0069aa_2b3e74ec53014effaacd86122a934788~mv2.jpg', 'Washington D.C.', 'Kick Axe Throwing', 'https://www.kickaxe.com/dc', 'https://www.kickaxe.com/dc', '1401 Okie St NE STE 101, Washington, DC 20002', '(833) 454-2529', '$$$');
@@ -275,12 +275,12 @@ INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, e
 INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (1, 'https://parade.com/.image/ar_4:3%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MTkwNTgxMjIzMjQzMzkyODky/new-york-st-patricks-day-parade.jpg', 'Pittsburgh', 'Saint Patrick''s Day Parade', 'https://pittsburghstpatricksdayparade.com/', 'Boulevard of the Allies, Pittsburgh, PA 15222', 'March 16 2024', 'FREE');
 INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (1, 'https://www.pennlive.com/resizer/y5yvuRK8VgMP1cqoi-Hy4ev-57A=/1280x0/smart/cloudfront-us-east-1.images.arcpublishing.com/advancelocal/543HFDTJARGH7L32II7WORAAZM.jpg', 'Pittsburgh', 'Picklesburgh', 'https://www.picklesburgh.com/', 'Boulevard of the Allies, Pittsburgh, PA 15222', '2024', 'FREE');
 
--- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (2, '', '', '', '', '', '', '');
--- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (2, '', '', '', '', '', '', '');
--- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (2, '', '', '', '', '', '', '');
--- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (2, '', '', '', '', '', '', '');
--- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (2, '', '', '', '', '', '', '');
--- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (2, '', '', '', '', '', '', '');
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (2, 'https://assets.simpleviewinc.com/simpleview/image/upload/crm/miamifl/Miami-Marathon-1440x9000_08179285-5056-a36a-0b692b318230d35e.jpg', 'Miami', 'Lifetime Miami Marathon and Half Marathon', 'https://www.themiamimarathon.com/', '601 Biscayne Blvd, Miami, FL 33132', 'January 28, 2024', '$155');
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (2, 'https://assets.simpleviewinc.com/simpleview/image/upload/crm/miamifl/Formula_1_cars_on_track_1440x900_BD084F50-5056-A36A-0B6797D01C2EA2AD_be07a273-5056-a36a-0bd0d82ef2deb826.jpg', 'Miami', 'Formula 1 Crypto.com - Miami Grand Prix', 'https://f1miamigp.com/', '347 Don Shula Dr, Miami Gardens, FL 33056', 'May 03 - May 05, 2024', 'From $1600');
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (2, 'https://media2.miaminewtimes.com/mia/imager/u/original/11580422/carnaval-on-the-mile.jpg', 'Miami', 'Carnaval on the Mile', 'https://carnavalmiami.com/events/carnaval-on-the-mile/', 'Miracle Mile, Coral Gables, FL 33134', 'March 04 - March 05', 'FREE');
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (2, 'https://cloudfront-us-east-1.images.arcpublishing.com/gmg/WRTY7KRE3NG2HHPHLCCO7R4Q4U.jpg', 'Miami', 'Miami Dolphins Games', 'https://www.miamidolphins.com/', '347 Don Shula Drive Miami Gardens, FL 33056', 'Through Dec 2023', '$100-$400');
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (2, 'https://i0.wp.com/www.miamirealestateguy.com/wp-content/uploads/Miami-Beach-Ocean-Drive.jpg', 'Miami', 'Art Deco Weekend', 'https://artdecoweekend.org/', '5 Ocean Dr, Miami Beach, FL 33139', 'January 12 - January 14, 2024', '$35');
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (2, 'https://media.guestofaguest.com/t_card_large/gofg-media/2018/11/1/51714/41284861_1944594655841099_6348378045061146374_n.jpg', 'Miami', 'The Great Gatsby Party', 'https://greatgatsbyparty.com/', '169 E. Flagler St. Miami, FL 33131', 'Januray 12 - January 14, 2024', '$110-$5000');
 
 -- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (3, '', '', '', '', '', '', '');
 -- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (3, '', '', '', '', '', '', '');

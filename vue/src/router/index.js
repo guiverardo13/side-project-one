@@ -3,7 +3,8 @@ import CityPage from '../components/CityPage.vue';
 import WelcomePage from '../views/WelcomePage.vue';
 import HotelPage from '../components/HotelPage.vue';
 import BarPage from '../components/BarPage.vue';
-import EventPage from '../components/EventPage.vue'
+import EventPage from '../components/EventPage.vue';
+import AboutPage from '../components/AboutPage.vue';
 import store from '../store'; // Import your Vuex store
 
 const routes = [
@@ -33,6 +34,12 @@ const routes = [
     path: '/city/name/:cityName/events',
     name: 'EventPage',
     component: EventPage,
+    // meta: { requiresAuth: true }, // Add meta field to require authentication
+  },
+  {
+    path: '/about',
+    name: 'AboutPage',
+    component: AboutPage,
     // meta: { requiresAuth: true }, // Add meta field to require authentication
   }
 ];

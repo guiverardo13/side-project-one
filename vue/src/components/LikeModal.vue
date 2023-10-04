@@ -17,7 +17,14 @@
             :class="{'fa-regular fa-heart red-heart': like.isLiked, 'fa-solid fa-heart red-heart': !like.isLiked }"
           ></i>
                 </div>
-                <h3>{{ like.likeName }}</h3>
+                <h3>
+                    {{ like.likeName }}
+                    {{ like.likeHotelId ? ' | Hotel' : '' }}
+                    {{ like.likeBarId ? ' | Bar' : '' }}
+                    {{ like.likeRestaurantId ? ' | Restaurant' : '' }}
+                    {{ like.likeEventId ? ' | Event' : '' }}
+                </h3>
+                    <!-- need to do this for pois -->
                 <p>City: {{ like.likeCityName }}</p>
                 <p>Address: {{ like.likeAddress }}</p>
                 <p>Phone: {{ like.likePhone }}</p>
@@ -27,8 +34,8 @@
                 </p>
               </div>
             </div>
+            </div>
           </div>
-        </div>
         <div v-else>
           <p class="no-likes">You have no likes yet.</p>
         </div>

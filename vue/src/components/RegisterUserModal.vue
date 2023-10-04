@@ -70,7 +70,10 @@ export default {
         async registerUser() {
             // Need to perform validation! (user exists -> user with same email(email already exists), same thing with username.)
             // Perform validation here if needed
+            
+
             if (this.newUser.password !== this.newUser.confirmPassword) {
+                window.alert("Password must match.");
                 // Handle password mismatch
                 return;
             }
@@ -87,6 +90,7 @@ export default {
             }
           } catch (error) {
             console.error('Error occurred:', error);
+            window.alert("Username or Email already exists.");
           }
         },
 
@@ -96,13 +100,22 @@ export default {
         this.closeRegistrationModal();
       }
     },
+
+      closeRegistrationModal() {
+        console.log('Closing registration modal in parent');
+          this.$emit('close');
+      },
     
-        closeRegistrationModal() {
-          console.log('Closing registration modal in parent');
-            this.$emit('close');
-        },
-      
-       
+      clearForm() {
+            this.newUser.username = '',
+            this.newUser.firstName = '',
+            this.newUser.lastName = '',
+            this.newUser.password = '',
+            this.newUser.email = '',
+            this.newUser.confirmPassword = '',
+            this.newUser.role = 'user'
+      },
+    
     },
 }
 

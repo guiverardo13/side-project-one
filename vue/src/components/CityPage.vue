@@ -18,7 +18,7 @@
         <div class="cover-picture-container">
             <img v-if="coverPictureUrl" :src="coverPictureUrl" alt="City Cover" class="cover-picture">
             <h1 class="city-name">
-            {{ cityName }}<a :href="videoLink" target="_blank" class="city-link"><i class="fa-brands fa-youtube"></i></a>
+            {{ cityName }}<a :href="videoLink" target="_blank" class="city-link"><i class="fa-brands fa-youtube" :title="'Watch a 4k Drone Video of ' + cityName"></i></a>
           </h1>
         </div>
     </div>
