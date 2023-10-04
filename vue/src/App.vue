@@ -25,11 +25,11 @@ export default {
     margin: 0;
     background-image: linear-gradient(to bottom, #051937, #004D7A, #008793);
     background-repeat: no-repeat;
-    background-attachment: fixed; /* Change this to fixed */
+    background-attachment: fixed; 
     font-family: 'Russo One', sans-serif;
     display: flex;
     flex-direction: column;
-    min-height: 100vh; /* Ensure the body takes at least the viewport height */
+    min-height: 100vh; 
   }
 
   

@@ -174,9 +174,9 @@
           <LoginModal v-if="showLoginModal" @close="closeLoginModal" @login-successful="handleLoginSuccess" />
           <LikeModal v-if="showLikesModal" :isAuthenticated="isAuthenticated" :likedItems="likedItems" @close="closeLikeModal"/>
       </div>
-  </template>
+</template>
   
-  <script>
+<script>
   import UserServices from '../services/UserServices.js';
   import RegisterUserModal from '../components/RegisterUserModal.vue';
   import AccountCreatedModal from '../components/AccountCreatedModal.vue';
@@ -386,7 +386,7 @@
 
 
 .drop-down-list ul {
-  list-style: none; /* Remove bullet points */
+  list-style: none; 
   padding: 0;
   margin: 0;
 }
@@ -406,17 +406,17 @@
 }
 
 .fa-chevron-up.fa-rotate-180 {
-  position: absolute; /* Set position to absolute */
-  right: 685px; /* Adjust the right distance as needed */
-  top: 47.3%; /* Position it vertically in the middle */
-  /* transform: translateY(-50%); Adjust vertical alignment */
+  position: absolute; 
+  right: 685px; 
+  top: 47.3%; 
+  
 }
 
 .fa-chevron-up {
-  position: absolute; /* Set position to absolute */
-  right: 685px; /* Adjust the right distance as needed */
-  top: 47.3%; /* Position it vertically in the middle */
-  /* transform: translateY(-50%); Adjust vertical alignment */
+  position: absolute; 
+  right: 685px;
+  top: 47.3%;
+  
 }
 
 .none {
@@ -499,7 +499,7 @@
       padding: 7px;
       border-radius: 6px;
       gap: 4px;
-      height: 45px; /* Add a fixed height */
+      height: 45px; 
     }
   
   
@@ -518,21 +518,6 @@
   .fa-chevron-up.fa-rotate-180 {
     margin-left: 400px;
   }
-/*   
-  #where-to-flex input {
-      border: 1px solid transparent;
-      font-size: 18px;   
-      font-family:'Russo One', sans-serif;
-      padding-left: 10px;
-      width: 650px;  
-  } */
-  
-  /* #where-to-flex {
-      background-color: white;
-      padding: 10px 8px;
-      border-radius: 3px;
-      text-align: center;
-  } */
   
   button {
       font-size: 17px;
@@ -624,15 +609,15 @@
   
     section .top-searches {
     text-align: center;
-    margin-top: 100px; /* Adjust as needed */
-    margin-bottom: 0; /* Adjust as needed */
-    padding-bottom: 0; /* Adjust as needed */
+    margin-top: 100px; 
+    margin-bottom: 0; 
+    padding-bottom: 0; 
   }
 
     section .top-searches h3 {
     font-size: 40px;
     padding-bottom: 15px;
-    width: 100%; /* Ensure the width matches the content container */
+    width: 100%; 
     border-bottom: black solid 1px;
   }
   
@@ -653,11 +638,11 @@
   .pittsburgh {
   display: flex;
   position: relative;
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
+  justify-content: center; 
+  align-items: center; 
 }
 
-/* Style for the h4 text */
+
 .pittsburgh-text h4 {
   font-size: 40px;
   top: 21%;
@@ -681,8 +666,8 @@
   .miami {
   display: flex;
   position: relative;
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
+  justify-content: center; 
+  align-items: center; 
 }
 
 .miami-text h4 {
@@ -707,8 +692,8 @@
   .nyc {
   display: flex;
   position: relative;
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
+  justify-content: center; 
+  align-items: center; 
 }
   
   
@@ -734,8 +719,8 @@
   .seattle {
   display: flex;
   position: relative;
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
+  justify-content: center; 
+  align-items: center; 
 }
   
 .seattle-text h4 {
@@ -760,8 +745,8 @@
   .los-angeles {
   display: flex;
   position: relative;
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
+  justify-content: center; 
+  align-items: center;
 }
 
 .la-text h4 {
@@ -788,8 +773,8 @@
   .dc {
   display: flex;
   position: relative;
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
+  justify-content: center; 
+  align-items: center; 
 }
       
   
@@ -810,8 +795,8 @@
   
   .dc a :hover{
     color: #cfc8c8;
-  } */
-   */
+  } 
+  
   .container-footer {
     position: relative;
     padding: 0;
@@ -897,28 +882,28 @@
 .city-pictures img {
     width: 350px;
     border-radius: 25px;
-    transition: transform 0.3s ease; /* Add a smooth transition */
+    transition: transform 0.3s ease; 
     position: relative;
-    z-index: 1; /* Set a higher z-index for the images */
+    z-index: 1; 
   }
 
-  /* Apply zoom effect on hover */
+  
   .city-pictures img:hover {
     transform: scale(1.1);
-    z-index: 2; /* Set a higher z-index for the zoomed-in image */
+    z-index: 2; 
   }
 
   .fa-earth-americas, 
   .fa-pen-to-square, 
   .fa-champagne-glasses {  
-    transition: transform 0.3s ease; /* Add a smooth transition */
+    transition: transform 0.3s ease; 
   }
 
-  /* Apply zoom effect on hover */
+
   .fa-earth-americas:hover, 
   .fa-pen-to-square:hover, 
   .fa-champagne-glasses:hover {
-    transform: scale(1.3); /* Enlarge the image on hover */
+    transform: scale(1.3); 
     cursor: pointer;
   }
 
@@ -948,16 +933,7 @@
   height: 100px;
   display: flex;
   background-image: linear-gradient(to bottom, #051937, #004D7A, #008793, white 70%);
-                    /* linear-gradient(to top, #051937,white,white, , white 50%); */
   background-repeat: no-repeat;
-  /* margin: 0;
-  display: flex;
-  flex-direction: column;
-  font-family: 'Russo One', sans-serif;
- 
-  background-attachment: scroll;
-  background-position: top, bottom;
-  background-size: 100% 50%; */
 }
 
 .container-top {
@@ -1226,8 +1202,6 @@
     }
 }
 
-
-
 @media (max-width: 450px) {
 
 .container {
@@ -1240,17 +1214,8 @@ body {
  height: 100px;
  display: flex;
  background-image: linear-gradient(to bottom, #051937, #004D7A, #008793, white 70%);
-                   /* linear-gradient(to top, #051937,white,white, , white 50%); */
  background-repeat: no-repeat;
  background-size: 110% 50%;
- /* margin: 0;
- display: flex;
- flex-direction: column;
- font-family: 'Russo One', sans-serif;
-
- background-attachment: scroll;
- background-position: top, bottom;
- background-size: 100% 50%; */
 }
 
 .container-top {
@@ -1258,7 +1223,6 @@ body {
    justify-content: space-between;
    font-size: 15px;
    width: 110%;
-
    font-family: 'Russo One', sans-serif;
    
  }
@@ -1517,4 +1481,4 @@ body {
      width: 340px;
    }
 }
-  </style>
+</style>

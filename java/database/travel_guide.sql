@@ -107,7 +107,7 @@ CREATE TABLE likes (
     like_name varchar(500) NOT NULL,  -- Common name attribute
     like_address varchar(1000) NOT NULL,  -- Common address attribute
     like_phone varchar(20) NOT NULL,  -- Common phone attribute
-    like_price varchar(5) NOT NULL,  -- Common price attribute
+    like_price varchar(15) NOT NULL,  -- Common price attribute
     like_website varchar(1000) NOT NULL,  -- Common website attribute
     CONSTRAINT pk_like PRIMARY KEY (like_id),
     CONSTRAINT fk_like_city_id FOREIGN KEY (like_city_id) REFERENCES city(city_id),
