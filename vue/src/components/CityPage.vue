@@ -361,6 +361,11 @@ a {
   color:  #cfc8c8;
 }
 
+.container-top-new-page a:hover {
+    color: #00AFEF;
+    text-decoration: none;
+  }
+
 
 .categories .bars-restaurants {
   background-image: url("../assets/restaurant.jpeg");

@@ -529,14 +529,10 @@
       border-radius: 3px;
   }
   
-    .about :hover {
-      color: #00AFEF;
-      text-decoration: none;
-    } 
-  
-    .contact :hover {
-      color: #00AFEF;
-    }
+  .container-top a:hover {
+    color: #00AFEF;
+   
+  }
 
     .container-middle h3 {
       display: flex;

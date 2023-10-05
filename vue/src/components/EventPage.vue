@@ -1,5 +1,5 @@
 <template>
-    <div class="container-event">
+    <div class="container">
       <header>
       <nav class="container-top-event" v-if="isEventPage">
           <h1><router-link to="/">GV's Travel Guide</router-link></h1>
@@ -362,12 +362,6 @@ openLikesModal() {
   margin: 0;
 }
 
-.container-event {
-margin: 0 auto;
-max-width: 1200px;
-padding: 0 20px;
-flex: 1;
-}
 
 .container-top-event {
 display: flex;
@@ -384,6 +378,10 @@ width: 100%;
   margin: 0;
   padding: 0;
   align-items: flex-start;
+}
+
+.container-top-event a:hover {
+  color:#00AFEF;
 }
 
 .book-link {

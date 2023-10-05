@@ -402,12 +402,8 @@ width: 100%;
   text-decoration: none;
 }
 
-.item.about:hover,
-.item.sign-in:hover,
-.item.contact:hover,
-.item.register:hover {
-  color: #00AFEF;
-  text-decoration: underline;
+.container-top-hotel a:hover {
+  color:#00AFEF;
 }
 
 .container-footer {
