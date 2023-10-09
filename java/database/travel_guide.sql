@@ -72,13 +72,13 @@ CREATE TABLE bar (
 CREATE TABLE events (
 	event_id serial NOT NULL,
 	event_city_id INT NOT NULL,
-	event_picture varchar(250) NOT NULL,
+	event_picture varchar(500) NOT NULL,
 	event_city_name varchar(50) NOT NULL,
 	event_name varchar(500) NOT NULL,
 	event_website varchar(1000) NOT NULL,
 	event_address varchar(1000) NOT NULL,
 	event_phone varchar(100) NOT NULL,
-	event_price varchar(10) NOT NULL,
+	event_price varchar(100) NOT NULL,
 	CONSTRAINT pk_event PRIMARY KEY (event_id),
 	CONSTRAINT fk_event_city FOREIGN KEY(event_city_id) REFERENCES city(city_id)
 );
@@ -102,12 +102,12 @@ CREATE TABLE likes (
     like_restaurant_id int,
     like_event_id int,
     like_tour_id int,
-	like_picture varchar(250) NOT NULL,
+	like_picture varchar(500) NOT NULL,
 	like_city_name varchar(50) NOT NULL,
     like_name varchar(500) NOT NULL,  -- Common name attribute
     like_address varchar(1000) NOT NULL,  -- Common address attribute
     like_phone varchar(100) NOT NULL,  -- Common phone attribute
-    like_price varchar(10) NOT NULL,  -- Common price attribute
+    like_price varchar(100) NOT NULL,  -- Common price attribute
     like_website varchar(1000) NOT NULL,  -- Common website attribute
     CONSTRAINT pk_like PRIMARY KEY (like_id),
     CONSTRAINT fk_like_city_id FOREIGN KEY (like_city_id) REFERENCES city(city_id),
@@ -282,34 +282,33 @@ INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, e
 INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (2, 'https://i0.wp.com/www.miamirealestateguy.com/wp-content/uploads/Miami-Beach-Ocean-Drive.jpg', 'Miami', 'Art Deco Weekend', 'https://artdecoweekend.org/', '5 Ocean Dr, Miami Beach, FL 33139', 'January 12 - January 14, 2024', '$35');
 INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (2, 'https://media.guestofaguest.com/t_card_large/gofg-media/2018/11/1/51714/41284861_1944594655841099_6348378045061146374_n.jpg', 'Miami', 'The Great Gatsby Party', 'https://greatgatsbyparty.com/', '169 E. Flagler St. Miami, FL 33131', 'Januray 12 - January 14, 2024', '$110-$5000');
 
--- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (3, '', '', '', '', '', '', '');
--- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (3, '', '', '', '', '', '', '');
--- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (3, '', '', '', '', '', '', '');
--- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (3, '', '', '', '', '', '', '');
--- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (3, '', '', '', '', '', '', '');
--- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (3, '', '', '', '', '', '', '');
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (3, 'https://www.hollywoodreporter.com/wp-content/uploads/2016/04/gettyimages-112178872-h_2016.jpg?w=3000', 'New York City', 'Blue Man Group', 'https://www.broadway.com/shows/blue-man-group/?_gl=1*14k9csu*_ga*NzU2NzE5NTk3LjE2OTY4NzQwMDM.*_ga_6MCFSZ2WNN*MTY5Njg3NDAwMy4xLjEuMTY5Njg3NDE3OC4wLjAuMA..', '729 7th Avenue, 6th Floor, New York, NY 10019', 'Januray 01 - March 31, 2024', '$78.64 - $142.83');
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (3, 'https://cdn-az.allevents.in/events7/banners/39d025eff8200dcdf3a2843fc84797552597d0f1f81cc83bc713353800fea2fc-rimg-w610-h343-gmir.jpg?v=1696411978', 'New York City', 'Winter Lantern Festival', 'https://winterlanternfestival.com/', 'American Dream Way, East Rutherford, NJ 07073', 'October 05, 2024', '$28.99');
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (3, 'https://www.hollywoodreporter.com/wp-content/uploads/2015/12/onceuponamattressphotobycarolrosegg_2_-_h_2015.jpg?w=3000', 'New York City', 'Once Upon a Mattress', 'https://www.nycitycenter.org/pdps/2023-2024/once-upon-a-mattress/', '131 W 55th St, New York, NY 10019 ', 'Jan 24 – Feb 4, 2024', 'From $35');
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (3, 'https://res.cloudinary.com/hello-tickets/image/upload/ar_9:5,c_limit,f_auto,q_auto,w_1300/v1645697978/gvsl5eiu3kavmeaxufyl.jpg', 'New York City', 'New York Knicks Games', 'https://www.nba.com/knicks/', '4 Pennsylvania Plaza, New York, NY 10001', '2023 - 2024', 'From $90');
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (3, 'https://www.popupraces.ie/wp-content/themes/popupraces/assets/images/default-featured.jpg', 'New York City', 'Central Park 5K Fun Run', 'https://www.centralpark.com/events/5K-fun-run/?occ_dtstart=2024-04-01T00:00', '5th Ave & E 59th St, New York, NY 10022', 'April 1, 2024', '$44');
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (3, 'https://www.billboard.com/wp-content/uploads/media/times-square-ball-drop-new-years-eve-2018-billboard-1548.jpg', 'New York City', 'Times Square New Year''s Eve Balldrop', 'https://www.balldrop.com/times-square-all-access-pass', 'Times Square NYC, New York City, NY 10036', 'December 31, 2023', 'From $179');
 
--- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (4, '', '', '', '', '', '', '');
--- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (4, '', '', '', '', '', '', '');
--- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (4, '', '', '', '', '', '', '');
--- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (4, '', '', '', '', '', '', '');
--- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (4, '', '', '', '', '', '', '');
--- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (4, '', '', '', '', '', '', '');
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (4, 'https://www.westsideseattle.com/sites/default/files/inline-images/Wild%20Lanterns%202022%20kim%20and%20pat%20-%207.jpeg', 'Seattle', 'Wild Lanterns', 'https://www.zoo.org/wildlanterns', '5500 Phinney Ave North, Seattle, WA 98103', 'November 10, 2023 – January 14, 2024', '$29.95 - $36.95');
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (4, 'https://res.cloudinary.com/sagacity/image/upload/c_crop,h_3326,w_5000,x_0,y_0/c_limit,dpr_auto,f_auto,fl_lossy,q_80,w_1080/Northwest_Folklife-Christopher-Nelson-CMYK_re6elx.jpg', 'Seattle', 'Timber Music Fest', 'https://summer.timbermusicfest.com/', '31020 NE 40th St, Carnation, WA 98014', 'July 25 - 27, 2024', 'TBD');
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (4, 'https://cdn.geekwire.com/wp-content/uploads/2022/09/lumenfield.jpg', 'Seattle', 'Seattle Seahawks Games', 'https://www.seahawks.com/', '800 Occidental Ave S, Seattle, WA 98134', '2023 - 2024', 'From $100');
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (4, 'https://cdn.geekwire.com/wp-content/uploads/2021/08/NHL22_Reveal_KRAKEN_ARENA_16x9.jpeg', 'Seattle', 'Seattle Kraken Games', 'https://www.nhl.com/kraken/', '334 1st Ave N, Seattle, WA 98109', '2023 - 2024', 'From $115');
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (4, 'https://www.danvillesocial.com/php_partials/uploads/2019/07/Car-Show.jpg', 'Seattle', 'Greenwood Car Show', 'https://www.greenwoodcarshow.com/', '8100 Greenwood Ave NSeattle, WA 98103', 'June 29, 2024', 'FREE');
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (4, 'https://img.sunset02.com/sites/default/files/image/2016/06/main/aquarium-of-the-bay.jpg', 'Seattle', 'Halloween at the Aquarium', 'https://www.seattleaquarium.org/events/halloween', '1483 Alaskan Way Pier 59, Seattle, WA 98101', 'October 28 - 29, 2023/2024', 'From $23.95');
 
--- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (5, '', '', '', '', '', '', '');
--- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (5, '', '', '', '', '', '', '');
--- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (5, '', '', '', '', '', '', '');
--- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (5, '', '', '', '', '', '', '');
--- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (5, '', '', '', '', '', '', '');
--- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (5, '', '', '', '', '', '', '');
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (5, 'https://b.fssta.com/uploads/application/nba/venues/SR-Staples-Center-LAL.vresize.2240.1260.medium.1.jpg', 'Los Angeles', 'Los Angeles Lakers Games', 'https://nba.com/lakers/', '1111 S Figueroa St, Los Angeles, CA 90015', '2023 - 2024', 'From $100');
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (5, 'https://i0.wp.com/buzzbands.s3.amazonaws.com/wp-content/uploads/2022/10/20113723/calivibesfest2022-overview.jpg?fit=1280%2C720&ssl=1', 'Los Angeles', 'Cali Vibes', 'https://calivibesfest.com/getting-here/', '386 E Shoreline Dr, Long Beach, CA 90803', 'Feb 16 - Feb 18, 2024', 'TBD');
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (5, 'https://static.clubs.nfl.com/image/private/t_editorial_landscape_12_desktop/chargers/yxjkykzs0x3rpbtkeel1', 'Los Angeles', 'Los Angeles Rams/Chargers Games', 'https://www.nfl.com/', '1001 Stadium Dr, Inglewood, CA 90301', '2023 - 2024', 'From $120');
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (5, 'https://santamonica.com/wp-content/uploads/2023/10/1729639_drseusslorax.webp', 'Los Angeles', 'The Dr. Seuss Experience', 'https://losangeles.experienceseuss.com/?utm_campaign=139607_lax&utm_term=plan_cta_1&utm_source=email&utm_content=lax_eml_mkt_lch_jtw_blk_usr_139607_drseuss_jtwl_lz_21-9-2023_35393358_1090257_20005&utm_medium=join_the_waitlist&dm_i=5bq0%2Cl1cs%2C6en726%2C2dmy4%2C1#', '395 Santa Monica Place, Santa Monica, 90401', 'November 2023 -  January 2024', '$37');
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (5, 'https://mayorsmanor.com/wp-content/uploads/2020/12/Doughty-Vegas-Kings-LA-LV-e1608753054679.jpg', 'Los Angeles', 'Los Angeles Kings Games', 'https://www.nhl.com/kings/', '1111 S Figueroa St, Los Angeles, CA 90015', '2023 - 2024', 'From $80');
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (5, 'https://patch.com/img/cdn20/users/22511888/20221108/112729/lightscape-2022-4-photo-credit-sony-music___08112728892.jpg', 'Los Angeles', 'LightScape', 'https://www.arboretum.org/lightscape-2023/', '301 North Baldwin Ave, Arcadia, CA 91007', 'November 17 - January 2', '$32');
 
--- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (6, '', '', '', '', '', '', '');
--- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (6, '', '', '', '', '', '', '');
--- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (6, '', '', '', '', '', '', '');
--- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (6, '', '', '', '', '', '', '');
--- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (6, '', '', '', '', '', '', '');
--- INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (6, '', '', '', '', '', '', '');
-
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (6, 'https://media.bleacherreport.com/image/upload/c_crop,h_0.80,w_0.80,x_0.10,y_0.02/v1692282697/evymvqtblm9ii7kjowzs.jpg', 'Washington D.C.', 'Washington Capitals Games', 'https://www.nhl.com/capitals/tickets/', '601 F St NW, Washington, DC 20004', '2023 - 2024', 'From $27');
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (6, 'https://www.washingtonpost.com/wp-apps/imrs.php?src=https://arc-anglerfish-washpost-prod-washpost.s3.amazonaws.com/public/R75RJ2FSDMI6TFI63YBEECKULU.jpg&w=1200', 'Washington D.C.', 'The Flea Market at Eastern Market', 'http://easternmarket.net/index.html', '7th & C St. SE, Washington, DC 20003', 'Now - May 25, 2025', 'FREE');
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (6, 'https://npr.brightspotcdn.com/dims4/default/24de546/2147483647/strip/true/crop/3000x1993+0+0/resize/880x585!/quality/90/?url=http%3A%2F%2Fnpr-brightspot.s3.amazonaws.com%2Fa6%2F9d%2Fa372cc07428bb7f5f8d8c227e280%2Fsa-2021-race-day-credit-rwbmultimedia-6.jpg', 'Washington D.C.', 'Rock ''n'' Roll Running Series', 'https://www.runrocknroll.com/washington-dc-register', '801 Mount Vernon Pl. NW, Washington, DC 20001', 'Now - Mar 16, 2024', 'From $59');
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (6, 'https://www.rateyourseats.com/shared/Verizon-Center-Basketball-Section-217-Row-F-on-11-1-2014f.jpg', 'Washington D.C.', 'Washington Wizard Games', 'nba.com/wizards/', '601 F St NW, Washington, DC 20004', '2023 - 2024', 'From $90');
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (6, 'https://i0.wp.com/newspack-washingtoncitypaper.s3.amazonaws.com/uploads/2023/07/Beyond-the-Light-4-_-Credit-ARTECHOUSE-scaled.jpeg?fit=2560%2C1707&ssl=1', 'Washington D.C.', 'Beyond the Light', 'https://www.artechouse.com/program/beyond-the-light-dc/', '1238 Maryland Ave. SW, Washington, DC 20024', 'Now - Nov 05, 2023', '$17-35');
+INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (6, 'https://www.si.com/.image/t_share/MjAwODA0ODY1MTQyNjk1MTE2/howell.jpg', 'Washington D.C.', 'Washington Commander Games', 'https://www.commanders.com/', '1600 Fedex Way, North Englewood, MD 20785', '2023 - 2024', 'From $177');
 
 
 COMMIT;
