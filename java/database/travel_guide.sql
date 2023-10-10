@@ -86,10 +86,13 @@ CREATE TABLE events (
 CREATE TABLE tourism (
 	tour_id serial NOT NULL,
 	tour_city_id INT NOT NULL,
+	tour_picture varchar(500) NOT NULL,
+	tour_city_name varchar(50) NOT NULL,
 	tour_name varchar(50) NOT NULL,
+	tour_website varchar(1000) NOT NULL,
 	tour_address varchar(50) NOT NULL,
-	description varchar(50) NOT NULL,
-	tour_price varchar(5) NOT NULL,
+	tour_phone varchar(100) NOT NULL,
+	tour_price varchar(50) NOT NULL,
 	CONSTRAINT pk_tour PRIMARY KEY (tour_id),
 	CONSTRAINT fk_tour_city FOREIGN KEY(tour_city_id) REFERENCES city(city_id)
 );
@@ -104,11 +107,11 @@ CREATE TABLE likes (
     like_tour_id int,
 	like_picture varchar(500) NOT NULL,
 	like_city_name varchar(50) NOT NULL,
-    like_name varchar(500) NOT NULL,  -- Common name attribute
-    like_address varchar(1000) NOT NULL,  -- Common address attribute
-    like_phone varchar(100) NOT NULL,  -- Common phone attribute
-    like_price varchar(100) NOT NULL,  -- Common price attribute
-    like_website varchar(1000) NOT NULL,  -- Common website attribute
+    like_name varchar(500) NOT NULL,
+    like_address varchar(1000) NOT NULL,
+    like_phone varchar(100) NOT NULL,
+    like_price varchar(100) NOT NULL,
+    like_website varchar(1000) NOT NULL,
     CONSTRAINT pk_like PRIMARY KEY (like_id),
     CONSTRAINT fk_like_city_id FOREIGN KEY (like_city_id) REFERENCES city(city_id),
     CONSTRAINT fk_like_bar_id FOREIGN KEY (like_bar_id) REFERENCES bar(bar_id),
@@ -309,6 +312,50 @@ INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, e
 INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (6, 'https://www.rateyourseats.com/shared/Verizon-Center-Basketball-Section-217-Row-F-on-11-1-2014f.jpg', 'Washington D.C.', 'Washington Wizard Games', 'nba.com/wizards/', '601 F St NW, Washington, DC 20004', '2023 - 2024', 'From $90');
 INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (6, 'https://i0.wp.com/newspack-washingtoncitypaper.s3.amazonaws.com/uploads/2023/07/Beyond-the-Light-4-_-Credit-ARTECHOUSE-scaled.jpeg?fit=2560%2C1707&ssl=1', 'Washington D.C.', 'Beyond the Light', 'https://www.artechouse.com/program/beyond-the-light-dc/', '1238 Maryland Ave. SW, Washington, DC 20024', 'Now - Nov 05, 2023', '$17-35');
 INSERT INTO events (event_city_id, event_picture, event_city_name, event_name, event_website, event_address, event_phone, event_price) VALUES (6, 'https://www.si.com/.image/t_share/MjAwODA0ODY1MTQyNjk1MTE2/howell.jpg', 'Washington D.C.', 'Washington Commander Games', 'https://www.commanders.com/', '1600 Fedex Way, North Englewood, MD 20785', '2023 - 2024', 'From $177');
+
+-- POIS
+
+INSERT INTO tourism (tour_city_id, tour_picture, tour_city_name, tour_name, tour_website, tour_address, tour_phone, tour_price) VALUES (1, 'https://www.visitpittsburgh.com/imager/files_idssasp_com/public/C32/048a7c25-af0f-4edb-9f53-43c4b4f8a7f1/7e373b2b-0468-4ac7-bbcb-c0914e8591ff_2200f99a241e55606b0e5da9ea141a39.jpg', 'Pittsburgh', 'Monongahela Incline', 'http://www.duquesneincline.org/', '1197 West Carson St. Pittsburgh, PA 15219', '(412) 381-1665', '$2.60');
+INSERT INTO tourism (tour_city_id, tour_picture, tour_city_name, tour_name, tour_website, tour_address, tour_phone, tour_price) VALUES (1, 'https://www.nps.gov/articles/000/images/1164.jpg?maxwidth=650&autorotate=false', 'Pittsburgh', 'Point State Park', 'https://www.dcnr.pa.gov/Pages/default.aspx', '601 Commonwealth Pl, Pittsburgh, PA 15222', '(412) 565-2850', 'FREE');
+INSERT INTO tourism (tour_city_id, tour_picture, tour_city_name, tour_name, tour_website, tour_address, tour_phone, tour_price) VALUES (1, 'https://live.staticflickr.com/1956/31752106458_d3c35c7537_b.jpg', 'Pittsburgh', 'Pittsburgh Water Steps', 'https://pittsburghpa.gov/citiparks/north-shore', 'N Shore Dr, Pittsburgh PA 15212', '(412) 231-4326', 'FREE');
+INSERT INTO tourism (tour_city_id, tour_picture, tour_city_name, tour_name, tour_website, tour_address, tour_phone, tour_price) VALUES (1, 'https://live.staticflickr.com/65535/49651222026_1f600e0cb6_b.jpg', 'Pittsburgh', 'USS Requin', 'https://carnegiesciencecenter.org/exhibits/requin-submarine/', 'Three Rivers Heritage Trail, Pittsburgh, PA 15212', '(412) 237-1637', '$11.95 - $19.95');
+INSERT INTO tourism (tour_city_id, tour_picture, tour_city_name, tour_name, tour_website, tour_address, tour_phone, tour_price) VALUES (1, 'https://our-kids.com/wp-content/uploads/phipps-garden-whats-to-see.jpg', 'Pittsburgh', 'Phipps Conservatory and Botanical Gardens', 'https://www.phipps.conservatory.org/', '1 Schenley Drive, Pittsburgh, PA 15213', '(412) 622-6914', '$21.95');
+INSERT INTO tourism (tour_city_id, tour_picture, tour_city_name, tour_name, tour_website, tour_address, tour_phone, tour_price) VALUES (1, 'https://www.americanhumane.org/app/uploads/2016/11/20110625_PS3_7521-%C2%ACPaulSelvaggio.jpg.jpeg', 'Pittsburgh', 'Pittsburgh Zoo & Aquarium', 'https://www.pittsburghzoo.org/', '7370 Baker St, Pittsburgh, PA 15206', '(412) 665-3640', '$22.00');
+
+-- INSERT INTO tourism (tour_city_id, tour_picture, tour_city_name, tour_name, tour_website, tour_address, tour_phone, tour_price) VALUES (2, '', '', '', '', '', '', '');
+-- INSERT INTO tourism (tour_city_id, tour_picture, tour_city_name, tour_name, tour_website, tour_address, tour_phone, tour_price) VALUES (2, '', '', '', '', '', '', '');
+-- INSERT INTO tourism (tour_city_id, tour_picture, tour_city_name, tour_name, tour_website, tour_address, tour_phone, tour_price) VALUES (2, '', '', '', '', '', '', '');
+-- INSERT INTO tourism (tour_city_id, tour_picture, tour_city_name, tour_name, tour_website, tour_address, tour_phone, tour_price) VALUES (2, '', '', '', '', '', '', '');
+-- INSERT INTO tourism (tour_city_id, tour_picture, tour_city_name, tour_name, tour_website, tour_address, tour_phone, tour_price) VALUES (2, '', '', '', '', '', '', '');
+-- INSERT INTO tourism (tour_city_id, tour_picture, tour_city_name, tour_name, tour_website, tour_address, tour_phone, tour_price) VALUES (2, '', '', '', '', '', '', '');
+
+-- INSERT INTO tourism (tour_city_id, tour_picture, tour_city_name, tour_name, tour_website, tour_address, tour_phone, tour_price) VALUES (3, '', '', '', '', '', '', '');
+-- INSERT INTO tourism (tour_city_id, tour_picture, tour_city_name, tour_name, tour_website, tour_address, tour_phone, tour_price) VALUES (3, '', '', '', '', '', '', '');
+-- INSERT INTO tourism (tour_city_id, tour_picture, tour_city_name, tour_name, tour_website, tour_address, tour_phone, tour_price) VALUES (3, '', '', '', '', '', '', '');
+-- INSERT INTO tourism (tour_city_id, tour_picture, tour_city_name, tour_name, tour_website, tour_address, tour_phone, tour_price) VALUES (3, '', '', '', '', '', '', '');
+-- INSERT INTO tourism (tour_city_id, tour_picture, tour_city_name, tour_name, tour_website, tour_address, tour_phone, tour_price) VALUES (3, '', '', '', '', '', '', '');
+-- INSERT INTO tourism (tour_city_id, tour_picture, tour_city_name, tour_name, tour_website, tour_address, tour_phone, tour_price) VALUES (3, '', '', '', '', '', '', '');
+
+-- INSERT INTO tourism (tour_city_id, tour_picture, tour_city_name, tour_name, tour_website, tour_address, tour_phone, tour_price) VALUES (4, '', '', '', '', '', '', '');
+-- INSERT INTO tourism (tour_city_id, tour_picture, tour_city_name, tour_name, tour_website, tour_address, tour_phone, tour_price) VALUES (4, '', '', '', '', '', '', '');
+-- INSERT INTO tourism (tour_city_id, tour_picture, tour_city_name, tour_name, tour_website, tour_address, tour_phone, tour_price) VALUES (4, '', '', '', '', '', '', '');
+-- INSERT INTO tourism (tour_city_id, tour_picture, tour_city_name, tour_name, tour_website, tour_address, tour_phone, tour_price) VALUES (4, '', '', '', '', '', '', '');
+-- INSERT INTO tourism (tour_city_id, tour_picture, tour_city_name, tour_name, tour_website, tour_address, tour_phone, tour_price) VALUES (4, '', '', '', '', '', '', '');
+-- INSERT INTO tourism (tour_city_id, tour_picture, tour_city_name, tour_name, tour_website, tour_address, tour_phone, tour_price) VALUES (4, '', '', '', '', '', '', '');
+
+-- INSERT INTO tourism (tour_city_id, tour_picture, tour_city_name, tour_name, tour_website, tour_address, tour_phone, tour_price) VALUES (5, '', '', '', '', '', '', '');
+-- INSERT INTO tourism (tour_city_id, tour_picture, tour_city_name, tour_name, tour_website, tour_address, tour_phone, tour_price) VALUES (5, '', '', '', '', '', '', '');
+-- INSERT INTO tourism (tour_city_id, tour_picture, tour_city_name, tour_name, tour_website, tour_address, tour_phone, tour_price) VALUES (5, '', '', '', '', '', '', '');
+-- INSERT INTO tourism (tour_city_id, tour_picture, tour_city_name, tour_name, tour_website, tour_address, tour_phone, tour_price) VALUES (5, '', '', '', '', '', '', '');
+-- INSERT INTO tourism (tour_city_id, tour_picture, tour_city_name, tour_name, tour_website, tour_address, tour_phone, tour_price) VALUES (5, '', '', '', '', '', '', '');
+-- INSERT INTO tourism (tour_city_id, tour_picture, tour_city_name, tour_name, tour_website, tour_address, tour_phone, tour_price) VALUES (5, '', '', '', '', '', '', '');
+
+-- INSERT INTO tourism (tour_city_id, tour_picture, tour_city_name, tour_name, tour_website, tour_address, tour_phone, tour_price) VALUES (6, '', '', '', '', '', '', '');
+-- INSERT INTO tourism (tour_city_id, tour_picture, tour_city_name, tour_name, tour_website, tour_address, tour_phone, tour_price) VALUES (6, '', '', '', '', '', '', '');
+-- INSERT INTO tourism (tour_city_id, tour_picture, tour_city_name, tour_name, tour_website, tour_address, tour_phone, tour_price) VALUES (6, '', '', '', '', '', '', '');
+-- INSERT INTO tourism (tour_city_id, tour_picture, tour_city_name, tour_name, tour_website, tour_address, tour_phone, tour_price) VALUES (6, '', '', '', '', '', '', '');
+-- INSERT INTO tourism (tour_city_id, tour_picture, tour_city_name, tour_name, tour_website, tour_address, tour_phone, tour_price) VALUES (6, '', '', '', '', '', '', '');
+-- INSERT INTO tourism (tour_city_id, tour_picture, tour_city_name, tour_name, tour_website, tour_address, tour_phone, tour_price) VALUES (6, '', '', '', '', '', '', '');
 
 
 COMMIT;
