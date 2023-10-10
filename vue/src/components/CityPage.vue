@@ -44,18 +44,18 @@
         </div>
         <div class="categories">
           <router-link class="category events" :to="{ name: 'EventPage', params: { cityName: selectedCity } }">
-          <div>
-            <router-link  class="category-text" :to="{ name: 'EventPage', params: { cityName: selectedCity } }">Events</router-link>
-          </div>
-        </router-link>
-        <!-- need to add router link around category pois. name routerlink category pois and delete class from div so picture is involved. -->
-          <div class="category pois">
-            <div class="category-text">Points <br> Of <br> Interest</div>
-          </div>
+            <router-link :to="{ name: 'EventPage', params: { cityName: selectedCity } }">
+              <div class="category-text">Events</div>
+            </router-link>
+          </router-link>
+          <router-link class="category pois" :to="{ name: 'TourPage', params: { cityName: selectedCity } }">
+            <router-link :to="{ name: 'TourPage', params: { cityName: selectedCity } }">
+              <div class="category-text">Points Of Interest</div>
+            </router-link>
+          </router-link>
         </div>
-        </section>
+      </section>
     </section>
-
     <footer class="container-footer" id="contact">
             <div class="footer-content">
         <h2>Contact Me</h2>
@@ -279,7 +279,7 @@ export default {
   gap: 20px; /* Adjust the gap between boxes */
   margin-top: 20px;
   max-width: 800px; /* Limit the maximum width */
-  margin: 0 auto; /* Center the container horizontally */
+  margin: 0 auto; 
 }
 
 
@@ -325,6 +325,19 @@ export default {
   text-align: center;
 }
 
+.categories .pois {
+  background-image: url("../assets/bean.jpeg");
+  background-size: cover;
+  background-position: center;
+  height: 180px; /* Set the height as needed */
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 30px;
+  text-align: center;
+}
 
 .categories .hotels:hover {
   transform: scale(1.1); /* Increase the scale value for a stronger zoom effect */
@@ -379,19 +392,6 @@ a {
   font-size: 30px;
 }
 
-.categories .pois {
-  background-image: url("../assets/bean.jpeg");
-  background-size: cover;
-  background-position: center;
-  height: 180px; /* Set the height as needed */
-  border-radius: 25px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 30px;
-  text-align: center;
-}
 
 .back-button {
   display: flex;

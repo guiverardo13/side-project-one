@@ -19,6 +19,7 @@ public class Like {
     private Bar bar;
     private Restaurant restaurant;
     private Event event;
+    private Tour tour;
 
     public Like(int likeId, int likeCityId, int likeBarId, int likeHotelId, int likeRestaurantId, int likeEventId, int likeTourId, String likePicture, String likeCityName, String likeName, String likeAddress, String likePhone, String likePrice, String likeWebsite) {
         this.likeId = likeId;
@@ -181,6 +182,14 @@ public class Like {
 
     public void setEvent(Event event) {
         this.event = event;
+    }
+
+    public Tour getTour() {
+        return tour;
+    }
+
+    public void setTour(Tour tour) {
+        this.tour = tour;
     }
 }
 

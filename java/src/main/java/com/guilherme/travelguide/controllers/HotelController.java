@@ -1,5 +1,4 @@
 package com.guilherme.travelguide.controllers;
-
 import com.guilherme.travelguide.dao.HotelDao;
 import com.guilherme.travelguide.model.City;
 import com.guilherme.travelguide.model.Hotel;

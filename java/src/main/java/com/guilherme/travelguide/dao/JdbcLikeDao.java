@@ -236,6 +236,51 @@ public class JdbcLikeDao implements LikeDao {
     }
 
     @Override
+    public Like addTourToLikeList(User user, Like like, Tour tour) {
+        int tourId = tour.getTourId();
+
+        if (tourId == 0) {
+            throw new DaoException("Event information not found for eventId: " + tour.getTourId());
+        }
+
+        // Create a new Like object and set its properties
+        Like newLike = new Like();
+        newLike.setLikeCityId(tour.getTourCityId());
+        newLike.setLikePicture(tour.getTourPicture());
+        newLike.setLikeCityName(tour.getTourCityName());
+        newLike.setLikeName(tour.getTourName());
+        newLike.setLikeWebsite(tour.getTourWebsite());
+        newLike.setLikeAddress(tour.getTourAddress());
+        newLike.setLikePhone(tour.getTourPhone());
+        newLike.setLikePrice(tour.getTourPrice());
+
+        // Set the hotel object in the newLike object
+        newLike.setTour(tour);
+
+        try {
+            String insertLikeSql = "INSERT INTO likes (like_city_id, like_tour_id, like_picture, like_city_name, like_name, like_address, like_phone, like_price, like_website) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING like_id;";
+            int newLikeId = jdbcTemplate.queryForObject(insertLikeSql, int.class,
+                    newLike.getLikeCityId(), tourId, newLike.getLikePicture(),
+                    newLike.getLikeCityName(), newLike.getLikeName(), newLike.getLikeAddress(),
+                    newLike.getLikePhone(), newLike.getLikePrice(), newLike.getLikeWebsite());
+
+            // Now, insert the association into the user_likes table
+            String insertUserLikesSql = "INSERT INTO user_likes (user_id, like_id) VALUES (?, ?)";
+            jdbcTemplate.update(insertUserLikesSql, user.getUserId(), newLikeId);
+
+            newLike.setLikeId(newLikeId); // Set the generated like_id in the newLike object
+
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        } catch (Exception e) {
+            throw new DaoException("An error occurred while adding the like", e);
+        }
+        return newLike;
+    }
+
+    @Override
     public boolean deleteLike(int likeId, int userId) {
         try {
             // Check if the like belongs to the user

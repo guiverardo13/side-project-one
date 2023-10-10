@@ -6,6 +6,7 @@ import BarPage from '../components/BarPage.vue';
 import EventPage from '../components/EventPage.vue';
 import AboutPage from '../components/AboutPage.vue';
 import store from '../store'; // Import your Vuex store
+import PointsOfInterestPageVue from '@/components/PointsOfInterestPage.vue';
 
 const routes = [
   {
@@ -41,7 +42,12 @@ const routes = [
     name: 'AboutPage',
     component: AboutPage,
     // meta: { requiresAuth: true }, // Add meta field to require authentication
-  }
+  },
+  {
+    path: '/city/name/:cityName/pois',
+    name: 'TourPage',
+    component: PointsOfInterestPageVue,
+  },
 ];
 
 const router = createRouter({
