@@ -3,7 +3,7 @@
     <header>
     <nav class="container-top-new-page">
         <h1><router-link to="/">GV's Travel Guide</router-link></h1>
-        <div class="item about"><a href="#">About</a></div>
+        <div class="item about"><a href="/about">About</a></div>
         <div class="item contact"><a href="#contact">Contact</a></div>
         <div class="item" @click="openLikesModal">
           {{ isAuthenticated ? 'Likes' : 'Register' }}
