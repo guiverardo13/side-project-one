@@ -65,6 +65,7 @@ export default {
 
             // Close the login modal
             this.closeLoginModal();
+            window.location.reload();
           }
         })
         .catch((error) => {

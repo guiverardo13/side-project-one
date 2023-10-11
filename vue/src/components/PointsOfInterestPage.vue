@@ -148,7 +148,7 @@ export default {
 
     async toggleLike(tour) {
   if (!this.isAuthenticated) {
-    window.alert('Please sign in to like tours');
+    window.alert('Please sign in to like points of interest');
   } else {
     tour.isLiked = !tour.isLiked;
     try {
