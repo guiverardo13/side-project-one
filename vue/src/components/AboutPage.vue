@@ -82,9 +82,151 @@
 
 
 <script>
+import UserServices from '@/services/UserServices';
+import RegisterUserModal from './RegisterUserModal.vue';
+import AccountCreatedModal from './AccountCreatedModal.vue';
+import LoginModal from './LoginModal.vue';
+import HotelPage from './HotelPage.vue';
+import BarPage from './BarPage.vue';
+import LikeModal from './LikeModal.vue';
+
 export default {
-    name: 'AboutPage'
-}
+    name: 'AboutPage',
+
+    data() {
+    return {
+      isAuthenticated: false, 
+      showRegistrationModal: false,
+      showAccountCreatedModal: false,
+      showLoginModal: false,
+      showLikesModal: false
+    };
+  },
+
+  created() {
+    // Check if the user is authenticated by looking at the Vuex store and local storage
+    this.checkUserAuthentication();
+  },
+
+  components: {
+    RegisterUserModal,
+    AccountCreatedModal,
+    LoginModal,
+    HotelPage,
+    BarPage,
+    LikeModal
+  },
+
+  props: {
+    cityName: String,
+    selectedCity: String
+  },
+
+  methods: {
+    handleSignIn() {
+      console.log('Sign In button clicked');
+      this.closeSuccessModal();
+      this.openLoginModal();
+    },
+
+    async handleSignOutClick() {
+      if (this.isAuthenticated) {
+        this.logoutUser();
+      } else {
+        this.openLoginModal();
+      }
+    },
+
+    logoutUser() {
+      // Clear the token and user data from local storage
+      UserServices.logout();
+
+      // Clear user data and token in your Vuex store if needed
+      this.$store.commit('LOGOUT');
+
+      // Reset the user in Vuex store to an empty object if needed
+      this.$store.commit('SET_USER', {});
+
+      // Update the isAuthenticated status directly
+      this.isAuthenticated = false;
+      window.alert("Sign out Successful!");
+      // Ensure that the route is redirected to another page after logout
+      this.$router.push('/'); // Redirect to the home page or another appropriate page
+      },
+
+    async checkUserAuthentication() {
+      const token = this.$store.state.token;
+      if (token) {
+        this.isAuthenticated = true;
+        // You can also update the user data here if needed
+      }
+    },
+
+    openLikesModal() {
+      // Check if the user is authenticated before showing the Like modal
+      if (this.isAuthenticated) {
+        this.showLikesModal = true;
+      } else {
+        // If not authenticated, you can handle it in some way, such as showing a login/register modal
+        this.openRegistrationModal(); // You may want to modify this part to fit your application's logic
+      }
+    },
+
+      async handleLoginSuccess(response) {
+          this.closeLoginModal();
+          this.isAuthenticated = true; // Set isAuthenticated to true
+          this.user = response.data.user; // Update the user data
+
+          try {
+            // Update the Vuex store with the new user data
+            this.$store.commit("SET_AUTH_TOKEN", response.data.token);
+            this.$store.commit("SET_USER", response.data.user);
+
+            // Update local storage
+            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('user', JSON.stringify(response.data.user));
+          } catch (error) {
+            console.error('Error updating Vuex store and local storage:', error);
+          }
+        },
+
+        openRegistrationModal() {
+      this.showRegistrationModal = true;
+    },
+
+    closeRegistrationModal() {
+      this.showRegistrationModal = false;
+    },
+
+    handleRegistrationSuccess() {
+      console.log('Registration successful. Opening success modal.');
+      this.closeRegistrationModal();
+      this.openSuccessModal();
+    },
+
+    closeSuccessModal() {
+      this.showAccountCreatedModal = false;
+    },
+
+    openSuccessModal() {
+      this.showAccountCreatedModal = true;
+    },
+
+    openLoginModal() {
+        this.showLoginModal = true;
+      },
+
+    closeLoginModal() {
+      this.showLoginModal = false;
+    },
+
+    closeLikeModal() {
+      this.showLikesModal = false;
+    }
+
+    
+  },
+};
 </script>
 
 <style scoped>
