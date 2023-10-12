@@ -20,7 +20,11 @@
         <p class="description">A little bit about me</p>
       </div>
       <div class="middle-middle-pic">
+      <a href="https://www.youtube.com/watch?v=nfaPKcNVD2c" target="_blank">
+        <img class="gv-bball" src="../assets/basketball.png" alt="bball" title="Click here for a surprise!">
+      </a>
         <img class="gv-circle" src="../assets/circle.png" alt="circle">
+        <img class="gv-sru" src="../assets/sru.png" alt="sru">
       </div>
         <div class="middle-middle-p">
           <p>I am a multilingual professional from Brazil with a diverse background in basketball, team leadership, customer service, and now Java is my newest language. I have developed strong communication and interpersonal skills that have been invaluable throughout my career. As a dedicated basketball player since the age of 12, I honed my leadership abilities and thrived in a team-oriented environment where collective success was key. This led to my appointment as captain, enabling me to excel in guiding and motivating my teammates towards achieving our shared goals. Additionally, my exceptional performance earned me the privilege of representing Brazil on four occasions at the national level, which ultimately led to a full scholarship at Slippery Rock University, where I earned a Bachelor's Degree in Business Management.
@@ -231,6 +235,8 @@ export default {
 
 <style scoped>
 
+
+
   .icons-top,
   .icons-middle,
   .icons-bottom {
@@ -338,9 +344,11 @@ export default {
   .middle-middle-pic {
     margin-top: 50px;
     margin-bottom: 50px;
+
   }
 
   .middle-middle-p p {
+    font-size: 20px;
     text-align: center;
     margin-bottom: 50px;
   }
@@ -392,13 +400,28 @@ export default {
   .gv-circle {
     width: 180px;
     border: 5px solid black;
+    margin: 0px 80px 0px 80px;
+    border-radius: 220px;
+  }
+
+  .gv-sru {
+    width: 180px;
+    border: 5px solid black;
+    border-radius: 300px;
+  }
+
+  .gv-bball {
+    width: 180px;
+    border: 5px solid black;
     border-radius: 220px;
   }
 
   .page-title {
+  
     margin-top: 130px;
     font-size: 50px;
   }
+  
 
   .description {
     font-size: 25px;
