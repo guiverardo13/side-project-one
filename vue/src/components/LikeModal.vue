@@ -23,6 +23,7 @@
                     {{ like.likeBarId ? ' | Bar' : '' }}
                     {{ like.likeRestaurantId ? ' | Restaurant' : '' }}
                     {{ like.likeEventId ? ' | Event' : '' }}
+                    {{ like.likeTourId ? ' | Point Of Interest' : '' }}
                 </h3>
                     <!-- need to do this for pois -->
                 <p>City: {{ like.likeCityName }}</p>

@@ -408,14 +408,14 @@
 .fa-chevron-up.fa-rotate-180 {
   position: absolute; 
   right: 685px; 
-  top: 47.3%; 
+  top: 47.6%; 
   
 }
 
 .fa-chevron-up {
   position: absolute; 
   right: 685px;
-  top: 47.3%;
+  top: 47.6%;
   
 }
 

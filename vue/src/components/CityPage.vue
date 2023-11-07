@@ -396,6 +396,7 @@ a {
 .back-button {
   display: flex;
   text-decoration: underline;
+  max-width: 20px;
 }
 
 .city-link {
